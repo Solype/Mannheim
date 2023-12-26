@@ -1,0 +1,67 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:complexType name="identSection">
+        <xs:sequence>
+            <xs:element ref="nameCode"/>
+            <xs:element name="entityName" type="xs:string"/>
+            <xs:element name="lang" type="langType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="langType">
+        <xs:attribute name="country" type="xs:string" use="required"/>
+        <xs:attribute name="lang" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:element name="nameCode">
+        <xs:complexType>
+            <xs:attribute name="projectCode" type="projectCodeType" use="required"/>
+            <xs:attribute name="chapterCode" type="chapterCodeType" use="required"/>
+            <xs:attribute name="sectionCode" type="sectionCodeType" use="required"/>
+            <xs:attribute name="typeCode" type="sectionCodeType" use="required"/>
+            <xs:attribute name="identCode" type="identCodeType" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="typeCodeType">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="1"/>
+            <xs:minLength value="1"/>
+            <xs:pattern value="[ICU]"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="projectCodeType">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="4"/>
+            <xs:minLength value="2"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="chapterCodeType">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="3"/>
+            <xs:minLength value="1"/>
+            <xs:pattern value="([A-Z0-9])*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="sectionCodeType">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="5"/>
+            <xs:minLength value="1"/>
+            <xs:pattern value="([A-Z0-9])*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="partCode">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[CUDI]"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="identCodeType">
+        <xs:restriction base="xs:string">
+            <xs:length value="3"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

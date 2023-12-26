@@ -1,0 +1,23 @@
+#!/bin/python
+
+import http.server
+import socketserver
+import webbrowser
+import tkinter as tk
+from threading import Thread
+
+Handler = http.server.SimpleHTTPRequestHandler
+httpd = socketserver.TCPServer(("", 8000), Handler)
+
+server_thread = Thread(target=httpd.serve_forever)
+server_thread.daemon = True
+server_thread.start()
+webbrowser.open("http://127.0.0.1:8000/")
+
+
+root = tk.Tk()
+root.title("Fermer la fenêtre pour arrêter la visionneuse")
+root.mainloop()
+
+httpd.shutdown()
+httpd.server_close()

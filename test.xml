@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="entity.xsd" type="application/xml" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<?xml-stylesheet href="format.xslt" type="text/xsl"?>
+<entity>
+    <identSection>
+        <nameCode projectCode="RP" chapterCode="E" sectionCode="CE" identCode="001" typeCode="AE"/>
+        <entityName>Test</entityName>
+        <lang country="FR" lang="fr" />
+    </identSection>
+    <section>
+        <title>Bonjour</title>
+        <stat nameId="F" value="4" />
+        <para>
+            <unit name="%">
+                <calculation>
+                    <add>
+                        <statRef ref="F" />
+                        <number value="4" />
+                    </add>
+                </calculation>
+            </unit>
+        </para>
+    </section>
+</entity>

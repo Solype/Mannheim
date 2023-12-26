@@ -1,0 +1,210 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:include schemaLocation="identSection.xsd"/>
+
+
+    <xs:element name="accronym">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="accronymTerm" />
+                <xs:element name="accronymDefinition" type="xs:string" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="accronymTerm" type="xs:string" />
+
+
+    <xs:element name="status">
+        <xs:complexType>
+            <xs:attribute name="name" type="xs:ID" use="required" />
+            <xs:attribute name="value" type="xs:boolean" use="required" />
+        </xs:complexType>
+    </xs:element>
+
+
+    <xs:element name="refId">
+        <xs:complexType>
+            <xs:attribute name="ref" type="xs:IDREF" use="required" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="title" type="xs:string" />
+
+
+    <xs:element name="list">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="title" minOccurs="0" maxOccurs="1" />
+                <xs:element ref="listElem" maxOccurs="unbounded" />
+            </xs:sequence>
+            <xs:attribute name="numerical" type="xs:boolean"/>
+            <xs:attribute name="id" type="xs:ID" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="dict">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="dictElem" maxOccurs="unbounded" minOccurs="1" />
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:ID" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="dictElem">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="dictKey" />
+                <xs:element ref="dictValue" />
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:ID" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="dictKey" type="xs:string" />
+
+    <xs:element name="unit">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:choice>
+                    <xs:element ref="number" />
+                    <xs:element ref="calculation" />
+                </xs:choice>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string" use="required" />
+            <xs:attribute name="hidden" type="xs:boolean" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="table">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="row" minOccurs="1" />
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:ID" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="row">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="column" minOccurs="1" />
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:ID" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="sumUnit">
+        <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required" />
+            <xs:attribute name="id" type="xs:ID" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="statRef">
+        <xs:complexType>
+            <xs:attribute name="ref" type="xs:string" use="required" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="stat">
+        <xs:complexType>
+            <xs:attribute name="nameId" type="xs:ID" use="required" />
+            <xs:attribute name="value" type="xs:integer" use="required" />
+        </xs:complexType>
+    </xs:element>
+
+
+    <xs:element name="dmRef">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="nameCode"/>
+            </xs:sequence>
+            <xs:attribute name="type" use="required">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="import"/>
+                        <xs:enumeration value="link"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="para" type="textType" />
+    <xs:element name="bold" type="textType" />
+    <xs:element name="under" type="textType" />
+    <xs:element name="ita" type="textType" />
+
+    <xs:element name="listElem" type="capsuleType" />
+    <xs:element name="dictValue" type="capsuleType" />
+    <xs:element name="column" type="capsuleType" />
+    <xs:element name="section" type="capsuleType" />
+
+    <xs:complexType name="textType" mixed="true">
+        <xs:sequence>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="ita" />
+                <xs:element ref="bold" />
+                <xs:element ref="under" />
+                <xs:element ref="statRef" />
+                <xs:element ref="sumUnit" />
+                <xs:element ref="accronym" />
+                <xs:element ref="accronymTerm" />
+                <xs:element ref="unit" />
+                <xs:element ref="dmRef"/>
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="capsuleType">
+        <xs:sequence>
+            <xs:element ref="title" minOccurs="0" maxOccurs="1" />
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="para" />
+                <xs:element ref="table" />
+                <xs:element ref="dict" />
+                <xs:element ref="list" />
+                <xs:element ref="section" />
+                <xs:element ref="stat" />
+                <xs:element ref="status" />
+                <xs:element ref="dmRef"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:ID" use="optional" />
+    </xs:complexType>
+
+    <xs:element name="calculation">
+        <xs:complexType>
+            <xs:choice>
+                <xs:element ref="add" />
+                <xs:element ref="sub" />
+                <xs:element ref="div" />
+                <xs:element ref="mul" />
+                <xs:element ref="statRef" />
+                <xs:element ref="number" />
+            </xs:choice>
+            <xs:attribute name="isScore" type="xs:boolean" />
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="add" type="calculationType" />
+    <xs:element name="sub" type="calculationType" />
+    <xs:element name="div" type="calculationType" />
+    <xs:element name="mul" type="calculationType" />
+
+    <xs:element name="number">
+        <xs:complexType>
+            <xs:attribute name="value" type="xs:integer" use="required" />
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="calculationType">
+        <xs:sequence>
+            <xs:choice minOccurs="1" maxOccurs="unbounded">
+                <xs:element ref="add" />
+                <xs:element ref="sub" />
+                <xs:element ref="div" />
+                <xs:element ref="mul" />
+                <xs:element ref="statRef" />
+                <xs:element ref="number" />
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

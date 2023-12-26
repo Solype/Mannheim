@@ -1,0 +1,47 @@
+<save>
+    <accronym></accronym>
+    <accronymTerm></accronymTerm>
+    <accronymDefinition></accronymDefinition>
+    <abbr></abbr>
+    <abbrTerm></abbrTerm>
+    <abbrDef></abbrDef>
+
+    <!-- général -->
+    <bold></bold>
+    <under></under>
+    <ita></ita>
+    <refId ref=""/>
+    <calcul></calcul>
+    <table>
+        <row>
+            <column></column>
+        </row>
+    </table>
+    <para></para>
+    <list type=""><elem></elem></list>
+    <title></title>
+    <section></section>
+    <dict>
+        <elem>
+            <key>clé</key>
+            <value>valeur</value>
+        </elem>
+    </dict>
+    <!-- spécifique aux règles -->
+
+
+    <!-- monstre et pouvoir -->
+    <sum refId="" unit=""/>
+    <cost unit="[hidden]"></cost>
+    <damage type=""></damage>
+    <stat type=""></stat>
+
+
+
+    <calcul>
+        <add>
+            <num value="3"/>
+            <refStat ref="Force"/>
+        </add>
+    </calcul>
+</save>

@@ -1,0 +1,13 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:include schemaLocation="identSection.xsd"/>
+    <xs:include schemaLocation="common.xsd"/>
+
+    <xs:element name="entity">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="identSection" type="identSection"/>
+                <xs:element ref="section"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

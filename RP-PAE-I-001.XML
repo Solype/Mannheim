@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="./format.xslt" type="text/xsl"?>
+<?xml-model href="entity.xsd" type="application/xml" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<entity>
+    <identSection>
+        <nameCode projectCode="RP" chapterCode="P" sectionCode="AE" typeCode="I" identCode="001" />
+        <entityName>Charge</entityName>
+        <lang country="FR" lang="fr" />
+    </identSection>
+    <section>
+        <dict>
+            <dictElem>
+                <dictKey>Type de pouvoir</dictKey>
+                <dictValue><para>Actif</para></dictValue>
+            </dictElem>
+            <dictElem>
+                <dictKey>Chance de toucher</dictKey>
+                <dictValue>
+                    <para><unit name="%">
+                        <calculation isScore="true">
+                            <add>
+                                <statRef ref="Course" />
+                                <statRef ref="Agilite" />
+                            </add>
+                        </calculation>
+                    </unit></para>
+                </dictValue>
+            </dictElem>
+            <dictElem>
+                <dictKey>Effet</dictKey>
+                <dictValue>
+                    <para>
+                        charge sa cible, infligeant <unit name="degats physiques">
+                            <calculation>
+                                <add>
+                                    <div>
+                                        <statRef ref="Resistance" />
+                                        <number value="2" />
+                                    </div>
+                                    <div>
+                                        <statRef ref="Force" />
+                                        <number value="2" />
+                                    </div>
+                                </add>
+                            </calculation>
+                        </unit>. Il fait perdre également <unit name="action"><number value="1" /></unit> à la cible
+                    </para>
+                </dictValue>
+            </dictElem>
+        </dict>
+    </section>
+</entity>

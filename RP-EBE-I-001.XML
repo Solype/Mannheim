@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="./format.xslt" type="text/xsl"?>
+<?xml-model href="entity.xsd" type="application/xml" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<entity>
+    <identSection>
+        <nameCode projectCode="RP" chapterCode="E" sectionCode="BE" typeCode="I" identCode="001" />
+        <entityName>Sanglier colossale</entityName>
+        <lang country="FR" lang="fr" />
+    </identSection>
+    <section>
+        <section>
+            <title>Traits</title>
+            <list>
+                <listElem><status name="Humanoide" value="false" /></listElem>
+                <listElem><status name="Empathique" value="true" /></listElem>
+                <listElem><status name="Civilise" value="false" /></listElem>
+                <listElem><status name="Magique" value="false" /></listElem>
+                <listElem><status name="Mobile" value="true" /></listElem>
+                <listElem><status name="Mort-vivant" value="false" /></listElem>
+                <listElem><status name="Volant" value="false" /></listElem>
+            </list>
+        </section>
+        <section>
+            <title>Attributs</title>
+            <list>
+                <listElem><stat nameId="Resistance" value="6" /></listElem>
+                <listElem><stat nameId="Force" value="8" /></listElem>
+                <listElem><stat nameId="Agilite" value="4" /></listElem>
+                <listElem><stat nameId="Dexterite" value="5" /></listElem>
+                <listElem><stat nameId="Vivacite" value="6" /></listElem>
+                <listElem><stat nameId="Intellect" value="2" /></listElem>
+            </list>
+        </section>
+        <section>
+            <title>Compétences</title>
+            <list>
+                <listElem id="Dep">
+                    <title>Deplacement</title>
+                    <list>
+                        <listElem><stat nameId="Course" value="6" /></listElem>
+                        <listElem><stat nameId="Equilibre" value="4" /></listElem>
+                        <listElem><stat nameId="Esquive" value="2" /></listElem>
+                        <listElem><stat nameId="Nage" value="0" /></listElem>
+                        <listElem><stat nameId="Reception" value="0" /></listElem>
+                        <listElem><stat nameId="Saut" value="1" /></listElem>
+                    </list>
+                </listElem>
+                <listElem id="Res">
+                    <title>Resistance</title>
+                    <list>
+                        <listElem><stat nameId="Endurance" value="6" /></listElem>
+                        <listElem><stat nameId="Mental" value="1" /></listElem>
+                        <listElem><stat nameId="Pathologique" value="3" /></listElem>
+                        <listElem><stat nameId="Physique" value="5" /></listElem>
+                    </list>
+                </listElem>
+                <listElem id="Sur">
+                    <title>Survie</title>
+                    <list>
+                        <listElem><stat nameId="Discretion" value="0" /></listElem>
+                        <listElem><stat nameId="Orientation" value="3" /></listElem>
+                        <listElem><stat nameId="Pistage" value="4" /></listElem>
+                        <listElem><stat nameId="Reflexe" value="2" /></listElem>
+                        <listElem><stat nameId="Soulevement" value="4" /></listElem>
+                    </list>
+                </listElem>
+                <listElem id="Int">
+                    <title>Survie</title>
+                    <list>
+                        <listElem><stat nameId="Concentration" value="0" /></listElem>
+                        <listElem><stat nameId="Deduction" value="2" /></listElem>
+                        <listElem><stat nameId="Memoire" value="0" /></listElem>
+                        <listElem><stat nameId="Observation" value="5" /></listElem>
+                    </list>
+                </listElem>
+                <listElem><stat nameId="armure" value="4" /></listElem>
+            </list>
+        </section>
+        <section>
+            <title>Pouvoirs</title>
+            <list>
+                <listElem>
+                    <dmRef type="import">
+                        <nameCode projectCode="RP" chapterCode="P" sectionCode="AE" typeCode="I" identCode="001" />
+                    </dmRef>
+                </listElem>
+            </list>
+        </section>
+    </section>
+</entity>
