@@ -1,0 +1,85 @@
+#!/usr/bin/env python
+
+import random
+import time
+
+m_input : str = ""
+random.seed(time.time())
+
+
+def function(x : int) :
+    x = int(x)
+    if x >= 47 :
+        print(f"{x}->{94}")
+        return 94
+    my_list = [0, 6,18,28,34,40,45,50]
+    my_list.extend(range(53, 68, 2))
+    my_list.extend(range(68, 90))
+    my_list.extend([90, 90, 91, 91, 92, 92, 93, 93])
+    print(f"{x}->{my_list[x]}")
+    return my_list[x]
+
+def score_input(msg) :
+    palier = input(msg)
+    if palier == "r" :
+        palier = random.randint(0, 99)
+        print(palier)
+    return int(palier)
+
+def palier_input(msg) :
+    palier = input(msg)
+    if palier[0] == "t" :
+        palier = function(palier[1:])
+    return int(palier)
+
+while m_input != "stop" :
+    attack_score = score_input("score de l'attaquant : ")
+
+    attack_palier = palier_input("palier de l'attaquant : ")
+    if attack_score > attack_palier :
+        print("attaque raté")
+        continue
+
+    damages = int(input("dégâts : "))
+    if input("réaction ? (y/n)") == 'y' :
+        reaction_score = score_input("score réaction : ")
+        reaction_pallier = palier_input("pallier de la reaction : ")
+
+        if reaction_score <= reaction_pallier :
+            damages /= 2
+            if reaction_score <= attack_score :
+                print("pas de dégâts subit")
+                continue
+
+    armure = int(input("armure : "))
+    penetration = int(input("pénétration d'armure : "))
+
+    if penetration > damages :
+        penetration = damages
+    
+    if damages >= armure :
+        armure -= penetration
+        if armure < 0 :
+            armure = 0
+    
+    if damages < armure :
+        damages = penetration
+
+    score_res = score_input("score résistance : ")
+    pallier_res = palier_input("pallier de resistance : ")
+
+    if score_res < 4 :
+        damages = 0
+        print("pas de dégâts")
+        continue
+
+    if score_res <= pallier_res :
+        damages /= 2
+        if score_res <= pallier_res / 2 :
+            damages /= 2
+    print("dégâts finaux :", damages)
+
+    
+
+
+# function(2)
