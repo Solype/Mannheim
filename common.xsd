@@ -137,10 +137,12 @@
     <xs:element name="dictValue" type="capsuleType" />
     <xs:element name="column" type="capsuleType" />
     <xs:element name="section" type="capsuleType" />
+    <xs:element name="subject"></xs:element>
 
     <xs:complexType name="textType" mixed="true">
         <xs:sequence>
             <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="subject"/>
                 <xs:element ref="ita" />
                 <xs:element ref="bold" />
                 <xs:element ref="under" />

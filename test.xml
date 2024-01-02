@@ -11,13 +11,9 @@
         <title>Bonjour</title>
         <stat nameId="F" value="4" />
         <para>
+            <subject/>
             <unit name="%">
-                <calculation>
-                    <add>
-                        <statRef ref="F" />
-                        <number value="4" />
-                    </add>
-                </calculation>
+                <number value="100" />
             </unit>
         </para>
     </section>

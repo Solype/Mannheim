@@ -30,7 +30,7 @@
                 <dictKey>Effet</dictKey>
                 <dictValue>
                     <para>
-                        charge sa cible, infligeant <unit name="degats physiques">
+                        <subject>aa</subject> charge sa cible, infligeant <unit name="degats physiques">
                             <calculation>
                                 <add>
                                     <div>

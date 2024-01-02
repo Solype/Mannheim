@@ -97,7 +97,6 @@
 
 <xsl:template match="section">
     <div>
-        <xsl:copy-of select="@id"/>
         <xsl:apply-templates select="./*"/>
     </div>
 </xsl:template>
@@ -127,6 +126,19 @@
     <p>
         <xsl:apply-templates select="./* | ./text()"/>
     </p>
+</xsl:template>
+
+<xsl:template match="subject">
+    <strong>
+        <xsl:choose>
+            <xsl:when test="//nameCode/@chapterCode = 'E'">
+                <xsl:value-of select="//entityName"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="'le sujet'"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </strong>
 </xsl:template>
 
 <xsl:template match="unit">
