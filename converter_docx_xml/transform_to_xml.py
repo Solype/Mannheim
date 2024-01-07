@@ -1,6 +1,23 @@
 import xml.dom.minidom as dom
 import csv
 
+list_attributes_names = ("Resistance", "Force", "Agilite", "Dexterite", "Vivacite", "Intellect", "Social")
+list_trait_names = ("Humanoide", "Empathique", "Civilise", "Magique", "Mobile", "Volant", "Mort-vivant", "Organique")
+
+list_competences = [
+    {"name" : "Deplacement", "stats" : ("Acrobatie", "Course", "Equilibre", "Equitation", "Escalade", "Esquive", "Nage", "Navigation", "Réception", "Saut", "Vol")},
+    {"name" : "A distance", "stats" : ("Arc", "Arbalete", "Arme exotique", "Petit projectile", "Pistolet")},
+    {"name" : "Artillerie", "stats" : ("Canon", "Engin")},
+    {"name" : "Corps a corps", "stats" : ("Arme d'hast", "Arme exotique", "Contondante", "Courte lame", "Epee", "Hache", "Sabre", "Main nue")},
+    {"name" : "Protectrice", "stats" : ("Bouclier")},
+    {"name" : "Resistances", "stats" : ("Endurance", "Mentale", "Pathologique", "Physique")},
+    {"name" : "Survie", "stats" : ("Crochetage", "Discretion", "Orientation", "Peche", "Pistage", "Reflexe", "Soulevement")},
+    {"name" : "Sociale", "stats" : ("Dressage", "Imposture", "Intimidation", "Persuasion", "Psychologie", "Parole")},
+    {"name" : "Intellect", "stats" : ("Concentration", "Deduction", "Memoire", "Observation")},
+    {"name" : "Artisanat", "stats" : ("Art plastique", "Chimie", "Construction", "Cuisine", "Explosif", "Forge", "Medecine", "Musique")},
+    {"name" : "Magie", "stats" : ("Alchimie", "Amelioration", "Annihilation", "Conjuration", "Elementarisme", "Enchantement", "Illusionnisme", "Invocation", "Necromancie", "Perception", "Scellement")},
+]
+
 def get_line_id(lines : list, start : str) -> int :
     len_start = len(start)
 
@@ -25,9 +42,9 @@ def get_code(type, name) -> str :
     for i in range(len(counter_str), 3) :
         counter_str = "0" + counter_str
     new_code += counter_str
-    file = open("monster_attack_code.csv", "a")
-    file.write(f"{new_code},{name}\n")
-    file.close()
+    # file = open("monster_attack_code.csv", "a")
+    # file.write(f"{new_code},{name}\n")
+    # file.close()
     return new_code
 
 def build_doc_header(lines : list[str]) -> dom.Document :
@@ -56,48 +73,62 @@ def build_doc_header(lines : list[str]) -> dom.Document :
     return document
 
 
-def create_section(document : dom.Document, core_section : dom.Element, title_value : str) -> dom.Element :
+def create_section(document : dom.Document, parent : dom.Element, title_value : str) -> dom.Element :
     section = document.createElement("section")
     title = document.createElement("title")
     title.appendChild(document.createTextNode(title_value))
     section.appendChild(title)
-    core_section.appendChild(section)
+    parent.appendChild(section)
     return section
 
 def create_traits(lines : list[str], document : dom.Document, core_section : dom.Element) :
-    list_trait = ["Humanoïde", "Empathique", "Civilisé", "Doué magiquement", "Mobile", "Volant", "Mort-Vivant", "Organique"]
-    list_internal_name = ["Humanoide", "Empathique", "Civilise", "Magique", "Mobile", "Volant", "Mort-vivant", "Organique"]
-
     section = create_section(document, core_section, "trait")
     list_xml = document.createElement("list")
     section.appendChild(list_xml)
-    for i in range(len(list_trait)) :
+    for ele in list_trait_names :
         elem = document.createElement("listElem")
         list_xml.appendChild(elem)
         status = document.createElement("status")
         elem.appendChild(status)
-        status.setAttribute("name", list_internal_name[i])
+        status.setAttribute("name", ele)
         status.setAttribute("value", "false")
-        id_line = get_line_id(lines, list_trait[i])
+        id_line = get_line_id(lines, ele)
         if (id_line != -1 and lines[id_line][-1] != "X") :
             status.setAttribute("value", "true")
 
-def create_attributes(lines : list[str], document : dom.Document, core_section : dom.Element) :
-    list_attributes = ["Résistance", "Force", "Agilité", "Dextérité", "Vivacité", "Intellect", "Social"]
-    list_attributes_names = ["Resistance", "Force", "Agilite", "Dexterite", "Vivacite", "Intellect", "Social"]
+def create_xml_simple_list_of_stat(lines : list[str], document : dom.Document, parent : dom.Element, elems : dict) :
+    name = elems["name"]
+    section = create_section(document, parent, name)
+    parent.appendChild(section)
 
-    section = create_section(document, core_section, "Attributs")
     list_xml = document.createElement("list")
     section.appendChild(list_xml)
-    
+    for ele in elems["stats"] :
+        id_line_attribute = get_line_id(lines, ele)
+        if id_line_attribute != -1 :
+            list_elem = document.createElement("listElem")
+            list_xml.appendChild(list_elem)
+            stat = document.createElement("stat")
+            list_elem.appendChild(stat)
+            stat.setAttribute("nameId", ele)
+            stat.setAttribute("value", str(int(lines[id_line_attribute][len(ele):])))
+    return
+
+def change_names_in_doc(texte : str) :
+    texte = texte.replace("é", "e").replace("è", "e").replace("ï", "i").replace("arc", "Arc").replace("à", "a").replace("É", "E")
+    return texte
 
 def convert_monster_text_to_xml(texte : str) :
-    lines = texte.splitlines(False)
+    doc_modified_name = change_names_in_doc(texte)
+    lines = doc_modified_name.splitlines(False)
     document = build_doc_header(lines)
     root = document.firstChild
     core_section = document.createElement("section")
     root.appendChild(core_section)
     create_traits(lines, document, core_section)
-
+    create_xml_simple_list_of_stat(lines, document, core_section, {"name" : "Attributs", "stats" : list_attributes_names})
+    competences = create_section(document, core_section, "Competence")
+    for ele in list_competences :
+        if  get_line_id(lines, "\t" + ele["name"]) != -1 :
+            create_xml_simple_list_of_stat(lines, document, competences, ele)
     print(document.toprettyxml())
-

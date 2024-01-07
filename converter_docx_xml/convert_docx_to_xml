@@ -15,8 +15,8 @@ def lire_fichier_word(chemin_fichier):
 
 if __name__ == "__main__":
     if len(argv) < 2 :
+        print("Not enough arguments")
         exit(0)
     texte_extrait = lire_fichier_word(argv[1])
     convert_monster_text_to_xml(texte_extrait)
     # print("Texte extrait du fichier Word :\n")
-    # print(texte_extrait)
