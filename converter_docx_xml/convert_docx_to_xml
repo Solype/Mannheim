@@ -18,5 +18,5 @@ if __name__ == "__main__":
         print("Not enough arguments")
         exit(0)
     texte_extrait = lire_fichier_word(argv[1])
+    # print(texte_extrait)
     convert_monster_text_to_xml(texte_extrait)
-    # print("Texte extrait du fichier Word :\n")

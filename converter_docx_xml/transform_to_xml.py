@@ -26,25 +26,29 @@ def get_line_id(lines : list, start : str) -> int :
             return i
     return -1
 
-def get_code(type, name) -> str :
-    dico = {"monster power id" : "RP-PAE-I-", "monster id" : "RP-EBE-I-"}
+def get_code(type, name = "") -> str :
+    dico = {"monster skill id" : "RP-PAE-I-", "monster id" : "RP-EBE-I-"}
 
     new_code = dico[type]
     count = 1
     file = open("monster_attack_code.csv", "r",newline="")
     csv_lines = csv.reader(file, delimiter=",")
     for row in csv_lines :
+        if row[1] == name :
+            file.close()
+            return row[0]
+
         if row[0][:len(new_code)] == new_code :
             count += 1
-    file.close()
 
+    file.close()
     counter_str = str(count)
     for i in range(len(counter_str), 3) :
         counter_str = "0" + counter_str
     new_code += counter_str
-    # file = open("monster_attack_code.csv", "a")
-    # file.write(f"{new_code},{name}\n")
-    # file.close()
+    file = open("monster_attack_code.csv", "a")
+    file.write(f"{new_code},{name}\n")
+    file.close()
     return new_code
 
 def build_doc_header(lines : list[str]) -> dom.Document :
@@ -131,4 +135,4 @@ def convert_monster_text_to_xml(texte : str) :
     for ele in list_competences :
         if  get_line_id(lines, "\t" + ele["name"]) != -1 :
             create_xml_simple_list_of_stat(lines, document, competences, ele)
-    print(document.toprettyxml())
+    # print(document.toprettyxml())
