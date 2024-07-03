@@ -1,7 +1,8 @@
 import React from "react";
 
 const HealthBar = ({ current, max }) => {
-    const percentage = (current / max) * 100;
+    const res = (current / max) * 100;
+    const percentage = res > 100 ? 100 : res < 0 ? 0 : res;
 
     return (
         <div className="w-full bg-red-600 rounded-full h-2.5 relative">
