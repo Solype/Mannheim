@@ -119,9 +119,7 @@
         "pathological health": [7, 7],
         "endurance health": [11, 11]
     },
-    "religion": {
-        "language": [],
-        "devotion": 0,
-        "gods": []
-    }
+    "language": [],
+    "devotion": 0,
+    "gods": []
 }
