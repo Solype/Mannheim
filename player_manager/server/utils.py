@@ -55,7 +55,7 @@ def modify_simple_data(name, section, skill_name, value) -> bool:
         else :
             python_obj[skill_name] = value
         f = open("./players/" + name + ".json", "w")
-        f.write(json.dumps(python_obj))
+        f.write(json.dumps(python_obj, indent=4))
         f.close()
         return True
     except Exception as e:
@@ -71,7 +71,7 @@ def add_role(name, section, role_name) -> bool:
         python_obj = json.loads(json_data)
         python_obj["roles"][section].append(role_name)
         f = open("./players/" + name + ".json", "w")
-        f.write(json.dumps(python_obj))
+        f.write(json.dumps(python_obj, indent=4))
         f.close()
         return True
     except Exception as e:
@@ -87,7 +87,7 @@ def remove_role(name, section, role_name) -> bool:
         python_obj = json.loads(json_data)
         python_obj["roles"][section].remove(role_name)
         f = open("./players/" + name + ".json", "w")
-        f.write(json.dumps(python_obj))
+        f.write(json.dumps(python_obj, indent=4))
         f.close()
         return True
     except Exception as e:
@@ -103,7 +103,7 @@ def modify_monitor(name, section, value) -> bool:
         python_obj = json.loads(json_data)
         python_obj["monitor"][section][0] = value
         f = open("./players/" + name + ".json", "w")
-        f.write(json.dumps(python_obj))
+        f.write(json.dumps(python_obj, indent=4))
         f.close()
         return True
 
@@ -120,7 +120,7 @@ def upgrade_monitor(name, section, value) -> bool:
         python_obj = json.loads(json_data)
         python_obj["monitor"][section][1] = value
         f = open("./players/" + name + ".json", "w")
-        f.write(json.dumps(python_obj))
+        f.write(json.dumps(python_obj, indent=4))
         f.close()
         return True
 
@@ -137,7 +137,7 @@ def remove_god(name, name_god) -> bool:
         python_obj = json.loads(json_data)
         python_obj["religion"]["gods"].remove(name_god)
         f = open("./players/" + name + ".json", "w")
-        f.write(json.dumps(python_obj))
+        f.write(json.dumps(python_obj, indent=4))
         f.close()
         return True
     except Exception as e:
@@ -153,7 +153,7 @@ def modify_devotion(name, value) -> bool:
         python_obj = json.loads(json_data)
         python_obj["religion"]["devotion"] = value
         f = open("./players/" + name + ".json", "w")
-        f.write(json.dumps(python_obj))
+        f.write(json.dumps(python_obj, indent=4))
         f.close()
         return True
     except Exception as e:
@@ -169,7 +169,7 @@ def add_language(name, language) -> bool:
         python_obj = json.loads(json_data)
         python_obj["religion"]["language"].append(language)
         f = open("./players/" + name + ".json", "w")
-        f.write(json.dumps(python_obj))
+        f.write(json.dumps(python_obj, indent=4))
         f.close()
         return True
     except Exception as e:
@@ -185,7 +185,7 @@ def remove_language(name, language) -> bool:
         python_obj = json.loads(json_data)
         python_obj["religion"]["language"].remove(language)
         f = open("./players/" + name + ".json", "w")
-        f.write(json.dumps(python_obj))
+        f.write(json.dumps(python_obj, indent=4))
         f.close()
         return True
     except Exception as e:
@@ -201,7 +201,7 @@ def add_god(name, name_god) -> bool:
         python_obj = json.loads(json_data)
         python_obj["religion"]["gods"].append(name_god)
         f = open("./players/" + name + ".json", "w")
-        f.write(json.dumps(python_obj))
+        f.write(json.dumps(python_obj, indent=4))
         f.close()
         return True
     except Exception as e:

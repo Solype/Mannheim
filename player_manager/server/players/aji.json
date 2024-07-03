@@ -1,9 +1,9 @@
 {
-    "name": "Solyp\u00e9",
+    "name": "Aji",
     "infos": {
-        "race": "human",
+        "race": "orc",
         "age": 20,
-        "gender": "male"
+        "gender": "female"
     },
     "priority": {
         "role": "c",
@@ -347,24 +347,24 @@
     },
     "monitor": {
         "mana": [
-            13,
-            13
+            60,
+            60
         ],
         "physical health": [
-            10,
-            11
+            9,
+            9
         ],
         "mental health": [
-            7,
-            7
+            8,
+            8
         ],
         "pathological health": [
-            7,
-            7
+            8,
+            8
         ],
         "endurance health": [
-            14,
-            14
+            10,
+            10
         ]
     },
     "religion": {

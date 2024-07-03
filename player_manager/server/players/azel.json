@@ -1,7 +1,7 @@
 {
-    "name": "Solyp\u00e9",
+    "name": "Azel",
     "infos": {
-        "race": "human",
+        "race": "elf",
         "age": 20,
         "gender": "male"
     },
@@ -348,23 +348,23 @@
     "monitor": {
         "mana": [
             13,
-            13
+            90
         ],
         "physical health": [
-            10,
-            11
+            5,
+            5
         ],
         "mental health": [
-            7,
-            7
+            4,
+            5
         ],
         "pathological health": [
-            7,
-            7
+            3,
+            4
         ],
         "endurance health": [
-            14,
-            14
+            4,
+            4
         ]
     },
     "religion": {

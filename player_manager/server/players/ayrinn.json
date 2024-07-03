@@ -1,9 +1,9 @@
 {
-    "name": "Solyp\u00e9",
+    "name": "Ayrinn",
     "infos": {
-        "race": "human",
+        "race": "homme",
         "age": 20,
-        "gender": "male"
+        "gender": "female"
     },
     "priority": {
         "role": "c",
@@ -347,24 +347,24 @@
     },
     "monitor": {
         "mana": [
-            13,
-            13
+            0,
+            0
         ],
         "physical health": [
-            10,
-            11
+            7,
+            7
         ],
         "mental health": [
-            7,
-            7
+            8,
+            8
         ],
         "pathological health": [
-            7,
-            7
+            4,
+            5
         ],
         "endurance health": [
-            14,
-            14
+            7,
+            7
         ]
     },
     "religion": {

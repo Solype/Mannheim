@@ -1,9 +1,9 @@
 {
-    "name": "Solyp\u00e9",
+    "name": "Anis",
     "infos": {
-        "race": "human",
+        "race": "orc",
         "age": 20,
-        "gender": "male"
+        "gender": "female"
     },
     "priority": {
         "role": "c",
@@ -347,20 +347,20 @@
     },
     "monitor": {
         "mana": [
-            13,
-            13
+            112,
+            125
         ],
         "physical health": [
-            10,
-            11
+            14,
+            17
         ],
         "mental health": [
-            7,
-            7
+            12,
+            12
         ],
         "pathological health": [
-            7,
-            7
+            11,
+            12
         ],
         "endurance health": [
             14,

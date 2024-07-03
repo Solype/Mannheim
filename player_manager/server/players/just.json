@@ -1,7 +1,7 @@
 {
-    "name": "Solyp\u00e9",
+    "name": "Just",
     "infos": {
-        "race": "human",
+        "race": "kobold",
         "age": 20,
         "gender": "male"
     },
@@ -347,24 +347,24 @@
     },
     "monitor": {
         "mana": [
-            13,
-            13
+            60,
+            90
         ],
         "physical health": [
             10,
-            11
+            10
         ],
         "mental health": [
-            7,
+            6,
             7
         ],
         "pathological health": [
-            7,
-            7
+            6,
+            6
         ],
         "endurance health": [
-            14,
-            14
+            8,
+            8
         ]
     },
     "religion": {

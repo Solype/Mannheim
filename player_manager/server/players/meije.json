@@ -1,9 +1,9 @@
 {
-    "name": "Solyp\u00e9",
+    "name": "Meije",
     "infos": {
-        "race": "human",
+        "race": "homme",
         "age": 20,
-        "gender": "male"
+        "gender": "female"
     },
     "priority": {
         "role": "c",
@@ -347,24 +347,24 @@
     },
     "monitor": {
         "mana": [
-            13,
-            13
+            0,
+            0
         ],
         "physical health": [
-            10,
-            11
+            8,
+            8
         ],
         "mental health": [
-            7,
-            7
+            4,
+            4
         ],
         "pathological health": [
-            7,
-            7
+            8,
+            8
         ],
         "endurance health": [
-            14,
-            14
+            6,
+            6
         ]
     },
     "religion": {

@@ -1,34 +1,44 @@
 import React, { useState } from 'react';
 import HealthBar from './HeathBar';
-import NumberInputPopup from './NumberInput';
+import NumberInputPopup from './NumberInput'; // Assurez-vous que le nom du fichier est correct
 
-const ClickableHealthBar = ({ current, max, onUpdateCurrent }) => {
-  const [isNumberInputOpen, setNumberInputOpen] = useState(false);
+interface ClickableHealthBarProps {
+    current: number;
+    max: number;
+    onUpdateCurrent: (newCurrent: number) => void;
+    barColor?: string;
+    backBarColor?: string;
+}
 
-  const openNumberInput = () => {
-    setNumberInputOpen(true);
-  };
+const ClickableHealthBar: React.FC<ClickableHealthBarProps> = ({ current, max, onUpdateCurrent, barColor = 'bg-green-500', backBarColor = 'bg-red-500' }) => {
+    const [isNumberInputOpen, setNumberInputOpen] = useState(false);
 
-  const closeNumberInput = () => {
-    setNumberInputOpen(false);
-  };
+    const openNumberInput = () => {
+        setNumberInputOpen(true);
+    };
 
-  const handleNumberSubmit = ({ operator, value }) => {
-    const newCurrent = operator === '+' ? current + value : operator === '-' ? current - value : value;
-    if (onUpdateCurrent !== null) {
-        onUpdateCurrent(newCurrent); // Met à jour le current dans le parent (envoi au serveur)
-    }
-    closeNumberInput();
-  };
+    const closeNumberInput = () => {
+        setNumberInputOpen(false);
+    };
 
-  return (
-    <>
-      <div onClick={openNumberInput} className="cursor-pointer">
-        <HealthBar current={current} max={max} />
-      </div>
-      <NumberInputPopup isOpen={isNumberInputOpen} onClose={closeNumberInput} onSubmit={handleNumberSubmit} />
-    </>
-  );
+    const handleNumberSubmit = ({ operator, value }: { operator: string, value: number }) => {
+        const newCurrent = operator === '+' ? current + value : operator === '-' ? current - value : value;
+        if (onUpdateCurrent) {
+            onUpdateCurrent(newCurrent); // Met à jour le current dans le parent (envoi au serveur)
+        }
+        closeNumberInput();
+    };
+
+    return (
+        <>
+            <div onClick={openNumberInput} className="cursor-pointer">
+                <HealthBar current={current} max={max} barColor={barColor} backBarColor={backBarColor} />
+            </div>
+            {isNumberInputOpen && (
+                <NumberInputPopup isOpen={isNumberInputOpen} onClose={closeNumberInput} onSubmit={handleNumberSubmit} />
+            )}
+        </>
+    );
 };
 
 export default ClickableHealthBar;
