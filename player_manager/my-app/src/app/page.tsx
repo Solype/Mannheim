@@ -1,34 +1,43 @@
 // src/app/page.tsx
+"use client";
+
+import React, { useState } from 'react';
+
 import Card from "../components/Card";
-import HeathBar from "../components/HeathBar";
+import SimpleCharCard from "../components/SimpleCharCard";
+import MinusButton from "../components/MinusButton";
+import PlusButton from "../components/PlusButton";
+import NumberInputPopup from "../components/NumberInput";
 
 export default function Home() {
+  const [isNumberInputOpen, setNumberInputOpen] = useState(false); // État pour gérer l'ouverture du popup
+
+  const openNumberInput = () => {
+    setNumberInputOpen(true);
+  };
+
+  const closeNumberInput = () => {
+    setNumberInputOpen(false);
+  };
+
+  const handleNumberSubmit = (value) => {
+    console.log('Submitted number:', value);
+    closeNumberInput();
+  };
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
 
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <Card
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          title="Docs"
-          description="Find in-depth information about Next.js features and API."
-        />
-        <Card
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          title="Learn"
-          description="Learn about Next.js in an interactive course with&nbsp;quizzes!"
-        />
-        <Card
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          title="Templates"
-          description="Explore starter templates for Next.js."
-        />
-        <Card
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          title="Deploy"
-          description="Instantly deploy your Next.js site to a shareable URL with Vercel."
-        />
-        <HeathBar current={10} max={20} />
+      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left gap-x-4 gap-y-4">
+        <SimpleCharCard name="test"
+          cur_mana={10} max_mana={10} cur_phys={10} max_phys={10} cur_mental={10} max_mental={10} cur_stamina={10} max_stamina={10} cur_path={10} max_path={10}
+          />
+        <SimpleCharCard name="test"
+          cur_mana={10} max_mana={100} cur_phys={10} max_phys={10} cur_mental={10} max_mental={10} cur_stamina={10} max_stamina={10} cur_path={10} max_path={10}
+          />
+        <MinusButton onClick={openNumberInput}/>
       </div>
+      <NumberInputPopup isOpen={isNumberInputOpen} onClose={closeNumberInput} onSubmit={handleNumberSubmit} />
     </main>
   );
 }
