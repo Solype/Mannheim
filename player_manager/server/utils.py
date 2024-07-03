@@ -1,4 +1,13 @@
 import json
+import os
+
+def get_player_files():
+    files = []
+    for file in os.listdir("./players"):
+        if file.endswith(".json"):
+            files.append(file)
+    
+    return files
 
 def extract_players_from_file(file):
     f = open("./players/" + file)
@@ -9,9 +18,7 @@ def extract_players_from_file(file):
         str_data = f.read()
         json_data = str_data.replace("'", '"')
         python_obj = json.loads(json_data)
-
-    except json.JSONDecodeError as e:
-        print("Erreur de décodage JSON:", e)
+        python_obj["file"] = file[:-len(".json")]  
 
     except Exception as e:
         print("Une erreur s'est produite:", e)
@@ -23,11 +30,13 @@ def filter_heath_players(players):
     for player in players:
         try:
             tmp = {
+                "file": player["file"],
                 "name": player["name"],
                 "physical health": player["monitor"]["physical health"],
                 "mental health": player["monitor"]["mental health"],
                 "pathological health": player["monitor"]["pathological health"],
-                "endurance health": player["monitor"]["endurance health"]
+                "endurance health": player["monitor"]["endurance health"],
+                "mana": player["monitor"]["mana"]
             }
             to_return.append(tmp)
         except Exception as e:

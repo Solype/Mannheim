@@ -4,13 +4,11 @@ from os import listdir
 from os.path import isfile, join
 from utils import extract_players_from_file, filter_heath_players, modify_simple_data, modify_monitor, upgrade_monitor, remove_role, add_role, \
     remove_language, add_language, add_god, remove_god, modify_devotion
+from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
-CORS(app)
-
-@app.route('/')
-def hello_world():
-    return "Hello, World!"
+CORS(app, resources={r"/*": {"origins": "*"}})
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 @app.route('/players/health')
 def players_health():
@@ -41,14 +39,19 @@ def change_monitor(name):
 
     if request.json["type"] == "upgrade":
         if upgrade_monitor(name, request.json["monitor"], request.json["value"]):
+            health_data = players_health().get_json()  # Extract JSON data
+            socketio.emit('updateData', health_data)
             return { "status": "success" }
         return { "status": "error", "content": "failed to upgrade" }
 
     if request.json["type"] == "update":
-        if modify_monitor(name, request.json["section"], request.json["value"]):
+        if modify_monitor(name, request.json["monitor"], request.json["value"]):
+            health_data = players_health().get_json()  # Extract JSON data
+            socketio.emit('updateData', health_data)
             return { "status": "success" }
         return { "status": "error", "content": "failed to update" }
     return { "status": "error" }
+
 
 @app.route('/player/<string:name>/role', methods=['POST'])
 def change_role(name):
