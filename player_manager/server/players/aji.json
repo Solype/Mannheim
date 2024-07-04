@@ -347,7 +347,7 @@
     },
     "monitor": {
         "mana": [
-            49,
+            5,
             60
         ],
         "physical health": [
