@@ -3,7 +3,7 @@ from flask_cors import CORS
 from os import listdir
 from os.path import isfile, join
 from utils import extract_players_from_file, filter_heath_players, modify_simple_data, modify_monitor, upgrade_monitor, remove_role, add_role, \
-    remove_language, add_language, add_god, remove_god, modify_devotion
+    remove_language, add_language, add_god, remove_god, modify_devotion, modify_skill
 from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
@@ -26,9 +26,9 @@ def players_health():
 
 @app.route('/player/<string:name>/skill', methods=['POST'])
 def change_skill(name):
-    if "skill name" not in request.json.keys() or "value" not in request.json.keys() :
+    if "skill name" not in request.json.keys() or "value" not in request.json.keys() or "type" not in request.json.keys() :
         return { "status": "error" }
-    if modify_simple_data(name, "skills", request.json["skill name"], request.json["value"]):
+    if modify_skill(name, request.json["skill name"], request.json["type"], request.json["value"]):
         return { "status": "success" }
     return { "status": "error" }
 

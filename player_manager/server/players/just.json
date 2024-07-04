@@ -347,7 +347,7 @@
     },
     "monitor": {
         "mana": [
-            60,
+            80,
             90
         ],
         "physical health": [
@@ -355,7 +355,7 @@
             10
         ],
         "mental health": [
-            6,
+            7,
             7
         ],
         "pathological health": [

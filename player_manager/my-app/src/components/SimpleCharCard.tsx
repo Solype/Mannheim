@@ -1,7 +1,7 @@
 import React from 'react';
-import ClickableHealthBar from './ClickableHealthBar';
-import { HealthData } from '../types';
-import { FaCog } from 'react-icons/fa';
+import ClickableHealthBar from './Card/ClickableHealthBar';
+import { HealthData } from '@/types';
+import Link from 'next/link';
 
 interface SimpleCharCardProps {
     jsonData: HealthData;
@@ -12,13 +12,11 @@ const SimpleCharCard: React.FC<SimpleCharCardProps> = ({ jsonData, onUpdateCurre
     return (
         <div className="relative group rounded-lg bg-gray-600 border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 border-gray-400 flex flex-col md:flex-row md:items-center md:justify-between">
             <div className="md:flex-1">
-                <button
-                    className="p-2 hover:bg-blue-700 rounded-lg transition-colors duration-300"
-                    onClick={() => console.log('Settings button clicked')}>
-                    <h2 className="mb-0 text-xl font-semibold">
+                <Link href={`/player?name=${jsonData["file"]}`}>
+                    <h2 className="mb-0 text-xl font-semibold text-center p-2 hover:bg-blue-700 rounded-lg transition-colors duration-300">
                         {jsonData["name"]}
                     </h2>
-                </button>
+                </Link>
 
                 <div className="space-y-2">
                     <div>

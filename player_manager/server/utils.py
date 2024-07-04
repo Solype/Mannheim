@@ -61,6 +61,22 @@ def modify_simple_data(name, section, skill_name, value) -> bool:
     except Exception as e:
         print("Une erreur s'est produite:", e)
         return False
+    
+def modify_skill(name, skill_name, section, value) -> bool:
+    try:
+        f = open("./players/" + name + ".json", "r")
+        str_data = f.read()
+        f.close()
+        json_data = str_data.replace("'", '"')
+        python_obj = json.loads(json_data)
+        python_obj["skills"][skill_name][section] = value
+        f = open("./players/" + name + ".json", "w")
+        f.write(json.dumps(python_obj, indent=4))
+        f.close()
+        return True
+    except Exception as e:
+        print("Une erreur s'est produite:", e)
+        return False
 
 def add_role(name, section, role_name) -> bool:
     try:

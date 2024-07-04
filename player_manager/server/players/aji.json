@@ -347,11 +347,11 @@
     },
     "monitor": {
         "mana": [
-            60,
+            49,
             60
         ],
         "physical health": [
-            9,
+            7,
             9
         ],
         "mental health": [
@@ -363,7 +363,7 @@
             8
         ],
         "endurance health": [
-            10,
+            7,
             10
         ]
     },
