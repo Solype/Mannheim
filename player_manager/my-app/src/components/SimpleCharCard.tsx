@@ -38,20 +38,20 @@ const SimpleCharCard: React.FC<SimpleCharCardProps> = ({ jsonData, onUpdateCurre
                         />
                     </div>
                     <div>
-                        <p className="text-xs font-medium mb-1">Mental</p>
-                        <ClickableHealthBar current={jsonData["mental health"][0]} max={jsonData["mental health"][1]}
-                            onUpdateCurrent={(n: number) => onUpdateCurrent(jsonData["file"], "mental health", n)}
-                            barColor='bg-blue-500'
-                            backBarColor='bg-gray-500'
-                        />
-                    </div>
-                    <div>
                         <p className="text-xs font-medium mb-1">Endurance</p>
                         <ClickableHealthBar current={jsonData["endurance health"][0]} max={jsonData["endurance health"][1]}
                             onUpdateCurrent={(n: number) => onUpdateCurrent(jsonData["file"], "endurance health", n)}
                             barColor='bg-yellow-500'
                             backBarColor='bg-gray-500'
                             />
+                    </div>
+                    <div>
+                        <p className="text-xs font-medium mb-1">Mental</p>
+                        <ClickableHealthBar current={jsonData["mental health"][0]} max={jsonData["mental health"][1]}
+                            onUpdateCurrent={(n: number) => onUpdateCurrent(jsonData["file"], "mental health", n)}
+                            barColor='bg-blue-500'
+                            backBarColor='bg-gray-500'
+                        />
                     </div>
                     <div>
                         <p className="text-xs font-medium mb-1">Pathologique</p>

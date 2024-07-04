@@ -12,7 +12,7 @@ const HealthBar: React.FC<HealthBarProps> = ({ current, max, barColor = 'bg-gree
     const res = max <= 0 ? 0 : (current / max) * 100;
     const percentage = res > 100 ? 100 : res < 0 ? 0 : res;
     const finalBarColor = max <= 0 ? 'bg-gray-200' : barColor;
-    const finalBackBarColor = max <= 0 ? 'bg-gray-200' : backBarColor;
+    const finalBackBarColor = max <= 0 ? 'bg-gray-200' : (max > 0 && percentage === 0) ? 'bg-red-600': backBarColor ;
 
     return (
         <div className={`w-full ${finalBackBarColor} rounded-full h-2.5 relative`}>
