@@ -2,13 +2,13 @@
 "use client";
 
 import React from 'react';
-import { useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 const Player = () => {
-    const params = useParams();
+    const router = useRouter();
+    const { name } = router.query;
 
-    // Vérification de la disponibilité de router.query avant de déstructurer
-    console.log(params);
+    console.log(name);
     return (
         <div>
             <h1>Player Page</h1>
