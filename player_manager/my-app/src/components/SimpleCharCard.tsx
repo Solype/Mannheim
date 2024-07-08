@@ -13,11 +13,9 @@ const SimpleCharCard: React.FC<SimpleCharCardProps> = ({ jsonData, onUpdateCurre
         <div className="relative group rounded-lg bg-gray-600 border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30 border-gray-400 flex flex-col md:flex-row md:items-center md:justify-between">
             <div className="md:flex-1">
                 <Link href={{ pathname: `/player`, query: { name: jsonData["file"] }}}>
-                    <a>
-                        <h2 className="mb-0 text-xl font-semibold text-center p-2 hover:bg-blue-700 rounded-lg transition-colors duration-300">
-                            {jsonData["name"]}
-                        </h2>
-                    </a>
+                    <h2 className="mb-0 text-xl font-semibold text-center p-2 hover:bg-blue-700 rounded-lg transition-colors duration-300">
+                        {jsonData["name"]}
+                    </h2>
                 </Link>
 
                 <div className="space-y-2">

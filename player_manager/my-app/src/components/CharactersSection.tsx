@@ -9,12 +9,12 @@ interface CharactersProps {}
 
 const Characters: React.FC<CharactersProps> = () => {
     const [data, setData] = useState<[]>([]);
-    const socket = io('http://192.168.1.128:5000'); // Connect to your Flask server
+    const socket = io('http://192.168.1.31:5000'); // Connect to your Flask server
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('http://192.168.1.128:5000/players/health');
+                const response = await fetch('http://192.168.1.31:5000/players/health');
                 if (!response.ok) {
                     throw new Error('Réponse réseau incorrecte');
                 }
@@ -44,7 +44,7 @@ const Characters: React.FC<CharactersProps> = () => {
     const onUpdateMonitor = async (name: string, monitor: string, newCurrent: number) => {
         console.log(name, monitor, newCurrent);
 
-        const response = await fetch(`http://192.168.1.128:5000/player/${name}/monitor`, {
+        const response = await fetch(`http://192.168.1.31:5000/player/${name}/monitor`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

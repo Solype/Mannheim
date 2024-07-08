@@ -1,19 +1,16 @@
-// src/app/player/page.tsx
 "use client";
 
-import React from 'react';
-import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
-const Player = () => {
-    const router = useRouter();
-    const { name } = router.query;
+const PlayerPage: React.FC = () => {
+    const searchParams = useSearchParams();
+    const name = searchParams.get('name') || "";
 
-    console.log(name);
     return (
-        <div>
-            <h1>Player Page</h1>
-        </div>
+        <>
+            <h1>{name}</h1>
+        </>
     );
 };
 
-export default Player;
+export default PlayerPage;
