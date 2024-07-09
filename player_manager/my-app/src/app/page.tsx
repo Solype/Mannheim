@@ -7,10 +7,11 @@ import Characters from '@/components/CharactersSection';
 
 export default function Home() {
     return (
-        <main className="flex min-h-screen flex-col items-center justify-between p-24">
+        <div className="relative flex min-h-screen">
+            <main className={`flex-grow flex flex-col items-center justify-between p-24 transition-all`}>
+                <Characters />
+            </main>
             <Tools />
-            <hr className="my-8 w-full border-t-2 border-gray-300" />
-            <Characters />
-        </main>
+        </div>
     );
 }

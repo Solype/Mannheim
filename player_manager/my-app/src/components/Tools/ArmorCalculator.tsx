@@ -48,45 +48,41 @@ const ArmorCalculator: React.FC = () => {
     };
 
     return (
-        <div className="flex items-center border border-gray-300 rounded p-4">
-            <div className="flex flex-col items-center">
-                <div className="flex items-center mb-2">
+        <div className="flex flex-col items-center border border-gray-300 rounded p-4 w-full">
+            <div className="flex flex-col items-center mb-2 w-full">
+                <div className="flex items-center mb-2 w-full">
                     <span role="img" aria-label="Damage Icon" style={{ fontSize: '1.5rem', marginRight: '0.5rem' }}>💥</span>
                     <input
                         type="number"
                         value={number1}
                         onChange={handleNumber1Change}
-                        className="px-4 py-2 border rounded text-center text-black w-24"
+                        className="px-4 py-2 border rounded text-center text-black w-full"
                         placeholder="Damage"
-                        // w-24 sets a fixed width for the input
                     />
                 </div>
-                <div className="flex items-center mb-2">
+                <div className="flex items-center mb-2 w-full">
                     <span role="img" aria-label="Penetration Icon" style={{ fontSize: '1.5rem', marginRight: '0.5rem' }}>🎯</span>
                     <input
                         type="number"
                         value={number2}
                         onChange={handleNumber2Change}
-                        className="px-4 py-2 border rounded text-center text-black w-24"
+                        className="px-4 py-2 border rounded text-center text-black w-full"
                         placeholder="Penetration"
-                        // w-24 sets a fixed width for the input
                     />
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center w-full">
                     <span role="img" aria-label="Armor Icon" style={{ fontSize: '1.5rem', marginRight: '0.5rem' }}>🛡️</span>
                     <input
                         type="number"
                         value={number3}
                         onChange={handleNumber3Change}
-                        className="px-4 py-2 border rounded text-center text-black w-24"
+                        className="px-4 py-2 border rounded text-center text-black w-full"
                         placeholder="Armor"
-                        // w-24 sets a fixed width for the input
                     />
                 </div>
             </div>
-            <span className="ml-2" role="img" aria-label="Arrow Icon" style={{ fontSize: '2rem' }}>➡️</span>
-            <div className="ml-2 text-4xl font-bold">{sum}</div>
-            {/* ml-2 sets a margin-left of 0.5rem (adjust as needed) */}
+            <span className="mt-2" role="img" aria-label="Arrow Icon" style={{ fontSize: '2rem' }}>➡️</span>
+            <div className="mt-2 text-4xl font-bold">{sum}</div>
         </div>
     );
 };

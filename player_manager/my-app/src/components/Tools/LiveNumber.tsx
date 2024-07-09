@@ -38,20 +38,19 @@ const LiveNumber: React.FC = () => {
     };
 
     return (
-        <div className="flex items-center border border-gray-300 rounded p-4">
-            <input
-                type="number"
-                onChange={handleChange}
-                className="px-4 py-2 border rounded text-center text-black w-24"
-                placeholder="Enter number"
-            />  
-                <span className="ml-2" role="img" aria-label="Character Icon" style={{ fontSize: '2rem' }}>👤</span>
-                <span className="ml-2" role="img" aria-label="Arrow Icon" style={{ fontSize: '2rem' }}>➡️</span>
-                <span className="ml-2" role="img" aria-label="Dice Icon" style={{ fontSize: '2rem' }}>🎲</span>
-            <div className="ml-2">
-                <div className="text-4xl font-bold">{formatNumber(displayNumber)}</div>
+        <div className="flex flex-col items-center border border-gray-300 rounded p-4 w-full">
+            <div className="flex items-center mb-2 w-full">
+                <input
+                    type="number"
+                    onChange={handleChange}
+                    className="px-4 py-2 border rounded text-center text-black w-full"
+                    placeholder="Enter number"
+                />
             </div>
-            {/* ml-2 sets a margin-left of 0.5rem (adjust as needed) */}
+            <div className="flex items-center">
+                <span className="ml-2" role="img" aria-label="Icons" style={{ fontSize: '2rem' }}>👤➡️🎲</span>
+            </div>
+            <div className="mt-2 text-4xl font-bold">{formatNumber(displayNumber)}</div>
         </div>
     );
 };

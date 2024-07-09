@@ -31,3 +31,7 @@ body {
     text-wrap: balance;
   }
 }
+
+.transition-margin {
+  transition: margin 0.3s ease;
+}
