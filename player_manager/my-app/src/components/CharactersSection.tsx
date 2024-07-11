@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import SimpleCharCard from "@/components/SimpleCharCard";
+import SimpleCharCard from "@/components/Card/SimpleCharCard";
 import io from 'socket.io-client';
 
 interface CharactersProps {}
@@ -71,15 +71,19 @@ const Characters: React.FC<CharactersProps> = () => {
 
     return (
         <>
-            <h2 className="text-3xl font-bold">Characters</h2>
-            <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left gap-x-4 gap-y-4">
-                {data.map((item, index) => (
-                    <SimpleCharCard
-                        key={index}
-                        jsonData={item}
-                        onUpdateCurrent={onUpdateMonitor}
-                    />
-                ))}
+            <div className="flex flex-col items-center">
+                <h2 className="text-3xl font-bold mb-4">Characters</h2>
+                <div className="flex flex-wrap gap-4 justify-center">
+                    {data.map((item, index) => (
+                        <div key={index} className="flex justify-center">
+                            <SimpleCharCard
+                                key={index}
+                                jsonData={item}
+                                onUpdateCurrent={onUpdateMonitor}
+                            />
+                        </div>
+                    ))}
+                </div>
             </div>
         </>
     );
