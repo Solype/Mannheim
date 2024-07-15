@@ -368,8 +368,15 @@
         ]
     },
     "religion": {
+        "gods": {"Nake": 1}
+    },
+    "other": {
         "language": [],
-        "devotion": 0,
-        "gods": []
+        "inventory": [],
+        "special abilities": [],
+        "spells": [],
+        "experience": 0,
+        "mana": 0,
+        "money": 0
     }
 }

@@ -52,7 +52,6 @@ def change_monitor(name):
         return { "status": "error", "content": "failed to update" }
     return { "status": "error" }
 
-
 @app.route('/player/<string:name>/role', methods=['POST'])
 def change_role(name):
     if "role" not in request.json.keys() or "action" not in request.json.keys() or "section" not in request.json.keys() :
