@@ -18,7 +18,6 @@ interface PlayerData {
     file?: string;
     infos?: Infos;
     monitor?: Monitor;
-    name?: string;
     priority?: Priority;
     religion?: Religion;
     roles?: Roles;
@@ -56,13 +55,13 @@ const PlayerPage: React.FC = () => {
     }, [name]);
 
     return (
-        <main className="flex min-h-screen flex-col items-center justify-between p-24">
+        <main className="flex min-h-screen flex-col items-center justify-between p-8">
             <Tools />
             <h1 className="text-center text-4xl font-bold mb-8">{name}</h1>
             {data ? (
-                <div className="w-full flex flex-col md:flex-row gap-8">
-                    <div className="md:w-1/2">
-                        {data.infos && data.file && data.name && <InfoComponent infos={data.infos} file={data.file} name={data.name} />}
+                <div className="w-full flex flex-col md:flex-row gap-8 justify-center">
+                    <div className="md:w-1/6 min-w-[200px]">
+                        {data.infos && data.file && data.name && <InfoComponent infos={data.infos} file={data.file} />}
                         {data.priority && <PriorityComponent priority={data.priority} />}
                         {data.attributes && <AttributesComponent attributes={data.attributes} />}
                         {data.roles && <RolesComponent roles={data.roles} />}
@@ -70,14 +69,14 @@ const PlayerPage: React.FC = () => {
                         {data.religion && <ReligionComponent religion={data.religion} />}
                         {data.other && <OtherComponent other={data.other} />}
                     </div>
-                    <div className="md:w-1/2">
+                    <div className="border-l-2 border-gray-400"></div>
+                    <div className="md:w-1/6 min-w-[200px]">
                         {data.skills && <SkillsComponent skills={data.skills} />}
                     </div>
                 </div>
             ) : (
                 <p>Loading data...</p>
             )}
-            <code className="mt-8">{JSON.stringify(data)}</code>
         </main>
     );
 };

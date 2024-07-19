@@ -7,6 +7,7 @@ export interface Infos {
     age: number;
     gender: string;
     race: string;
+    name: string;
 }
 
 export interface Monitor {

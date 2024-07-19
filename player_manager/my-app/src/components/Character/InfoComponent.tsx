@@ -4,10 +4,9 @@ import { Infos } from '@/types';
 interface InfoComponentProps {
     infos: Infos | undefined;
     file: string | undefined;
-    name: string | undefined;
 }
 
-const InfoComponent: React.FC<InfoComponentProps> = ({ infos, file, name }) => {
+const InfoComponent: React.FC<InfoComponentProps> = ({ infos, file }) => {
     if (!infos) return null;
 
     return (
@@ -20,7 +19,7 @@ const InfoComponent: React.FC<InfoComponentProps> = ({ infos, file, name }) => {
                 </li>
                 <li className="flex justify-between">
                     <span className="capitalize">Name</span>
-                    <span>{name}</span>
+                    <span>{infos.name}</span>
                 </li>
                 <li className="flex justify-between">
                     <span className="capitalize">Age</span>

@@ -10,18 +10,22 @@ def get_player_files():
     return files
 
 def extract_players_from_file(file):
-    f = open("./players/" + file)
-    content = f.read()
     python_obj = None
     try:
         f = open("./players/" + file)
+        print("./players/" + file)
         str_data = f.read()
+        print("got data")
         json_data = str_data.replace("'", '"')
+        print("jsonified")
         python_obj = json.loads(json_data)
-        python_obj["file"] = file[:-len(".json")]  
+        print("loaded")
+        python_obj["file"] = file[:-len(".json")] 
+        f.close()
+        print("done")
 
     except Exception as e:
-        print("Une erreur s'est produite:", e)
+        print("Une erreur s'est produite dans 'extract_players_from_file':", e)
 
     return python_obj
 
@@ -31,7 +35,7 @@ def filter_heath_players(players):
         try:
             tmp = {
                 "file": player["file"],
-                "name": player["name"],
+                "name": player["infos"]["name"],
                 "physical health": player["monitor"]["physical health"],
                 "mental health": player["monitor"]["mental health"],
                 "pathological health": player["monitor"]["pathological health"],
@@ -40,7 +44,7 @@ def filter_heath_players(players):
             }
             to_return.append(tmp)
         except Exception as e:
-            print("Une erreur s'est produite:", e)
+            print("Une erreur s'est produite dans 'filter_heath_players':", e)
     return to_return
 
 def modify_simple_data(name, section, skill_name, value) -> bool:
@@ -59,7 +63,7 @@ def modify_simple_data(name, section, skill_name, value) -> bool:
         f.close()
         return True
     except Exception as e:
-        print("Une erreur s'est produite:", e)
+        print("Une erreur s'est produite dans 'modify_simple_data':", e)
         return False
     
 def modify_skill(name, skill_name, section, value) -> bool:
@@ -75,7 +79,7 @@ def modify_skill(name, skill_name, section, value) -> bool:
         f.close()
         return True
     except Exception as e:
-        print("Une erreur s'est produite:", e)
+        print("Une erreur s'est produite dans 'modify_skill':", e)
         return False
 
 def add_role(name, section, role_name) -> bool:
@@ -91,7 +95,7 @@ def add_role(name, section, role_name) -> bool:
         f.close()
         return True
     except Exception as e:
-        print("Une erreur s'est produite:", e)
+        print("Une erreur s'est produite dans 'add_role':", e)
         return False
 
 def remove_role(name, section, role_name) -> bool:
@@ -107,7 +111,7 @@ def remove_role(name, section, role_name) -> bool:
         f.close()
         return True
     except Exception as e:
-        print("Une erreur s'est produite:", e)
+        print("Une erreur s'est produite dans 'remove_role':", e)
         return False
 
 def modify_monitor(name, section, value) -> bool:
@@ -124,7 +128,7 @@ def modify_monitor(name, section, value) -> bool:
         return True
 
     except Exception as e:
-        print("Une erreur s'est produite:", e)
+        print("Une erreur s'est produite dans 'modify_monitor':", e)
         return False
 
 def upgrade_monitor(name, section, value) -> bool:
@@ -141,7 +145,7 @@ def upgrade_monitor(name, section, value) -> bool:
         return True
 
     except Exception as e:
-        print("Une erreur s'est produite:", e)
+        print("Une erreur s'est produite dans 'upgrade_monitor':", e)
         return False
 
 def remove_god(name, name_god) -> bool:
@@ -157,7 +161,7 @@ def remove_god(name, name_god) -> bool:
         f.close()
         return True
     except Exception as e:
-        print("Une erreur s'est produite:", e)
+        print("Une erreur s'est produite dans 'remove_god':", e)
         return False
 
 def modify_devotion(name, value) -> bool:
@@ -173,7 +177,7 @@ def modify_devotion(name, value) -> bool:
         f.close()
         return True
     except Exception as e:
-        print("Une erreur s'est produite:", e)
+        print("Une erreur s'est produite dans 'modify_devotion':", e)
         return False
 
 def add_language(name, language) -> bool:
@@ -189,7 +193,7 @@ def add_language(name, language) -> bool:
         f.close()
         return True
     except Exception as e:
-        print("Une erreur s'est produite:", e)
+        print("Une erreur s'est produite dans 'add_language':", e)
         return False
 
 def remove_language(name, language) -> bool:
@@ -205,7 +209,7 @@ def remove_language(name, language) -> bool:
         f.close()
         return True
     except Exception as e:
-        print("Une erreur s'est produite:", e)
+        print("Une erreur s'est produite dans 'remove_language':", e)
         return False
 
 def add_god(name, name_god) -> bool:
@@ -221,5 +225,5 @@ def add_god(name, name_god) -> bool:
         f.close()
         return True
     except Exception as e:
-        print("Une erreur s'est produite:", e)
+        print("Une erreur s'est produite dans 'add_god':", e)
         return False
