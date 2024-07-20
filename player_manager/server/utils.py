@@ -13,16 +13,11 @@ def extract_players_from_file(file):
     python_obj = None
     try:
         f = open("./players/" + file)
-        print("./players/" + file)
         str_data = f.read()
-        print("got data")
         json_data = str_data.replace("'", '"')
-        print("jsonified")
         python_obj = json.loads(json_data)
-        print("loaded")
         python_obj["file"] = file[:-len(".json")] 
         f.close()
-        print("done")
 
     except Exception as e:
         print("Une erreur s'est produite dans 'extract_players_from_file':", e)
@@ -47,9 +42,9 @@ def filter_heath_players(players):
             print("Une erreur s'est produite dans 'filter_heath_players':", e)
     return to_return
 
-def modify_simple_data(name, section, skill_name, value) -> bool:
+def modify_simple_data(name_player, section, skill_name, value) -> bool:
     try:
-        f = open("./players/" + name + ".json", "r")
+        f = open("./players/" + name_player + ".json", "r")
         str_data = f.read()
         f.close()
         json_data = str_data.replace("'", '"')
@@ -58,7 +53,7 @@ def modify_simple_data(name, section, skill_name, value) -> bool:
             python_obj[section][skill_name] = value
         else :
             python_obj[skill_name] = value
-        f = open("./players/" + name + ".json", "w")
+        f = open("./players/" + name_player + ".json", "w")
         f.write(json.dumps(python_obj, indent=4))
         f.close()
         return True
@@ -66,14 +61,14 @@ def modify_simple_data(name, section, skill_name, value) -> bool:
         print("Une erreur s'est produite dans 'modify_simple_data':", e)
         return False
     
-def modify_skill(name, skill_name, section, value) -> bool:
+def modify_skill(name, skill_name, given_by_role, brut) -> bool:
     try:
         f = open("./players/" + name + ".json", "r")
         str_data = f.read()
         f.close()
         json_data = str_data.replace("'", '"')
         python_obj = json.loads(json_data)
-        python_obj["skills"][skill_name][section] = value
+        python_obj["skills"][skill_name] = [given_by_role, brut]
         f = open("./players/" + name + ".json", "w")
         f.write(json.dumps(python_obj, indent=4))
         f.close()

@@ -15,7 +15,7 @@ import { Attributes, Infos, Monitor, Other, Priority, Religion, Roles, Skills } 
 
 interface PlayerData {
     attributes?: Attributes;
-    file?: string;
+    file: string;
     infos?: Infos;
     monitor?: Monitor;
     priority?: Priority;
@@ -57,11 +57,12 @@ const PlayerPage: React.FC = () => {
     return (
         <main className="flex min-h-screen flex-col items-center justify-between p-8">
             <Tools />
-            <h1 className="text-center text-4xl font-bold mb-8">{name}</h1>
+            <h1 className="text-center text-6xl font-bold mb-8">{data?.infos?.name}</h1>
+            <h2 className="text-center text-2xl font-bold mb-8">{name}.json</h2>
             {data ? (
                 <div className="w-full flex flex-col md:flex-row gap-8 justify-center">
                     <div className="md:w-1/6 min-w-[200px]">
-                        {data.infos && data.file && data.name && <InfoComponent infos={data.infos} file={data.file} />}
+                        {data.infos && data.file && <InfoComponent infos={data.infos} file={data.file} />}
                         {data.priority && <PriorityComponent priority={data.priority} />}
                         {data.attributes && <AttributesComponent attributes={data.attributes} />}
                         {data.roles && <RolesComponent roles={data.roles} />}
@@ -71,7 +72,7 @@ const PlayerPage: React.FC = () => {
                     </div>
                     <div className="border-l-2 border-gray-400"></div>
                     <div className="md:w-1/6 min-w-[200px]">
-                        {data.skills && <SkillsComponent skills={data.skills} />}
+                        {data.skills && <SkillsComponent skills={data.skills} file={data.file} />}
                     </div>
                 </div>
             ) : (

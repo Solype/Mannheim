@@ -2,7 +2,7 @@
     "infos": {
         "name": "Solyp\u00e9",
         "race": "human",
-        "age": 20,
+        "age": "20",
         "gender": "male"
     },
     "priority": {
@@ -368,7 +368,9 @@
         ]
     },
     "religion": {
-        "gods": {"Nake": 1}
+        "gods": {
+            "Nake": 1
+        }
     },
     "other": {
         "language": [],

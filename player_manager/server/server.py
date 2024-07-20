@@ -26,10 +26,14 @@ def players_health():
 
 @app.route('/player/<string:name>/skill', methods=['POST'])
 def change_skill(name):
-    if "skill name" not in request.json.keys() or "value" not in request.json.keys() or "type" not in request.json.keys() :
+    print(request.json, name)
+    if "skill" not in request.json.keys() or "brut" not in request.json.keys() or "role" not in request.json.keys() :
+        print("Missing parameters")
         return { "status": "error" }
-    if modify_skill(name, request.json["skill name"], request.json["type"], request.json["value"]):
+    if modify_skill(name, request.json["skill"], request.json["role"], request.json["brut"]):
+        print("Success")
         return { "status": "success" }
+    print("Failed")
     return { "status": "error" }
 
 @app.route('/player/<string:name>/monitor', methods=['POST'])
@@ -68,7 +72,7 @@ def change_role(name):
         return { "status": "error", "content": "failed to add" }
     return { "status": "error" }
 
-@app.route('/player/<string:name>/info', methods=['POST'])
+@app.route('/player/<string:name>/infos', methods=['POST'])
 def change_info(name):
     if "type" not in request.json.keys() or "value" not in request.json.keys() :
         return { "status": "error", "content": "Missing parameters" }
