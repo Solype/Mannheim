@@ -63,8 +63,8 @@ const PlayerPage: React.FC = () => {
                 <div className="w-full flex flex-col md:flex-row gap-8 justify-center">
                     <div className="md:w-1/6 min-w-[200px]">
                         {data.infos && data.file && <InfoComponent infos={data.infos} file={data.file} />}
-                        {data.priority && <PriorityComponent priority={data.priority} />}
-                        {data.attributes && <AttributesComponent attributes={data.attributes} />}
+                        {data.priority && <PriorityComponent priority={data.priority} file={data.file} />}
+                        {data.attributes && <AttributesComponent attributes={data.attributes} file={data.file} />}
                         {data.roles && <RolesComponent roles={data.roles} />}
                         {data.monitor && <MonitorComponent monitor={data.monitor} />}
                         {data.religion && <ReligionComponent religion={data.religion} />}

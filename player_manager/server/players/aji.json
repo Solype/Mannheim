@@ -1,9 +1,9 @@
 {
     "infos": {
-        "name": "Solyp\u00e9",
-        "race": "human",
-        "age": "20",
-        "gender": "male"
+        "name": "Aji",
+        "race": "Orc",
+        "age": "28",
+        "gender": "female"
     },
     "priority": {
         "role": "c",
@@ -21,10 +21,12 @@
     },
     "roles": {
         "main": [
-            "templar"
+            "chaman"
         ],
         "secondary": [
-            "iron-clad"
+            "maitre ecurie",
+            "mercenaire",
+            "pisteur"
         ]
     },
     "skills": {
@@ -33,7 +35,7 @@
             0
         ],
         "blunt": [
-            1,
+            0,
             0
         ],
         "bow": [
@@ -77,8 +79,8 @@
             0
         ],
         "sword": [
-            5,
-            6
+            6,
+            5
         ],
         "axe": [
             0,
@@ -101,8 +103,8 @@
             0
         ],
         "running": [
-            0,
-            2
+            2,
+            0
         ],
         "balance": [
             0,
@@ -113,8 +115,8 @@
             0
         ],
         "climbing": [
-            0,
-            2
+            2,
+            0
         ],
         "dodging": [
             0,
@@ -137,28 +139,28 @@
             0
         ],
         "endurance": [
-            5,
-            3
+            3,
+            5
         ],
         "mental resistance": [
-            0,
-            1
-        ],
-        "pathological resistance": [
             1,
             0
         ],
+        "pathological resistance": [
+            0,
+            1
+        ],
         "physical resistance": [
-            3,
-            2
+            2,
+            3
         ],
         "lockpicking": [
             0,
             0
         ],
         "stealth": [
-            0,
-            3
+            3,
+            0
         ],
         "orientation": [
             0,
@@ -173,8 +175,8 @@
             0
         ],
         "reflex": [
-            0,
-            5
+            5,
+            0
         ],
         "lifting": [
             0,
@@ -241,7 +243,7 @@
             0
         ],
         "mystical Knowledge": [
-            4,
+            0,
             0
         ],
         "technological Knowledge": [
@@ -257,12 +259,12 @@
             0
         ],
         "memory": [
-            0,
-            2
+            2,
+            0
         ],
         "observation": [
-            0,
-            2
+            2,
+            0
         ],
         "craftsmanship": [
             0,
@@ -289,8 +291,8 @@
             0
         ],
         "blacksmithing": [
-            1,
-            0
+            0,
+            1
         ],
         "medicine": [
             0,
@@ -301,8 +303,8 @@
             0
         ],
         "magic": [
-            0,
-            4
+            4,
+            0
         ],
         "alchemy": [
             0,
@@ -321,8 +323,8 @@
             0
         ],
         "elementalism": [
-            0,
-            1
+            1,
+            0
         ],
         "enchantment": [
             0,
@@ -341,8 +343,8 @@
             0
         ],
         "perception": [
-            0,
-            2
+            2,
+            0
         ],
         "s\u00b2ealing": [
             0,
@@ -355,30 +357,28 @@
     },
     "monitor": {
         "mana": [
-            45,
-            45
+            60,
+            60
         ],
         "physical health": [
-            9,
-            11
+            7,
+            9
         ],
         "mental health": [
-            7,
-            7
+            8,
+            8
         ],
         "pathological health": [
-            7,
-            7
+            8,
+            8
         ],
         "endurance health": [
-            12,
-            14
+            9,
+            9
         ]
     },
     "religion": {
-        "gods": {
-            "Naka": 1
-        }
+        "gods": {}
     },
     "other": {
         "language": [],

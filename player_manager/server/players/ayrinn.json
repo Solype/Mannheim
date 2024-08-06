@@ -1,15 +1,15 @@
 {
     "infos": {
-        "name": "Solyp\u00e9",
+        "name": "Ayrinn",
         "race": "human",
-        "age": "20",
-        "gender": "male"
+        "age": "23",
+        "gender": "female"
     },
     "priority": {
-        "role": "c",
-        "attribute": "a",
-        "skills": "c",
-        "money": "d"
+        "role": "C",
+        "attribute": "A",
+        "skills": "E",
+        "money": "B"
     },
     "attributes": {
         "resistance": 6,
@@ -21,10 +21,11 @@
     },
     "roles": {
         "main": [
-            "templar"
+            "bretteur",
+            "menestrel"
         ],
         "secondary": [
-            "iron-clad"
+            "spy"
         ]
     },
     "skills": {
@@ -33,7 +34,7 @@
             0
         ],
         "blunt": [
-            1,
+            0,
             0
         ],
         "bow": [
@@ -49,7 +50,7 @@
             0
         ],
         "small projectile": [
-            0,
+            1,
             0
         ],
         "gun": [
@@ -74,11 +75,11 @@
         ],
         "small blade": [
             0,
-            0
+            2
         ],
         "sword": [
             5,
-            6
+            4
         ],
         "axe": [
             0,
@@ -94,15 +95,15 @@
         ],
         "shield": [
             0,
-            6
+            0
         ],
         "acrobatics": [
             0,
-            0
+            3
         ],
         "running": [
             0,
-            2
+            3
         ],
         "balance": [
             0,
@@ -114,11 +115,11 @@
         ],
         "climbing": [
             0,
-            2
+            1
         ],
         "dodging": [
-            0,
-            0
+            2,
+            2
         ],
         "swimming": [
             0,
@@ -130,35 +131,35 @@
         ],
         "reception": [
             0,
-            0
+            1
         ],
         "jumping": [
             0,
-            0
+            1
         ],
         "endurance": [
-            5,
-            3
+            0,
+            2
         ],
         "mental resistance": [
             0,
-            1
+            3
         ],
         "pathological resistance": [
-            1,
+            0,
             0
         ],
         "physical resistance": [
-            3,
+            0,
             2
         ],
         "lockpicking": [
-            0,
+            1,
             0
         ],
         "stealth": [
-            0,
-            3
+            2,
+            1
         ],
         "orientation": [
             0,
@@ -173,35 +174,35 @@
             0
         ],
         "reflex": [
-            0,
-            5
+            1,
+            0
         ],
         "lifting": [
             0,
-            0
+            2
         ],
         "dressage": [
             0,
             0
         ],
         "imposture": [
-            0,
-            0
+            2,
+            3
         ],
         "intimidation": [
             0,
             0
         ],
         "persuasion": [
-            0,
-            0
+            1,
+            2
         ],
         "psychology": [
-            2,
-            0
+            0,
+            1
         ],
         "speech": [
-            0,
+            4,
             0
         ],
         "anatomical Knowledge": [
@@ -209,7 +210,7 @@
             0
         ],
         "artistic Knowledge": [
-            0,
+            4,
             0
         ],
         "biological Knowledge": [
@@ -217,7 +218,7 @@
             0
         ],
         "cultural Knowledge": [
-            0,
+            1,
             0
         ],
         "geographical Knowledge": [
@@ -229,7 +230,7 @@
             0
         ],
         "historical Knowledge": [
-            0,
+            1,
             0
         ],
         "linguistic Knowledge": [
@@ -241,7 +242,7 @@
             0
         ],
         "mystical Knowledge": [
-            4,
+            0,
             0
         ],
         "technological Knowledge": [
@@ -253,15 +254,15 @@
             0
         ],
         "deduction": [
-            0,
+            1,
             0
         ],
         "memory": [
-            0,
-            2
+            2,
+            0
         ],
         "observation": [
-            0,
+            1,
             2
         ],
         "craftsmanship": [
@@ -297,12 +298,12 @@
             0
         ],
         "music": [
-            0,
-            0
+            1,
+            5
         ],
         "magic": [
             0,
-            4
+            0
         ],
         "alchemy": [
             0,
@@ -322,7 +323,7 @@
         ],
         "elementalism": [
             0,
-            1
+            0
         ],
         "enchantment": [
             0,
@@ -342,43 +343,41 @@
         ],
         "perception": [
             0,
-            2
+            0
         ],
         "s\u00b2ealing": [
             0,
             0
         ],
         "absorption": [
-            2,
-            1
+            0,
+            0
         ]
     },
     "monitor": {
         "mana": [
-            45,
-            45
+            0,
+            0
         ],
         "physical health": [
-            9,
-            11
+            6,
+            7
         ],
         "mental health": [
-            7,
-            7
+            8,
+            8
         ],
         "pathological health": [
-            7,
-            7
+            2,
+            5
         ],
         "endurance health": [
-            12,
-            14
+            5,
+            7
         ]
     },
     "religion": {
-        "gods": {
-            "Naka": 1
-        }
+        "gods": {}
     },
     "other": {
         "language": [],

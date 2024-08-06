@@ -1,0 +1,21 @@
+
+- Dossier déjà dans DB, juste récupérer les vidéos
+- l'utilisateur selectionne le dossier de mission à synchro, la récupération des fichiers pouvant être synchronisation est faite par le ligiciel,
+- les données de vols peuvent être visualisées via un graphe à côté
+
+2 pages:
+- choix de mission (dossier déjà load, juste récupérer la vidéo)
+    - 2 boutons pour chaque mission : regarder, charger video / dossier -> charger
+
+
+ffmpeg
+Next js (react)
+tailwind
+TS
+shadcn ui
+proto figma avec les shadcn ui composant
+
+Semaine 1:
+- prototype figma
+- regarder une vidéo dans un player (qui contient plusieurs pistes audio) (video brut)
+- mercredi: proto ?

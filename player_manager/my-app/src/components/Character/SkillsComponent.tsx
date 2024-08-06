@@ -8,12 +8,12 @@ interface SkillsProps {
 
 const skillCategories: { [key: string]: string[] } = {
     "Ranged Combat": ["bow", "crossbow", "exotic range", "small projectile", "gun"],
-    "Melee Combat": ["haast", "exotic melee", "small blade", "sword", "axe", "saber", "hand-to-hand"],
+    "Melee Combat": ["haast", "exotic melee", "small blade", "sword", "axe", "saber", "hand-to-hand", "blunt"],
     "Artillery": ["cannon", "engine"],
     "Protective Weapon": ["shield"],
-    "Movement": ["acrobatics", "running", "balance", "riding", "escalation", "dodging", "swimming", "navigation", "reception", "jumping"],
+    "Movement": ["acrobatics", "running", "balance", "climbing", "dodging", "swimming", "navigation", "reception", "jumping"],
     "Resistance": ["physical resistance", "mental resistance", "pathological resistance", "endurance"],
-    "Survival": ["lockpicking", "stealth", "manipulation", "orientation", "fishing", "tracking", "reflex", "uprising"],
+    "Survival": ["lockpicking", "stealth", "manipulation", "orientation", "fishing", "tracking", "reflex", "lifting", "handling"],
     "Social": ["dressage", "imposture", "intimidation", "speech", "persuasion", "psychology"],
     "Intellect": ["anatomical Knowledge", "artistic Knowledge", "biological Knowledge", "cultural Knowledge", "geographical Knowledge", "warrior Knowledge", "historical Knowledge", "linguistic Knowledge", "magical Knowledge", "mystical Knowledge", "technological Knowledge", "concentration", "deduction", "memory", "observation"],
     "Craftsmanship": ["visual arts", "chemistry", "construction", "cooking", "explosives", "blacksmithing", "medicine", "music"],
@@ -93,7 +93,8 @@ const SkillsComponent: React.FC<SkillsProps> = ({ skills, file }) => {
                         <h4 className="text-xl font-semibold mb-2">{category}</h4>
                         <ul>
                             {skills.map(skill => (
-                                <li key={skill.name} className="flex justify-between" onClick={() => handleSkillClick(skill.name, skill.role, skill.brut)}>
+                                <li key={skill.name} className="flex justify-between hover:cursor-pointer hover:text-blue-500 hover:underline"
+                                    onClick={() => handleSkillClick(skill.name, skill.role, skill.brut)}>
                                     <span>{skill.name}:</span> <span>{skill.total}</span>
                                 </li>
                             ))}

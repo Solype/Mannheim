@@ -19,6 +19,7 @@ def players_health():
     }
     for file in onlyfiles:
         tmp = extract_players_from_file(file)
+        print(tmp)
         if tmp != None:
             response["content"].append(tmp)
     response["content"] = filter_heath_players(response["content"])
@@ -56,69 +57,28 @@ def change_monitor(name):
         return { "status": "error", "content": "failed to update" }
     return { "status": "error" }
 
-@app.route('/player/<string:name>/role', methods=['POST'])
-def change_role(name):
-    if "role" not in request.json.keys() or "action" not in request.json.keys() or "section" not in request.json.keys() :
-        return { "status": "error", "content": "Missing parameters" }
-
-    if request.json["action"] == "remove":
-        if remove_role(name, request.json["section"], request.json["role"]):
-            return { "status": "success" }
-        return { "status": "error", "content": "failed to remove" }
-
-    if request.json["action"] == "add":
-        if add_role(name, request.json["section"], request.json["role"]):
-            return { "status": "success" }
-        return { "status": "error", "content": "failed to add" }
-    return { "status": "error" }
-
 @app.route('/player/<string:name>/infos', methods=['POST'])
 def change_info(name):
-    if "type" not in request.json.keys() or "value" not in request.json.keys() :
+    if "name" not in request.json.keys() or "value" not in request.json.keys() :
         return { "status": "error", "content": "Missing parameters" }
-    if modify_simple_data(name, "infos", request.json["type"], request.json["value"]):
+    if modify_simple_data(name, "infos", request.json["name"], request.json["value"]):
         return { "status": "success" }
     return { "status": "error" }
 
-@app.route('/player/<string:name>/god', methods=['POST'])
-def change_god(name):
-    if "god" not in request.json.keys() or "action" not in request.json.keys() :
+@app.route('/player/<string:name>/priority', methods=['POST'])
+def change_priority(name):
+    if "name" not in request.json.keys() or "value" not in request.json.keys() :
         return { "status": "error", "content": "Missing parameters" }
-
-    if request.json["action"] == "remove":
-        if remove_god(name, request.json["god"]):
-            return { "status": "success" }
-        return { "status": "error", "content": "failed to remove" }
-
-    if request.json["action"] == "add":
-        if add_god(name, request.json["god"]):
-            return { "status": "success" }
-        return { "status": "error", "content": "failed to add" }
-    return { "status": "error" }
-
-@app.route('/player/<string:name>/devotion', methods=['POST'])
-def change_devotion(name):
-    if "value" not in request.json.keys() :
-        return { "status": "error", "content": "Missing parameters" }
-
-    if modify_devotion(name, request.json["value"]):
+    if modify_simple_data(name, "priority", request.json["name"], request.json["value"]):
         return { "status": "success" }
     return { "status": "error" }
 
-@app.route('/player/<string:name>/language', methods=['POST'])
-def change_language(name):
-    if "language" not in request.json.keys() or "action" not in request.json.keys() :
+@app.route('/player/<string:name>/attribute', methods=['POST'])
+def change_attribute(name):
+    if "name" not in request.json.keys() or "value" not in request.json.keys() :
         return { "status": "error", "content": "Missing parameters" }
-
-    if request.json["action"] == "remove":
-        if remove_language(name, request.json["language"]):
-            return { "status": "success" }
-        return { "status": "error", "content": "failed to remove" }
-
-    if request.json["action"] == "add":
-        if add_language(name, request.json["language"]):
-            return { "status": "success" }
-        return { "status": "error", "content": "failed to add" }
+    if modify_simple_data(name, "attributes", request.json["name"], request.json["value"]):
+        return { "status": "success" }
     return { "status": "error" }
 
 @app.route('/player/<string:name>', methods=['GET'])
@@ -129,19 +89,6 @@ def player_data(name):
     }
     if response["content"] == None:
         return players_health()
-    return jsonify(response)
-
-@app.route('/greet')
-def greet():
-    name = request.args.get('name', 'World')
-    if name is None or name == "":
-        name = "COUCOU PETIT CONNARD"
-    message = f"Hello, {name}!"
-    response = {
-        "message": message,
-        "name": name,
-        "status": "success"
-    }
     return jsonify(response)
 
 if __name__ == "__main__":
