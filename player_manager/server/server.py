@@ -19,7 +19,6 @@ def players_health():
     }
     for file in onlyfiles:
         tmp = extract_players_from_file(file)
-        print(tmp)
         if tmp != None:
             response["content"].append(tmp)
     response["content"] = filter_heath_players(response["content"])
@@ -27,12 +26,10 @@ def players_health():
 
 @app.route('/player/<string:name>/skill', methods=['POST'])
 def change_skill(name):
-    print(request.json, name)
     if "skill" not in request.json.keys() or "brut" not in request.json.keys() or "role" not in request.json.keys() :
         print("Missing parameters")
         return { "status": "error" }
     if modify_skill(name, request.json["skill"], request.json["role"], request.json["brut"]):
-        print("Success")
         return { "status": "success" }
     print("Failed")
     return { "status": "error" }
@@ -77,8 +74,13 @@ def change_priority(name):
 def change_attribute(name):
     if "name" not in request.json.keys() or "value" not in request.json.keys() :
         return { "status": "error", "content": "Missing parameters" }
-    if modify_simple_data(name, "attributes", request.json["name"], request.json["value"]):
-        return { "status": "success" }
+    try:
+        value = int(request.json["value"])
+        if modify_simple_data(name, "attributes", request.json["name"], value):
+            return { "status": "success" }
+    except Exception as e:
+        print(e)
+        return { "status": "error", "content": "Wrong value" }
     return { "status": "error" }
 
 @app.route('/player/<string:name>', methods=['GET'])

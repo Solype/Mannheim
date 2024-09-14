@@ -1,0 +1,389 @@
+{
+    "infos": {
+        "name": "Aji (Edgar)",
+        "race": "Orc",
+        "age": "-24\n",
+        "gender": "female"
+    },
+    "priority": {
+        "role": "c",
+        "attribute": "a",
+        "skills": "c",
+        "money": "d"
+    },
+    "attributes": {
+        "resistance": 6,
+        "strength": 6,
+        "agility": 6,
+        "dexterity": 6,
+        "vivacity": 6,
+        "intellect": 6,
+        "social": 6
+    },
+    "roles": {
+        "main": [
+            "chaman"
+        ],
+        "secondary": [
+            "maitre ecurie",
+            "mercenaire",
+            "pisteur"
+        ]
+    },
+    "skills": {
+        "handling": [
+            0,
+            0
+        ],
+        "blunt": [
+            0,
+            0
+        ],
+        "bow": [
+            0,
+            0
+        ],
+        "crossbow": [
+            0,
+            0
+        ],
+        "exotic range": [
+            0,
+            0
+        ],
+        "small projectile": [
+            0,
+            0
+        ],
+        "gun": [
+            0,
+            0
+        ],
+        "engine": [
+            0,
+            0
+        ],
+        "cannon": [
+            0,
+            0
+        ],
+        "haast": [
+            0,
+            0
+        ],
+        "exotic melee": [
+            0,
+            0
+        ],
+        "small blade": [
+            0,
+            0
+        ],
+        "sword": [
+            6,
+            5
+        ],
+        "axe": [
+            0,
+            0
+        ],
+        "saber": [
+            0,
+            0
+        ],
+        "hand-to-hand": [
+            0,
+            0
+        ],
+        "shield": [
+            0,
+            6
+        ],
+        "acrobatics": [
+            0,
+            0
+        ],
+        "running": [
+            2,
+            0
+        ],
+        "balance": [
+            0,
+            0
+        ],
+        "riding": [
+            0,
+            0
+        ],
+        "climbing": [
+            2,
+            0
+        ],
+        "dodging": [
+            0,
+            0
+        ],
+        "swimming": [
+            0,
+            0
+        ],
+        "navigation": [
+            0,
+            0
+        ],
+        "reception": [
+            0,
+            0
+        ],
+        "jumping": [
+            0,
+            0
+        ],
+        "endurance": [
+            3,
+            5
+        ],
+        "mental resistance": [
+            1,
+            0
+        ],
+        "pathological resistance": [
+            0,
+            1
+        ],
+        "physical resistance": [
+            2,
+            3
+        ],
+        "lockpicking": [
+            0,
+            0
+        ],
+        "stealth": [
+            3,
+            0
+        ],
+        "orientation": [
+            0,
+            0
+        ],
+        "fishing": [
+            0,
+            0
+        ],
+        "tracking": [
+            0,
+            0
+        ],
+        "reflex": [
+            5,
+            0
+        ],
+        "lifting": [
+            0,
+            0
+        ],
+        "dressage": [
+            0,
+            0
+        ],
+        "imposture": [
+            0,
+            0
+        ],
+        "intimidation": [
+            0,
+            0
+        ],
+        "persuasion": [
+            0,
+            0
+        ],
+        "psychology": [
+            2,
+            0
+        ],
+        "speech": [
+            0,
+            0
+        ],
+        "anatomical Knowledge": [
+            0,
+            0
+        ],
+        "artistic Knowledge": [
+            0,
+            0
+        ],
+        "biological Knowledge": [
+            0,
+            0
+        ],
+        "cultural Knowledge": [
+            0,
+            0
+        ],
+        "geographical Knowledge": [
+            0,
+            0
+        ],
+        "warrior Knowledge": [
+            0,
+            0
+        ],
+        "historical Knowledge": [
+            0,
+            0
+        ],
+        "linguistic Knowledge": [
+            0,
+            0
+        ],
+        "magical Knowledge": [
+            0,
+            0
+        ],
+        "mystical Knowledge": [
+            0,
+            0
+        ],
+        "technological Knowledge": [
+            0,
+            0
+        ],
+        "concentration": [
+            0,
+            0
+        ],
+        "deduction": [
+            0,
+            0
+        ],
+        "memory": [
+            2,
+            0
+        ],
+        "observation": [
+            2,
+            0
+        ],
+        "craftsmanship": [
+            0,
+            0
+        ],
+        "visual arts": [
+            0,
+            0
+        ],
+        "chemistry": [
+            0,
+            0
+        ],
+        "construction": [
+            0,
+            0
+        ],
+        "cooking": [
+            0,
+            0
+        ],
+        "blacksmithing": [
+            0,
+            1
+        ],
+        "medicine": [
+            0,
+            0
+        ],
+        "music": [
+            0,
+            0
+        ],
+        "magic": [
+            4,
+            0
+        ],
+        "alchemy": [
+            0,
+            0
+        ],
+        "enhancement": [
+            0,
+            0
+        ],
+        "annihilation": [
+            0,
+            0
+        ],
+        "conjuration": [
+            0,
+            0
+        ],
+        "elementalism": [
+            1,
+            0
+        ],
+        "enchantment": [
+            0,
+            0
+        ],
+        "illusionism": [
+            0,
+            0
+        ],
+        "summoning": [
+            0,
+            0
+        ],
+        "necromancy": [
+            0,
+            0
+        ],
+        "perception": [
+            2,
+            0
+        ],
+        "sealing": [
+            0,
+            0
+        ],
+        "absorption": [
+            2,
+            1
+        ]
+    },
+    "monitor": {
+        "mana": [
+            36,
+            60
+        ],
+        "physical health": [
+            9,
+            9
+        ],
+        "mental health": [
+            8,
+            8
+        ],
+        "pathological health": [
+            8,
+            8
+        ],
+        "endurance health": [
+            9,
+            9
+        ]
+    },
+    "religion": {
+        "gods": {}
+    },
+    "other": {
+        "language": [],
+        "inventory": [],
+        "special abilities": [],
+        "spells": [],
+        "experience": 0,
+        "mana": 0,
+        "money": 0
+    }
+}

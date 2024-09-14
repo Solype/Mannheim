@@ -1,31 +1,32 @@
 {
     "infos": {
-        "name": "Azel",
-        "race": "elf",
-        "age": "",
-        "gender": ""
+        "name": "Just (Kenji)",
+        "race": "Kobold",
+        "age": "???",
+        "gender": "male"
     },
     "priority": {
-        "role": "B",
-        "attribute": "B",
-        "skills": "E",
-        "money": "B"
+        "role": "c",
+        "attribute": "a",
+        "skills": "c",
+        "money": "d"
     },
     "attributes": {
         "resistance": 6,
         "strength": 6,
-        "agility": "6",
+        "agility": 6,
         "dexterity": 6,
         "vivacity": 6,
-        "intellect": 6
+        "intellect": 6,
+        "social": 6
     },
     "roles": {
         "main": [
-            "dragonnier"
+            "prince"
         ],
         "secondary": [
-            "tueur \u00e0 gage",
-            "sorcier"
+            "berzerk",
+            "gourou"
         ]
     },
     "skills": {
@@ -50,8 +51,8 @@
             0
         ],
         "small projectile": [
-            2,
-            4
+            0,
+            0
         ],
         "gun": [
             0,
@@ -74,12 +75,12 @@
             0
         ],
         "small blade": [
-            2,
-            5
-        ],
-        "sword": [
             0,
             0
+        ],
+        "sword": [
+            6,
+            5
         ],
         "axe": [
             0,
@@ -91,7 +92,7 @@
         ],
         "hand-to-hand": [
             0,
-            1
+            0
         ],
         "shield": [
             0,
@@ -99,10 +100,10 @@
         ],
         "acrobatics": [
             0,
-            3
+            0
         ],
         "running": [
-            0,
+            2,
             0
         ],
         "balance": [
@@ -114,12 +115,12 @@
             0
         ],
         "climbing": [
-            0,
-            1
+            2,
+            0
         ],
         "dodging": [
             0,
-            3
+            0
         ],
         "swimming": [
             0,
@@ -130,35 +131,35 @@
             0
         ],
         "reception": [
-            1,
-            1
+            0,
+            0
         ],
         "jumping": [
             0,
             0
         ],
         "endurance": [
-            0,
-            2
+            3,
+            5
         ],
         "mental resistance": [
-            0,
-            2
+            1,
+            0
         ],
         "pathological resistance": [
             0,
             1
         ],
         "physical resistance": [
-            0,
-            1
+            2,
+            3
         ],
         "lockpicking": [
             0,
             0
         ],
         "stealth": [
-            2,
+            3,
             0
         ],
         "orientation": [
@@ -174,28 +175,28 @@
             0
         ],
         "reflex": [
-            0,
-            2
+            5,
+            0
         ],
         "lifting": [
             0,
             0
         ],
         "dressage": [
-            5,
-            4
+            0,
+            0
         ],
         "imposture": [
             0,
-            1
+            0
         ],
         "intimidation": [
             0,
             0
         ],
         "persuasion": [
-            2,
-            1
+            0,
+            0
         ],
         "psychology": [
             2,
@@ -211,10 +212,10 @@
         ],
         "artistic Knowledge": [
             0,
-            2
+            0
         ],
         "biological Knowledge": [
-            2,
+            0,
             0
         ],
         "cultural Knowledge": [
@@ -238,7 +239,7 @@
             0
         ],
         "magical Knowledge": [
-            4,
+            0,
             0
         ],
         "mystical Knowledge": [
@@ -258,12 +259,12 @@
             0
         ],
         "memory": [
-            1,
+            2,
             0
         ],
         "observation": [
-            0,
-            1
+            2,
+            0
         ],
         "craftsmanship": [
             0,
@@ -285,17 +286,13 @@
             0,
             0
         ],
-        "explosives": [
-            0,
-            0
-        ],
         "blacksmithing": [
             0,
             1
         ],
         "medicine": [
             0,
-            2
+            0
         ],
         "music": [
             0,
@@ -303,7 +300,7 @@
         ],
         "magic": [
             4,
-            6
+            0
         ],
         "alchemy": [
             0,
@@ -319,15 +316,15 @@
         ],
         "conjuration": [
             0,
-            3
+            0
         ],
         "elementalism": [
-            0,
-            7
+            1,
+            0
         ],
         "enchantment": [
             0,
-            3
+            0
         ],
         "illusionism": [
             0,
@@ -342,42 +339,44 @@
             0
         ],
         "perception": [
-            0,
-            2
+            2,
+            0
         ],
-        "s\u00b2ealing": [
+        "sealing": [
             0,
             0
         ],
         "absorption": [
-            0,
-            2
+            2,
+            1
         ]
     },
     "monitor": {
         "mana": [
-            59,
-            90
+            4,
+            95
         ],
         "physical health": [
-            2,
-            5
+            1,
+            10
         ],
         "mental health": [
-            5,
-            5
+            3,
+            7
         ],
         "pathological health": [
-            4,
-            4
+            2,
+            6
         ],
         "endurance health": [
-            4,
-            4
+            3,
+            8
         ]
     },
     "religion": {
-        "gods": {}
+        "gods": {
+            "Kelinenilek": 7
+        }
     },
     "other": {
         "language": [],

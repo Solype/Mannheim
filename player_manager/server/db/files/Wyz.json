@@ -1,30 +1,32 @@
 {
     "infos": {
-        "name": "Solyp\u00e9",
-        "race": "human",
-        "age": "20",
-        "gender": "male"
+        "name": "Wiz",
+        "race": "elf",
+        "age": "",
+        "gender": ""
     },
     "priority": {
-        "role": "c",
-        "attribute": "a",
-        "skills": "c",
-        "money": "d"
+        "role": "B",
+        "attribute": "B",
+        "skills": "B",
+        "money": "E"
     },
     "attributes": {
-        "resistance": 6,
-        "strength": 6,
+        "resistance": 3,
+        "strength": 3,
         "agility": 6,
-        "dexterity": 6,
-        "vivacity": 6,
-        "intellect": 6
+        "dexterity": 7,
+        "vivacity": 9,
+        "intellect": 4,
+        "social": 4
     },
     "roles": {
         "main": [
-            "templar"
+            "dragonnier"
         ],
         "secondary": [
-            "iron-clad"
+            "tueur \u00e0 gage",
+            "sorcier"
         ]
     },
     "skills": {
@@ -33,7 +35,7 @@
             0
         ],
         "blunt": [
-            1,
+            0,
             0
         ],
         "bow": [
@@ -49,8 +51,8 @@
             0
         ],
         "small projectile": [
-            0,
-            0
+            2,
+            4
         ],
         "gun": [
             0,
@@ -73,12 +75,12 @@
             0
         ],
         "small blade": [
-            0,
-            0
+            2,
+            5
         ],
         "sword": [
-            5,
-            6
+            0,
+            0
         ],
         "axe": [
             0,
@@ -90,7 +92,7 @@
         ],
         "hand-to-hand": [
             0,
-            0
+            1
         ],
         "shield": [
             0,
@@ -98,11 +100,11 @@
         ],
         "acrobatics": [
             0,
-            0
+            3
         ],
         "running": [
             0,
-            2
+            0
         ],
         "balance": [
             0,
@@ -114,11 +116,11 @@
         ],
         "climbing": [
             0,
-            2
+            1
         ],
         "dodging": [
             0,
-            0
+            3
         ],
         "swimming": [
             0,
@@ -129,36 +131,36 @@
             0
         ],
         "reception": [
-            0,
-            0
+            1,
+            1
         ],
         "jumping": [
             0,
             0
         ],
         "endurance": [
-            5,
-            3
+            0,
+            2
         ],
         "mental resistance": [
             0,
-            1
+            2
         ],
         "pathological resistance": [
-            1,
-            0
+            0,
+            1
         ],
         "physical resistance": [
-            3,
-            2
+            0,
+            1
         ],
         "lockpicking": [
             0,
             0
         ],
         "stealth": [
-            0,
-            3
+            2,
+            0
         ],
         "orientation": [
             0,
@@ -174,27 +176,27 @@
         ],
         "reflex": [
             0,
-            5
+            2
         ],
         "lifting": [
             0,
             0
         ],
         "dressage": [
-            0,
-            0
+            5,
+            4
         ],
         "imposture": [
             0,
-            0
+            1
         ],
         "intimidation": [
             0,
             0
         ],
         "persuasion": [
-            0,
-            0
+            2,
+            1
         ],
         "psychology": [
             2,
@@ -210,10 +212,10 @@
         ],
         "artistic Knowledge": [
             0,
-            0
+            2
         ],
         "biological Knowledge": [
-            0,
+            2,
             0
         ],
         "cultural Knowledge": [
@@ -237,11 +239,11 @@
             0
         ],
         "magical Knowledge": [
-            0,
+            4,
             0
         ],
         "mystical Knowledge": [
-            4,
+            0,
             0
         ],
         "technological Knowledge": [
@@ -257,12 +259,12 @@
             0
         ],
         "memory": [
-            0,
-            2
+            1,
+            0
         ],
         "observation": [
             0,
-            2
+            1
         ],
         "craftsmanship": [
             0,
@@ -284,25 +286,21 @@
             0,
             0
         ],
-        "explosives": [
-            0,
-            0
-        ],
         "blacksmithing": [
-            1,
-            0
+            0,
+            1
         ],
         "medicine": [
             0,
-            0
+            2
         ],
         "music": [
             0,
             0
         ],
         "magic": [
-            0,
-            4
+            4,
+            6
         ],
         "alchemy": [
             0,
@@ -318,15 +316,15 @@
         ],
         "conjuration": [
             0,
-            0
+            3
         ],
         "elementalism": [
             0,
-            1
+            7
         ],
         "enchantment": [
             0,
-            0
+            3
         ],
         "illusionism": [
             0,
@@ -344,41 +342,39 @@
             0,
             2
         ],
-        "s\u00b2ealing": [
+        "sealing": [
             0,
             0
         ],
         "absorption": [
-            2,
-            1
+            0,
+            2
         ]
     },
     "monitor": {
         "mana": [
-            45,
-            45
+            0,
+            0
         ],
         "physical health": [
-            9,
-            11
+            15,
+            27
         ],
         "mental health": [
-            7,
-            7
+            20,
+            20
         ],
         "pathological health": [
-            7,
-            7
+            17,
+            17
         ],
         "endurance health": [
-            12,
-            14
+            27,
+            28
         ]
     },
     "religion": {
-        "gods": {
-            "Naka": 1
-        }
+        "gods": {}
     },
     "other": {
         "language": [],

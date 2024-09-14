@@ -1,9 +1,9 @@
 {
     "infos": {
-        "name": "Anis",
-        "race": "Orc",
-        "age": "28",
-        "gender": "female"
+        "name": "Solyp\u00e9 (Ambroise)",
+        "race": "human",
+        "age": "20",
+        "gender": "male"
     },
     "priority": {
         "role": "c",
@@ -17,7 +17,8 @@
         "agility": 6,
         "dexterity": 6,
         "vivacity": 6,
-        "intellect": 6
+        "intellect": 6,
+        "social": 6
     },
     "roles": {
         "main": [
@@ -33,7 +34,7 @@
             0
         ],
         "blunt": [
-            0,
+            1,
             0
         ],
         "bow": [
@@ -77,8 +78,8 @@
             0
         ],
         "sword": [
-            6,
-            5
+            5,
+            6
         ],
         "axe": [
             0,
@@ -101,8 +102,8 @@
             0
         ],
         "running": [
-            2,
-            0
+            0,
+            2
         ],
         "balance": [
             0,
@@ -113,8 +114,8 @@
             0
         ],
         "climbing": [
-            2,
-            0
+            0,
+            2
         ],
         "dodging": [
             0,
@@ -137,28 +138,28 @@
             0
         ],
         "endurance": [
-            3,
-            5
+            5,
+            3
         ],
         "mental resistance": [
-            1,
-            0
-        ],
-        "pathological resistance": [
             0,
             1
         ],
+        "pathological resistance": [
+            1,
+            0
+        ],
         "physical resistance": [
-            2,
-            3
+            3,
+            2
         ],
         "lockpicking": [
             0,
             0
         ],
         "stealth": [
-            3,
-            0
+            0,
+            3
         ],
         "orientation": [
             0,
@@ -173,8 +174,8 @@
             0
         ],
         "reflex": [
-            5,
-            0
+            0,
+            5
         ],
         "lifting": [
             0,
@@ -241,7 +242,7 @@
             0
         ],
         "mystical Knowledge": [
-            0,
+            4,
             0
         ],
         "technological Knowledge": [
@@ -257,12 +258,12 @@
             0
         ],
         "memory": [
-            2,
-            0
+            0,
+            2
         ],
         "observation": [
-            2,
-            0
+            0,
+            2
         ],
         "craftsmanship": [
             0,
@@ -284,13 +285,9 @@
             0,
             0
         ],
-        "explosives": [
-            0,
-            0
-        ],
         "blacksmithing": [
-            0,
-            1
+            1,
+            0
         ],
         "medicine": [
             0,
@@ -301,8 +298,8 @@
             0
         ],
         "magic": [
-            4,
-            0
+            0,
+            4
         ],
         "alchemy": [
             0,
@@ -321,8 +318,8 @@
             0
         ],
         "elementalism": [
-            1,
-            0
+            0,
+            1
         ],
         "enchantment": [
             0,
@@ -341,10 +338,10 @@
             0
         ],
         "perception": [
-            2,
-            0
+            0,
+            2
         ],
-        "s\u00b2ealing": [
+        "sealing": [
             0,
             0
         ],
@@ -355,28 +352,30 @@
     },
     "monitor": {
         "mana": [
-            109,
-            125
+            19,
+            45
         ],
         "physical health": [
-            10,
-            17
+            11,
+            11
         ],
         "mental health": [
-            12,
-            12
+            6,
+            7
         ],
         "pathological health": [
-            12,
-            12
+            7,
+            7
         ],
         "endurance health": [
-            13,
+            14,
             14
         ]
     },
     "religion": {
-        "gods": {}
+        "gods": {
+            "Naka": 1
+        }
     },
     "other": {
         "language": [],

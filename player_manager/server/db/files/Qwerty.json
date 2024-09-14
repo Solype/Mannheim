@@ -1,0 +1,139 @@
+{
+    "infos": {
+        "name": "Qwetzy",
+        "race": "vouivre",
+        "age": "",
+        "gender": "femelle"
+    },
+    "attributes": {
+        "resistance": 4,
+        "strength": 7,
+        "agility": 10,
+        "dexterity": 9,
+        "vivacity": 7,
+        "intellect": 3
+    },
+    "skills": {
+        "acrobatics": [
+            0,
+            0
+        ],
+        "running": [
+            0,
+            0
+        ],
+        "balance": [
+            0,
+            2
+        ],
+        "climbing": [
+            0,
+            2
+        ],
+        "dodging": [
+            0,
+            8
+        ],
+        "swimming": [
+            0,
+            0
+        ],
+        "navigation": [
+            0,
+            0
+        ],
+        "reception": [
+            0,
+            2
+        ],
+        "jumping": [
+            0,
+            2
+        ],
+        "endurance": [
+            0,
+            4
+        ],
+        "mental resistance": [
+            0,
+            3
+        ],
+        "pathological resistance": [
+            0,
+            2
+        ],
+        "physical resistance": [
+            0,
+            1
+        ],
+        "stealth": [
+            0,
+            3
+        ],
+        "orientation": [
+            0,
+            0
+        ],
+        "fishing": [
+            0,
+            0
+        ],
+        "tracking": [
+            0,
+            0
+        ],
+        "reflex": [
+            0,
+            5
+        ],
+        "lifting": [
+            0,
+            0
+        ],
+        "intimidation": [
+            0,
+            0
+        ],
+        "concentration": [
+            0,
+            0
+        ],
+        "deduction": [
+            0,
+            0
+        ],
+        "memory": [
+            0,
+            2
+        ],
+        "observation": [
+            0,
+            2
+        ]
+    },
+    "monitor": {
+        "mana": [
+            0,
+            0
+        ],
+        "physical health": [
+            5,
+            5
+        ],
+        "mental health": [
+            7,
+            7
+        ],
+        "pathological health": [
+            6,
+            6
+        ],
+        "endurance health": [
+            8,
+            8
+        ]
+    },
+    "other": {
+        "experience": 0
+    }
+}
