@@ -11,6 +11,7 @@ import RolesComponent from '@/components/Character/RolesComponent';
 import ReligionComponent from '@/components/Character/ReligionComponent';
 import PriorityComponent from '@/components/Character/PriorityComponent';
 import OtherComponent from '@/components/Character/OtherComponent';
+import HomeButton from '@/components/Utils/HomeButton';
 import { Attributes, Infos, Monitor, Other, Priority, Religion, Roles, Skills } from '@/types';
 
 interface PlayerData {
@@ -56,6 +57,7 @@ const PlayerPage: React.FC = () => {
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-between p-8">
+            <HomeButton />
             <Tools />
             <h1 className="text-center text-6xl font-bold mb-8">{data?.infos?.name}</h1>
             <h2 className="text-center text-2xl font-bold mb-8">{name}.json</h2>

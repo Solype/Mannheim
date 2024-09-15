@@ -20,16 +20,6 @@ const SimpleCharCard: React.FC<SimpleCharCardProps> = ({ jsonData, onUpdateCurre
 
             <div className="space-y-2">
                     <div>
-                        <p className="text-xs font-medium mb-1">Mana</p>
-                        <ClickableHealthBar
-                            current={jsonData["mana"][0]}
-                            max={jsonData["mana"][1]}
-                            onUpdateCurrent={(n: number) => onUpdateCurrent(jsonData["file"], "mana", n)}
-                            barColor='bg-purple-500'
-                            backBarColor='bg-gray-500'
-                        />
-                    </div>
-                    <div>
                         <p className="text-xs font-medium mb-1">Physique</p>
                         <ClickableHealthBar
                             current={jsonData["physical health"][0]}
@@ -66,6 +56,16 @@ const SimpleCharCard: React.FC<SimpleCharCardProps> = ({ jsonData, onUpdateCurre
                             max={jsonData["pathological health"][1]}
                             onUpdateCurrent={(n: number) => onUpdateCurrent(jsonData["file"], "pathological health", n)}
                             barColor='bg-green-500'
+                            backBarColor='bg-gray-500'
+                        />
+                    </div>
+                    <div>
+                        <p className="text-xs font-medium mb-1">Mana</p>
+                        <ClickableHealthBar
+                            current={jsonData["mana"][0]}
+                            max={jsonData["mana"][1]}
+                            onUpdateCurrent={(n: number) => onUpdateCurrent(jsonData["file"], "mana", n)}
+                            barColor='bg-purple-500'
                             backBarColor='bg-gray-500'
                         />
                     </div>

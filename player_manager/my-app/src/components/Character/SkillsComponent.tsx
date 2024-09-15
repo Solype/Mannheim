@@ -16,7 +16,7 @@ const skillCategories: { [key: string]: string[] } = {
     "Survival": ["lockpicking", "stealth", "manipulation", "orientation", "fishing", "tracking", "reflex", "lifting", "handling"],
     "Social": ["dressage", "imposture", "intimidation", "speech", "persuasion", "psychology"],
     "Intellect": ["anatomical Knowledge", "artistic Knowledge", "biological Knowledge", "cultural Knowledge", "geographical Knowledge", "warrior Knowledge", "historical Knowledge", "linguistic Knowledge", "magical Knowledge", "mystical Knowledge", "technological Knowledge", "concentration", "deduction", "memory", "observation"],
-    "Craftsmanship": ["visual arts", "chemistry", "construction", "cooking", "explosives", "blacksmithing", "medicine", "music"],
+    "Craftsmanship": ["visual arts", "chemistry", "construction", "cooking", "blacksmithing", "medicine", "music"],
     "Magic": ["magic", "alchemy", "enhancement", "annihilation", "conjuration", "elementalism", "enchantment", "illusionism", "summoning", "necromancy", "perception", "sealing", "sorcery", "absorption"]
 };
 
