@@ -1,0 +1,225 @@
+#!/usr/bin/env python3
+
+import math
+import sys
+
+def get_code(key) :
+    key
+    len_key = len(key)
+    round_sqrt_len_key = math.sqrt(len_key)
+    if round_sqrt_len_key == int(round_sqrt_len_key) :
+        round_sqrt_len_key = int(round_sqrt_len_key)
+    else :
+        round_sqrt_len_key = int(round_sqrt_len_key) + 1
+    matrice = [[0 for j in range(round_sqrt_len_key)] for i in range(round_sqrt_len_key)]
+    i_key = 0
+    for i in range(round_sqrt_len_key) :
+        for j in range(round_sqrt_len_key) :
+            if i_key < len_key :
+                matrice[i][j] = ord(key[i_key])
+                i_key += 1
+    return matrice, round_sqrt_len_key
+
+def transform_string_into_matrix(str, nbr_column = 3) :
+    i_str = 0
+    len_str = len(str)
+    m = []
+    i = 0
+    while i_str < len_str :
+        m.append([])
+        for j in range(nbr_column) :
+            if (i_str < len_str) :
+                m[i].append(ord(str[i_str]))
+            else :
+                m[i].append(0)
+            i_str += 1
+        i += 1
+    return m
+
+def multiply_matrice(ma1, ma2) :
+    new_matrice = []
+    for i in range(len(ma1)) :
+        new_matrice.append([])
+        for j in range(len(ma1[0])) :
+            value = 0
+            for k in range(len(ma2)) :
+                value += ma1[i][k] * ma2[k][j]
+            new_matrice[i].append(value)
+    return new_matrice
+
+def print_matrix(matrix) :
+    for ele in range(len(matrix)) :
+        for ele2 in range(len(matrix[ele])) : 
+            print('%3u' %matrix[ele][ele2], end='')
+            if ele2 != len(matrix[ele]) - 1 :
+                print(" ", end='')
+        print("\n", end='')
+
+def print_key_matrix(matrix, encrypt=0) :
+    print("Key matrix:")
+    for ele in range(len(matrix)) :
+        for ele2 in range(len(matrix[ele])) :
+            if matrix[ele][ele2] == 0 :
+                if encrypt == 0 :
+                    print("0", end='')
+                else :
+                    print("0.0", end='')
+            else :
+                print('%g' %round(matrix[ele][ele2], 3), end='')
+            if ele2 != len(matrix[ele]) - 1 :
+                print('\t', end='')
+        print("\n", end='')
+    print()
+        
+def transpose_matrix(matrix) :
+    nbr_line = len(matrix)
+    if nbr_line == 0 :
+        return 0
+    nbr_colomn = len(matrix[0])
+    new_matrix = [[0 for j in range(nbr_line)]for i in range(nbr_colomn)]
+    for i in range(nbr_line) :
+        for j in range(nbr_colomn) :
+            new_matrix[i][j] = matrix[j][i]
+    return new_matrix
+
+def get_det_matrix_2d(matrix) :
+    det = matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
+    return det
+
+def multiply_matrix_number(matrix, nbr) :
+    for i in range(len(matrix)) :
+        for j in range(len(matrix[0])) :
+            matrix[i][j] *= nbr
+
+def build_submatrix(matrix, x, y) :
+    cmptr = 0
+    sub_matrix = []
+    for i in range(len(matrix)) :
+        if i != x :
+            sub_matrix.append([])
+            for j in range(len(matrix)) :
+                if j != y :
+                    sub_matrix[i - cmptr].append(matrix[i][j])
+        else : 
+            cmptr += 1
+    return sub_matrix
+
+def get_cofactors(matrix, x, y) :
+    power_minus_one = (-1) ** (x + y)
+    sub_matrix = []
+    sub_matrix = build_submatrix(matrix, x, y)
+    det = get_det_matrix_2d(sub_matrix)
+    return det * power_minus_one
+    
+def get_det_size_3_matrix(matrix) :
+    det = 0
+    for i in range(len(matrix)) :
+        det += matrix[0][i] * get_cofactors(matrix, 0, i)
+    return det
+
+def compute_full_cofactor_matrix(matrix) :
+    new_matrix = [[] for i in range(len(matrix))]
+    len_ma = len(matrix) 
+    for i in range(len_ma) :
+        for j in range(len_ma) :
+            new_matrix[i].append(get_cofactors(matrix, i, j))
+    return new_matrix
+
+def compute_inverse_matrix(matrix) :
+    if len(matrix) == 2 :
+        det = get_det_matrix_2d(matrix)
+        if det != 0 :
+            new_matrix = [[0,0],[0,0]]
+            new_matrix[0][0], new_matrix[1][1] = matrix[1][1], matrix[0][0]
+            new_matrix[1][0] = -1 * matrix[1][0]
+            new_matrix[0][1] = -1 * matrix[0][1]
+            multiply_matrix_number(new_matrix, 1 / det)
+            return new_matrix
+        else : 
+            return 0
+    else :
+        det = get_det_size_3_matrix(matrix)
+        if det != 0 :
+            co_matrix = compute_full_cofactor_matrix(matrix)
+            co_matrix = transpose_matrix(co_matrix)
+            multiply_matrix_number(co_matrix, 1 / det)
+            return co_matrix
+        else : 
+            return 0
+
+def print_matrix_into_line(matrix) :
+    for ele in range(len(matrix)) :
+        for ele2 in range(len(matrix[ele])) :
+            print(matrix[ele][ele2], end='')
+            if ele2 != len(matrix[ele]) - 1 or ele != len(matrix) - 1 :
+                print(" ", end='')
+    print("\n", end='')
+
+def finish_to_fill_line(matrix, size) :
+    for i in range(len(matrix)) :
+        while len(matrix[i]) != size :
+            matrix[i].append(0)
+    return matrix
+
+def str_to_int_matrix(str, size = 2) :
+    word = ""
+    str = str + " "
+    matrix = [[]]
+    i_word = 0
+    j = 0
+    for i in range(len(str)) :
+        if str[i] != ' ' :
+            word = word + str[i]
+        else : 
+            if i_word == size :
+                matrix.append([])
+                j += 1
+                i_word = 0
+            matrix[j].append(int(word))
+            word = ""
+            i_word += 1
+    matrix = finish_to_fill_line(matrix, size)
+    return matrix
+
+def my_print_decrypted_matrix(matrix) :
+    for ele in range(len(matrix)) :
+        for ele2 in range(len(matrix[ele])) :
+            print(chr(int(round(matrix[ele][ele2]))), end='')
+    print("\n", end='')
+
+def usage() :
+    print("USAGE\n\
+    ./103cipher message key flag\n\
+DESCRIPTION\n\
+    message      a message, made of ASCII characters\n\
+    key          the encryption key, made of ASCII characters\n\
+    flag         0 for the message to be encrypted, 1 to be decrypted")
+
+def main() :
+    sys.argv.pop(0)
+    if sys.argv[0] == "-h" :
+        usage()
+        return 0
+    message = sys.argv.pop(0)
+    key = sys.argv.pop(0)
+    decrypt = int(sys.argv.pop(0))
+    if decrypt == 0 :
+        matrix_key, size = get_code(key)
+        print_key_matrix(matrix_key)
+        matrix_str = transform_string_into_matrix(message, size)
+        result = multiply_matrice(matrix_str, matrix_key)
+        print("Encrypted message:")
+        print_matrix_into_line(result)
+    else :
+        matrix_key, size = get_code(key)
+        matrix_message = str_to_int_matrix(message, size)
+        matrix_key = compute_inverse_matrix(matrix_key)
+        print_key_matrix(matrix_key, encrypt=1)
+        result = multiply_matrice(matrix_message, matrix_key)
+        print("Decrypted message:")
+        my_print_decrypted_matrix(result)
+
+try :
+    main()
+except :
+    sys.exit(84)
