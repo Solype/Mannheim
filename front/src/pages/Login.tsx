@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { CardContent, CardDescription, CardFooter, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-// import LoginService from "@/services/LoginService";
+import LoginService from "@/services/LoginService";
 
 const initialFormState = {
     username: "",
@@ -35,8 +35,8 @@ export default function LoginPage() {
         }
 
         try {
-            // await LoginService.login(formData);
-            // navigate('/');
+            await LoginService.login(formData.username, formData.password);
+            navigate('/');
         } catch (error) {
             setError("Error logging in. Please try again.");
             console.error('Error logging in:', error);
