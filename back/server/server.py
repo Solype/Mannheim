@@ -5,7 +5,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from fastapi.middleware.cors import CORSMiddleware
 from server.mysql_db import cursor, mydb
-
+from server.socket import socketio_mount
 
 async def lifespan(app: FastAPI):
     print("Le serveur s'initialise !", flush=True)
@@ -28,8 +28,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+sio = socketio_mount(app)
+
 security = HTTPBearer()
 
 import server.routes
+import server.socket_message
 
 print("Server route loaded !", flush=True)

@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from socketio import ASGIApp, AsyncServer
-from server.server import app
 
 def socketio_mount( app: FastAPI,
                     async_mode: str = "asgi",
@@ -21,6 +20,3 @@ def socketio_mount( app: FastAPI,
     app.add_route(mount_path, route=sio_app, methods=["GET", "POST"])
     app.add_websocket_route(mount_path, sio_app)
     return sio
-
-
-sio = socketio_mount(app)

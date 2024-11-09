@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { CardContent, CardDescription, CardFooter, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-// import RegisterService from "@/services/RegisterService";
+import LoginService from "@/services/LoginService";
 
 const initialFormState = {
     username: "",
@@ -41,8 +41,8 @@ export default function RegisterPage() {
         }
 
         try {
-            // await RegisterService.register(formData);
-            // setTimeout(() => navigate("/login"), 2000); // Redirige après 2 secondes
+            await LoginService.register(formData.username, formData.password);
+            navigate("/");
         } catch (error) {
             setError("Error registering. Please try again.");
             console.error('Error registering:', error);
