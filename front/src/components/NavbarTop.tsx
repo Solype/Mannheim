@@ -1,6 +1,6 @@
 import React from 'react';
 import { DropdownMenu, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuContent } from '@/components/ui/dropdown-menu';
-import { FaSignOutAlt, FaUser } from 'react-icons/fa';
+import { FaSignOutAlt, FaHatWizard } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 const NavbarTop: React.FC = () => {
@@ -27,7 +27,7 @@ const NavbarTop: React.FC = () => {
                     <DropdownMenuContent className="hover:bg-[#9AC1C1]" >
                         <DropdownMenuItem>
                             <Link to={"/profile"} className='flex items-center space-x-2 '>
-                                <FaUser className="w-4 h-4" />
+                                <FaHatWizard className="w-4 h-4" />
                                 <span>Profile</span>
                             </Link>
                         </DropdownMenuItem>
