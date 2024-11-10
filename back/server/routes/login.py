@@ -4,7 +4,7 @@ from hashlib import sha256
 
 from server.server import app, HTTPAuthorizationCredentials, security, Depends
 from server.access_manager import access_manager
-from server.routes.mydatatype import UserLogin
+from server.routes.server_datatype import UserLogin
 from server.mysql_db import cursor, mydb
 
 
