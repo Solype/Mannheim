@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `sessions` (
     FOREIGN KEY (`gamemaster_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
 );
 
-CREATE TABLE entities (
+CREATE TABLE IF NOT EXISTS entities (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `owner_id` BIGINT UNSIGNED NOT NULL,
     `session_id` BIGINT UNSIGNED NOT NULL,
@@ -39,13 +39,16 @@ CREATE TABLE entities (
     `max_mental_health` BIGINT NOT NULL,
     `max_path_health` BIGINT NOT NULL,
     `max_endurance` BIGINT NOT NULL,
+    `character_id` BIGINT UNSIGNED NOT NULL,
     INDEX `idx_owner_id` (`owner_id`),
     INDEX `idx_session_id` (`session_id`),
+    INDEX `idx_character_id` (`character_id`),
+    FOREIGN KEY (`character_id`) REFERENCES `characters`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`owner_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`session_id`) REFERENCES `sessions`(`id`) ON DELETE CASCADE
 );
 
-CREATE TABLE characters_played (
+CREATE TABLE IF NOT EXISTS characters_played (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `character_id` BIGINT UNSIGNED NOT NULL,
     `session_id` BIGINT UNSIGNED NOT NULL,
@@ -55,7 +58,7 @@ CREATE TABLE characters_played (
     FOREIGN KEY (`session_id`) REFERENCES sessions(`id`) ON DELETE CASCADE
 );
 
-CREATE TABLE xp (
+CREATE TABLE IF NOT EXISTS xp (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `character_id` BIGINT UNSIGNED NOT NULL,
     `session_id` BIGINT UNSIGNED NOT NULL,
@@ -64,4 +67,24 @@ CREATE TABLE xp (
     INDEX `idx_session_id` (`session_id`),
     FOREIGN KEY (`character_id`) REFERENCES characters(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`session_id`) REFERENCES sessions(`id`) ON DELETE CASCADE
+);
+
+------------------------------
+------------------------------
+-- Lore, Rules and anecdotes
+------------------------------
+------------------------------
+
+CREATE TABLE IF NOT EXISTS lore (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `title` VARCHAR(255) NOT NULL,
+    `path` VARCHAR(255) NOT NULL
+)
+
+CREATE TABLE IF NOT EXISTS lore_link (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `lore_id1` BIGINT UNSIGNED NOT NULL,
+    `lore_id2` BIGINT UNSIGNED NOT NULL,
+    INDEX `idx_lore_id` (`lore_id`),
+    FOREIGN KEY (`lore_id`) REFERENCES `lore`(`id`) ON DELETE CASCADE
 );

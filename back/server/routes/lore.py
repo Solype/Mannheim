@@ -4,3 +4,7 @@ from server.routes.server_datatype import LoreStoryShort
 @app.get("/api/lore/global")
 async def lore() -> list[LoreStoryShort]:
     return "Lore"
+
+@app.get("/api/lore/download")
+async def lore() :
+    return "Lore"
