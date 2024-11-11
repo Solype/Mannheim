@@ -105,12 +105,12 @@ CREATE TABLE IF NOT EXISTS lore_character (
 
 CREATE TABLE IF NOT EXISTS lore_entity_link (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `lore_id1` BIGINT UNSIGNED NOT NULL,
-    `lore_id2` BIGINT UNSIGNED NOT NULL,
-    INDEX `idx_lore_id1` (`lore_id1`),
-    INDEX `idx_lore_id2` (`lore_id2`),
-    FOREIGN KEY (`lore_id1`) REFERENCES `lore_character`(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`lore_id2`) REFERENCES `lore_story`(`id`) ON DELETE CASCADE
+    `lore_chara_id` BIGINT UNSIGNED NOT NULL,
+    `lore_story_id` BIGINT UNSIGNED NOT NULL,
+    INDEX `idx_lore_chara_id` (`lore_chara_id`),
+    INDEX `idx_lore_story_id` (`lore_story_id`),
+    FOREIGN KEY (`lore_chara_id`) REFERENCES `lore_character`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`lore_story_id`) REFERENCES `lore_story`(`id`) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS lore_story_entity_link (
@@ -121,4 +121,15 @@ CREATE TABLE IF NOT EXISTS lore_story_entity_link (
     INDEX `idx_lore_story_id` (`lore_story_id`),
     FOREIGN KEY (`lore_entity_id`) REFERENCES `lore_character`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`lore_story_id`) REFERENCES `lore_story`(`id`) ON DELETE CASCADE
-)
+);
+
+-- ----------------------------
+-- ----------------------------
+-- Base history
+-- ----------------------------
+-- ----------------------------
+
+INSERT IGNORE INTO `lore_story` (`id`, `title`, `path`, `short_description`, `image`) VALUES
+(1, "Le commencement", "./server/public/lore/the_beginning.md", "Comment tout a commencer", NULL),
+(2, "Preambule", "./server/public/lore/the_end.md", "Ul et la difference entre chouette et hibou", NULL);
+
