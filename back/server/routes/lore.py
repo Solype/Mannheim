@@ -1,5 +1,5 @@
 from server.server import app
-from server.routes.server_datatype import LoreStoryShort, LoreEntityShort, packDbElement
+from server.routes.server_datatype import LoreStoryShort, LoreEntityShort, packDbElement, LoreStory
 from server.mysql_db import get_db
 
 @app.get("/api/lore/stories")
