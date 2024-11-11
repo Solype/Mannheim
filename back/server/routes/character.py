@@ -49,7 +49,7 @@ async def my_characters(character: CharaAllData, credentials: HTTPAuthorizationC
     if not token or not access_manager.isTokenValid(token):
         raise HTTPException(status_code=401, detail="Unauthorized")
     user_id = access_manager.getTokenData(token).id
-    json_data = json.dumps(character.model_dump(), indent=4)
+    json_data = json.dumps(character.model_dump())
     print(json_data, flush=True)
     modify_db("INSERT INTO `characters` (user_id, character_data) VALUES (%s, %s)", (user_id, json_data, ))
 
@@ -64,7 +64,8 @@ async def my_characters(id: int, character: CharaAllData, credentials: HTTPAutho
     if not token or not access_manager.isTokenValid(token):
         raise HTTPException(status_code=401, detail="Unauthorized")
     user_id = access_manager.getTokenData(token).id
-    success = modify_db("UPDATE `characters` SET character_data = %s WHERE id = %s AND user_id = %s", (character.model_json_schema(), id, user_id, ))
+    json_data = json.dumps(character.model_dump())
+    success = modify_db("UPDATE `characters` SET character_data = %s WHERE id = %s AND user_id = %s", (json_data, id, user_id, ))
 
     if not success:
         raise HTTPException(status_code=404, detail="Character not found")
