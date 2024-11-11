@@ -1,0 +1,54 @@
+{
+    "infos": {
+        "name": "",
+        "race": "",
+        "age": "",
+        "gender": ""
+    },
+    "priority": {
+        "role": "",
+        "attribute": "",
+        "skills": "",
+        "money": ""
+    },
+    "attributes": {
+        "resistance": 0,
+        "strength": 0,
+        "agility": 0,
+        "dexterity": 0,
+        "vivacity": 0,
+        "intellect": 0,
+        "social": 0
+    },
+    "roles": {
+        "main": [
+            ""
+        ],
+        "secondary": [
+            ""
+        ]
+    },
+    "skills": [
+        {
+            "name": "hand-to-hand",
+            "pure": 0,
+            "role": 0,
+            "category": "close combat"
+        }
+    ],
+    "religion": [
+        {
+            "god": "",
+            "devotion": 0
+        }
+    ],
+    "other": {
+        "language": [],
+        "inventory": [],
+        "special abilities": [],
+        "spells": [],
+        "experience": 0,
+        "mana": 0,
+        "money": 0
+    }
+}
