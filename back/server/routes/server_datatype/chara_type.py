@@ -13,13 +13,13 @@ class CharaPriority(BaseModel):
     money:      str
 
 class CharaAttributes(BaseModel):
-    resistance:     str
-    strength:       str
-    dexterity:      str
-    intelligence:   str
-    agility:        str
-    vivacity:       str
-    social:         str
+    resistance:     int
+    strength:       int
+    dexterity:      int
+    intellect:      int
+    agility:        int
+    vivacity:       int
+    social:         int
 
 class CharaRoles(BaseModel):
     main:       list[str]
@@ -33,7 +33,7 @@ class CharaSkill(BaseModel):
 
 class CharaReligion(BaseModel):
     god:        str
-    devotion:   str
+    devotion:   int
 
 class CharaOtherData(BaseModel):
     language:   list[str]
@@ -47,5 +47,15 @@ class CharaAllData(BaseModel):
     attributes:     CharaAttributes
     roles:          CharaRoles
     skills:         list[CharaSkill]
-    religion:       CharaReligion
+    religion:       list[CharaReligion]
     other:          CharaOtherData
+
+class CharaAllDataShort(BaseModel):
+    infos:          CharaBasicInfos
+    roles:          CharaRoles
+
+class CharaAllDataWithId(CharaAllData):
+    id:             int
+
+class CharaAllDataWithIdShort(CharaAllDataShort):
+    id:             int

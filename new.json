@@ -1,9 +1,9 @@
 {
     "infos": {
-        "name": "",
-        "race": "",
-        "age": "",
-        "gender": ""
+        "name": "t",
+        "race": "human",
+        "age": "20",
+        "gender": "m"
     },
     "priority": {
         "role": "",
