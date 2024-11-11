@@ -3,12 +3,8 @@ from server.routes.server_datatype.chara_type import *
 from server.mysql_db import get_db, getone_db, modify_db
 from server.access_manager import access_manager
 
-from fastapi.responses import FileResponse
-from fastapi import File, UploadFile
 
 import json
-import shutil
-import os
 
 @app.get("/api/my/characters")
 async def my_characters(credentials: HTTPAuthorizationCredentials = Depends(security)) -> list[CharaAllDataWithIdShort]:
@@ -74,40 +70,4 @@ async def my_characters(id: int, character: CharaAllData, credentials: HTTPAutho
     if not success:
         raise HTTPException(status_code=404, detail="Character not found")
 
-    return
-
-@app.get("/api/my/character/{id}/image")
-async def get_character_image(id: int, credentials: HTTPAuthorizationCredentials = Depends(security)) -> FileResponse:
-    token = credentials.credentials
-
-    # if not token or not access_manager.isTokenValid(token):
-    #     raise HTTPException(status_code=401, detail="Unauthorized")
-    # user_id = access_manager.getTokenData(token).id
-    user_id = 1
-    character = getone_db("SELECT image FROM `characters` WHERE id = %s AND user_id = %s", (id, user_id))
-    print(character[0], flush=True)
-    if not character[0]:
-        raise HTTPException(status_code=404, detail="Character not found or image not linked to character")
-
-    return FileResponse(character[0])
-
-@app.post("/api/my/character/{id}/image")
-async def set_character_image(id: int, image: UploadFile = File(...), credentials: HTTPAuthorizationCredentials = Depends(security)):
-    token = credentials.credentials
-
-    # if not token or not access_manager.isTokenValid(token):
-    #     raise HTTPException(status_code=401, detail="Unauthorized")
-    # user_id = access_manager.getTokenData(token).id
-    user_id = 1
-
-    directory = "./server/public/image/characters/"
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-
-    image_name = "char_" + str(id) + "_" + image.filename
-
-    image_path = os.path.join(directory, image_name)
-    with open(image_path, "wb") as buffer:
-        shutil.copyfileobj(image.file, buffer)
-    modify_db("UPDATE `characters` SET image = %s WHERE id = %s AND user_id = %s", (image_path, id, user_id))
     return
