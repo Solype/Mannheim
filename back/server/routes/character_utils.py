@@ -11,21 +11,21 @@ import shutil
 import os
 
 
-@app.get("/api/magic_languages")
+@app.get("/api/magic_languages", tags=["Character Utils"])
 async def magic_languages() -> list[str]:
     return ["Runique", "Elfique", "Terthan", "Latin", "Grec ancien", "Egyptien"]
 
-@app.get("/api/metaraces")
+@app.get("/api/metaraces", tags=["Character Utils"])
 async def metaraces() -> list[str]:
     return ["Homme", "Elf", "Nain", "Orc", "Kobold"]
 
-@app.get("/api/gods")
+@app.get("/api/gods", tags=["Character Utils"])
 async def gods() -> list[str]:
     return ["Slarn", "Naka", "Kelnemore", "Kelinenilek",
             "Le guardien de l'apocalypse", "Pereine", "Golakhan", "Cekeli",
             "Wenwali", "Xianlen", "Terlema", "Zihl"]
 
-@app.get("/api/my/character/{id}/image")
+@app.get("/api/my/character/{id}/image", tags=["Character"])
 async def get_character_image(id: int, credentials: HTTPAuthorizationCredentials = Depends(security)) -> FileResponse:
     token = credentials.credentials
 
@@ -39,7 +39,7 @@ async def get_character_image(id: int, credentials: HTTPAuthorizationCredentials
 
     return FileResponse(character[0])
 
-@app.post("/api/my/character/{id}/image")
+@app.post("/api/my/character/{id}/image", tags=["Character"])
 async def set_character_image(id: int, image: UploadFile = File(...), credentials: HTTPAuthorizationCredentials = Depends(security)):
     token = credentials.credentials
 

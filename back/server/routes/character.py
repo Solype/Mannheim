@@ -6,8 +6,8 @@ from server.access_manager import access_manager
 
 import json
 
-@app.get("/api/my/characters")
-async def my_characters(credentials: HTTPAuthorizationCredentials = Depends(security)) -> list[CharaAllDataWithIdShort]:
+@app.get("/api/my/characters", tags=["Character"])
+async def my_chget_one_characteraracters(credentials: HTTPAuthorizationCredentials = Depends(security)) -> list[CharaAllDataWithIdShort]:
     token = credentials.credentials
 
     if not token or not access_manager.isTokenValid(token):
@@ -24,7 +24,7 @@ async def my_characters(credentials: HTTPAuthorizationCredentials = Depends(secu
 
     return result
 
-@app.get("/api/my/characters/{id}")
+@app.get("/api/my/characters/{id}", tags=["Character"])
 async def get_one_character(id: int, credentials: HTTPAuthorizationCredentials = Depends(security)) -> CharaAllData:
     token = credentials.credentials
 
@@ -42,8 +42,8 @@ async def get_one_character(id: int, credentials: HTTPAuthorizationCredentials =
 
     return character
 
-@app.post("/api/my/characters")
-async def my_characters(character: CharaAllData, credentials: HTTPAuthorizationCredentials = Depends(security)) -> int:
+@app.post("/api/my/characters", tags=["Character"])
+async def create_character(character: CharaAllData, credentials: HTTPAuthorizationCredentials = Depends(security)) -> int:
     token = credentials.credentials
 
     if not token or not access_manager.isTokenValid(token):
@@ -57,8 +57,8 @@ async def my_characters(character: CharaAllData, credentials: HTTPAuthorizationC
     print(id_character, flush=True)
     return id_character[0]
 
-@app.put("/api/my/characters/{id}")
-async def my_characters(id: int, character: CharaAllData, credentials: HTTPAuthorizationCredentials = Depends(security)):
+@app.put("/api/my/characters/{id}", tags=["Character"])
+async def modify_character(id: int, character: CharaAllData, credentials: HTTPAuthorizationCredentials = Depends(security)):
     token = credentials.credentials
 
     if not token or not access_manager.isTokenValid(token):

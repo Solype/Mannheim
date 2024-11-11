@@ -8,7 +8,7 @@ from server.routes.server_datatype import UserLogin
 from server.mysql_db import cursor, mydb
 
 
-@app.post("/login")
+@app.post("/login", tags=["Login"])
 async def login(user: UserLogin) -> str:
     user.password = sha256(user.password.encode()).hexdigest()
 
@@ -20,7 +20,7 @@ async def login(user: UserLogin) -> str:
     token = access_manager.addToken(id[0])
     return token
 
-@app.post("/register")
+@app.post("/register", tags=["Login"])
 async def register(user: UserLogin) -> str:
     user.password = sha256(user.password.encode()).hexdigest()
     cursor.execute("SELECT id FROM `users` WHERE username = %s", (user.username,))
@@ -45,7 +45,7 @@ async def register(user: UserLogin) -> str:
     return token
 
 
-@app.get("/api/whoami")
+@app.get("/api/whoami", tags=["Login"])
 async def whoami(credentials: HTTPAuthorizationCredentials = Depends(security)) -> int:
     token = credentials.credentials    
     if not token or not access_manager.isTokenValid(token):
