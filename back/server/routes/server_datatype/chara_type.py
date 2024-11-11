@@ -1,13 +1,5 @@
 from pydantic import BaseModel
 
-class LoreStoryShort(BaseModel):
-    name: str
-    
-
-class UserLogin(BaseModel):
-    username: str
-    password: str
-
 class CharaBasicInfos(BaseModel):
     name:   str
     race:   str
