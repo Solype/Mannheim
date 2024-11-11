@@ -1,9 +1,6 @@
 from server.server import app
-from server.routes.server_datatype import LoreStoryShort, LoreEntityShort, BaseModel
+from server.routes.server_datatype import LoreStoryShort, LoreEntityShort, packDbElement
 from server.mysql_db import get_db
-
-def packDbElement(classElement : BaseModel, tupleElement : tuple) :
-    return classElement(**zip(classElement.model_fields.keys(), tupleElement))
 
 @app.get("/api/lore/stories")
 async def lore_stories() -> list[LoreStoryShort]:
