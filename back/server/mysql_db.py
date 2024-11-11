@@ -22,3 +22,36 @@ if not mydb:
     exit(1)
 
 cursor : mysql.connector.cursor.MySQLCursor = mydb.cursor()
+
+def modify_db(query: str, params: tuple):
+    try:
+        cursor.execute(query, params)
+        mydb.commit()
+        return True
+    except Exception as e:
+        print(f"Erreur lors de la modification de la base de données : {e}")
+        mydb.rollback()
+        return False
+
+def getone_db(query: str, params: tuple):
+    try:
+        cursor.execute(query, params)
+        result = cursor.fetchall()
+        if len(result) == 0:
+            return None
+        result = result[0]
+        return result
+    except Exception as e:
+        print(f"Erreur lors de la récupération d'une ligne : {e}")
+        return None
+
+def get_db(query: str, params: tuple):
+    try:
+        cursor.execute(query, params)
+        result = cursor.fetchall()
+        return result
+    except Exception as e:
+        print(f"Erreur lors de la récupération des résultats : {e}")
+        return []
+
+
