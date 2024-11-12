@@ -2,6 +2,7 @@ from server.server import app, HTTPException
 from server.routes.server_datatype import LoreStoryShort, LoreEntityShort, packDbElement, LoreStory
 from server.mysql_db import get_db, getone_db
 
+from fastapi.responses import FileResponse
 import os
 
 @app.get("/api/lore/stories", tags=["Lore"])
@@ -14,6 +15,10 @@ async def lore_entities() -> list[LoreEntityShort]:
     entities = get_db("SELECT id, name, short_description, image FROM `lore_entity`", ())
     return [ packDbElement(LoreEntityShort, entity) for entity in entities ]
 
+
+@app.get("/api/lore/story/image/{name:str}", tags=["Lore"])
+async def lore_story_image(name: str) -> FileResponse:
+    return FileResponse(f"./server/public/image/stories/{name}")
 
 @app.get("/api/lore/story/{id}", tags=["Lore"])
 async def lore_story(id: int) -> LoreStory:
