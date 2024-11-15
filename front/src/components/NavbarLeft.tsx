@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 const NavbarLeft: React.FC = () => {
     return (
-        <div className="absolute top-0 left-0 h-full bg-foret text-white overflow-hidden transition-all duration-300 group w-20 hover:w-56 z-40">
+        <div className="fixed top-0 left-0 h-full bg-foret text-white overflow-hidden transition-all duration-300 group w-20 hover:w-56 z-40">
             <div 
                 className="absolute inset-0 bg-repeat" 
                 style={{

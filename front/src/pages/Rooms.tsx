@@ -1,5 +1,5 @@
 import React from 'react';
-import SocketComponent from '@/components/PoNg';
+import SocketComponent from '@/components/SocketComponent';
 
 const RoomsPage: React.FC = () => {
     return (

@@ -1,10 +1,9 @@
 import React from 'react';
 import ReactMarkdown, { Components } from 'react-markdown';
 
-// Composant personnalisé pour <h1>
 const Title1: React.FC<React.HTMLProps<HTMLHeadingElement>> = ({ children, ...props }) => {
     return (
-        <h1 className="text-4xl font-bold" {...props}>
+        <h1 className="text-4xl mb-5 text-center font-bold" {...props}>
             {children}
         </h1>
     );
@@ -50,15 +49,22 @@ const ListItem: React.FC<React.HTMLProps<HTMLLIElement>> = ({ children, ...props
     );
 };
 
-// Composant principal pour afficher le markdown
+const Image: React.FC<React.HTMLProps<HTMLImageElement>> = ({ children, ...props }) => {
+    return (
+        <img className="rounded mx-auto w-2/3 h-2/3 object-contain my-7" {...props} />
+    );
+}
+
+
 const MyMarkdown: React.FC<{ src: string }> = ({ src }) => {
     const components: Components = {
-        h1: (props) => <Title1 {...props} />, // Remplacer <h1> par notre composant personnalisé
+        h1: (props) => <Title1 {...props} />,
         h2: (props) => <Title2 {...props} />,
         h3: (props) => <Title3 {...props} />,
         p: (props) => <Paragraph {...props} />,
         ul: (props) => <List {...props} />,
-        li: (props) => <ListItem {...props} />
+        li: (props) => <ListItem {...props} />,
+        img: (props) => <Image {...props} /> 
     };
 
     return (
