@@ -85,24 +85,19 @@ export type Social = {
     [key: string]: number;
 };
 
-export type Knowledge = {
-    anatomy: number;
-    artistic: number;
-    astronomy: number;
-    biology: number;
-    cultural: number;
-    geography: number;
-    warfare: number;
-    history: number;
-    linguistics: number;
-    magic: number;
-    mysticism: number;
-    technology: number;
-    [key: string]: number;
-};
-
 export type Intellect = {
-    knowledge: Knowledge;
+    anatomy_knowledge: number;
+    artistic_knowledge: number;
+    astronomy_knowledge: number;
+    biology_knowledge: number;
+    cultural_knowledge: number;
+    geography_knowledge: number;
+    warfare_knowledge: number;
+    history_knowledge: number;
+    linguistics_knowledge: number;
+    magic_knowledge: number;
+    mysticism_knowledge: number;
+    technology_knowledge: number;
     concentration: number;
     deduction: number;
     memory: number;
