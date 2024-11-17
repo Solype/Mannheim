@@ -1,4 +1,6 @@
 import { Religion } from '@/types/types';
+import { Label } from '../ui/label';
+import { Input } from '../ui/input';
 
 export const ReligionForm = ({ religions, setReligions }: { religions: Religion[], setReligions: (r: Religion[]) => void }) => {
     const handleReligionChange = (index: number, field: string, value: string | number) => {
@@ -12,11 +14,11 @@ export const ReligionForm = ({ religions, setReligions }: { religions: Religion[
             <h2>Religions</h2>
             {religions.map((religion, index) => (
                 <div key={index}>
-                    <label>God</label>
-                    <input type="text" value={religion.god} onChange={(e) => handleReligionChange(index, 'god', e.target.value)} />
-                    
-                    <label>Devotion</label>
-                    <input type="number" value={religion.devotion} onChange={(e) => handleReligionChange(index, 'devotion', Number(e.target.value))} />
+                    <Label>Dieu</Label>
+                    <Input type="text" value={religion.god} onChange={(e) => handleReligionChange(index, 'god', e.target.value)} />
+
+                    <Label>Piété</Label>
+                    <Input type="number" value={religion.devotion} onChange={(e) => handleReligionChange(index, 'devotion', Number(e.target.value))} />
                 </div>
             ))}
         </div>

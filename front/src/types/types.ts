@@ -6,6 +6,7 @@ export type Attributes = {
     vivacity: number;
     intelligence: number;
     sociality: number;
+    [key: string]: number;
 };
 
 export type RangedWeapons = {
@@ -14,11 +15,13 @@ export type RangedWeapons = {
     exoticWeapon: number;
     smallProjectile: number;
     pistol: number;
+    [key: string]: number;
 };
 
 export type Artillery = {
     cannon: number;
     engine: number;
+    [key: string]: number;
 };
 
 export type MeleeWeapons = {
@@ -30,10 +33,12 @@ export type MeleeWeapons = {
     axe: number;
     saber: number;
     bareHands: number;
+    [key: string]: number;
 };
 
 export type Protective = {
     shield: number;
+    [key: string]: number;
 };
 
 export type Movement = {
@@ -47,6 +52,7 @@ export type Movement = {
     navigation: number;
     landing: number;
     jumping: number;
+    [key: string]: number;
 };
 
 export type Resistance = {
@@ -54,6 +60,7 @@ export type Resistance = {
     mental: number;
     pathological: number;
     physical: number;
+    [key: string]: number;
 };
 
 export type Survival = {
@@ -65,6 +72,7 @@ export type Survival = {
     tracking: number;
     reflex: number;
     lifting: number;
+    [key: string]: number;
 };
 
 export type Social = {
@@ -74,6 +82,7 @@ export type Social = {
     speech: number;
     persuasion: number;
     psychology: number;
+    [key: string]: number;
 };
 
 export type Knowledge = {
@@ -89,6 +98,7 @@ export type Knowledge = {
     magic: number;
     mysticism: number;
     technology: number;
+    [key: string]: number;
 };
 
 export type Intellect = {
@@ -97,6 +107,7 @@ export type Intellect = {
     deduction: number;
     memory: number;
     observation: number;
+    [key: string]: any;
 };
 
 export type Craft = {
@@ -108,6 +119,7 @@ export type Craft = {
     forging: number;
     medicine: number;
     music: number;
+    [key: string]: number;
 };
 
 export type Magic = {
@@ -124,6 +136,8 @@ export type Magic = {
     sealing: number;
     witchcraft: number;
     absorption: number;
+    envoutement: number;
+    [key: string]: number;
 };
 
 export type Competencies = {
@@ -138,16 +152,19 @@ export type Competencies = {
     intellect: Intellect;
     craft: Craft;
     magic: Magic;
+    [key: string]: any;
 };
 
 export type Inventory = {
     weight: number;
     contents: string[];
+    [key: string]: any;
 };
 
 export type Religion = {
     god: string;
     devotion: number;
+    [key: string]: any;
 };
 
 export type CharacterForm = {
@@ -165,4 +182,5 @@ export type CharacterForm = {
     animals: string[];
     inventory: Inventory;
     currency: number;
+    [key: string]: any;
 };

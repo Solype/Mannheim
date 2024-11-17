@@ -4,7 +4,10 @@ import { CompetenciesForm } from '@/components/Characterform/CompetenciesForm';
 import { InventoryForm } from '@/components/Characterform/InventoryForm';
 import { ReligionForm } from '@/components/Characterform/ReligionForm';
 import { CharacterForm, Attributes, Competencies, Inventory, Religion } from '@/types/types';
-import { Label } from '@radix-ui/react-label';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { SimpleField } from '@/components/SimpleField';
+import { dico } from '@/types/dico';
 
 const initialFormState: CharacterForm = {
     name: "",
@@ -118,6 +121,7 @@ const initialFormState: CharacterForm = {
             annihilation: 0,
             conjuration: 0,
             elementarism: 0,
+            envoutement: 0,
             enchantment: 0,
             illusionism: 0,
             summoning: 0,
@@ -145,124 +149,91 @@ const initialFormState: CharacterForm = {
     currency: 0
 }
 
+
+const SubForm = ({key, subKey, elem, handleChange} : {key: any, subKey: any, elem: any, handleChange: any}) => {
+    return (
+        typeof elem === 'object' && !Array.isArray(elem) ? (
+            <div className='rounded flex flex-col gap-5'>
+                <h1 className='text-3xl font-bold'>{dico[subKey]}</h1>
+                <div className='grid grid-cols-4 gap-5'>
+                    {Object.keys(elem).map((subSubKey) => (
+                        <SimpleField
+                            key={subSubKey}
+                            label={dico[subSubKey]}
+                            type="number"
+                            value={elem[subSubKey]}
+                            onChange={(e) => handleChange(e, [key, subKey, subSubKey])}
+                        />
+                    ))}
+                </div>
+            </div>
+        ) : (
+            <SimpleField
+                key={subKey}
+                label={dico[subKey]}
+                type={typeof elem === 'number' ? 'number' : 'text'}
+                value={elem}
+                onChange={(e) => handleChange(e, [key, subKey])}
+            />
+        )
+    )
+}
+
+
+// const SkillForm = ({skill_list} : {skill_list: Competencies}) => {
+//     return (
+//         Object.keys(skill_list).map((subKey) => {
+//             typeof skill_list[subKey]
+//         })
+//     )
+// }
+
+
 const CharactersPage = () => {
     const [formState, setFormState] = useState<CharacterForm>(initialFormState);
+  
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>, keys: string[]) => {
+        const newState = { ...formState };
+        let current = newState;
 
-    const setAttributes = (attributes: Attributes) => {
-        setFormState({ ...formState, attributes });
-    };
+        keys.slice(0, -1).forEach((key) => {
+            current = current[key];
+        });
 
-    const setCompetencies = (competencies: Competencies) => {
-        setFormState({ ...formState, competencies });
-    };
+        current[keys[keys.length - 1]] = typeof current[keys[keys.length - 1]] === 'number'
+            ? Number(e.target.value)
+            : e.target.value;
 
-    const setInventory = (inventory: Inventory) => {
-        setFormState({ ...formState, inventory });
-    };
-
-    const setReligions = (religions: Religion[]) => {
-        setFormState({ ...formState, religions });
+        setFormState(newState);
     };
 
     return (
-        <div className='bg-slate-500'>
-            <form>
-                <h1>Create Character</h1>
-                <div>
-                    <label>Nom</label>
-                    <input 
-                        type="text" 
-                        value={formState.name} 
-                        onChange={(e) => setFormState({ ...formState, name: e.target.value })} 
-                    />
+        <div className='bg-slate-500 items-center flex flex-col gap-10 pt-10'>
+            <h1 className='text-3xl font-bold'>Create Character</h1>
+            <form className='flex flex-col w-2/3'>
+                {Object.keys(formState).map((key) => (
+                    <>
+                    <p>{key}</p>
 
-                    <label>Espèce</label>
-                    <input 
-                        type="text" 
-                        value={formState.species} 
-                        onChange={(e) => setFormState({ ...formState, species: e.target.value })} 
-                    />
-
-                    <label>Age</label>
-                    <input 
-                        type="number" 
-                        value={formState.age} 
-                        onChange={(e) => setFormState({ ...formState, age: Number(e.target.value) })} 
-                    />
-                    <label>Priorité</label>
-                    <input 
-                        type="number" 
-                        value={formState.priority} 
-                        onChange={(e) => setFormState({ ...formState, priority: e.target.value })} 
-                    />
-                </div>
-
-                <AttributesForm 
-                    attributes={formState.attributes} 
-                    setAttributes={setAttributes} 
-                />
-
-                <Label>Role</Label>
-                <input 
-                    type="text" 
-                    value={formState.role} 
-                    onChange={(e) => setFormState({ ...formState, role: e.target.value })}
-                />
-
-                <CompetenciesForm 
-                    competencies={formState.competencies} 
-                    setCompetencies={setCompetencies} 
-                />
-
-                <div>
-                    <label>Mana</label>
-                    <input 
-                        type="number" 
-                        value={formState.mana} 
-                        onChange={(e) => setFormState({ ...formState, mana: Number(e.target.value) })} 
-                    />
-
-                    <label>Langues</label>
-                    <input 
-                        type="text" 
-                        value={formState.languages.join(', ')} 
-                        onChange={(e) => setFormState({ ...formState, languages: e.target.value.split(', ') })} 
-                    />
-
-                    <label>Animals Totems</label>
-                    <input 
-                        type="text" 
-                        value={formState.totemAnimals.join(', ')} 
-                        onChange={(e) => setFormState({ ...formState, totemAnimals: e.target.value.split(', ') })}
-                    />
-
-                    <ReligionForm 
-                        religions={formState.religions} 
-                        setReligions={setReligions} 
-                    />
-
-                    <label>Animals</label>
-                    <input 
-                        type="text" 
-                        value={formState.animals.join(', ')} 
-                        onChange={(e) => setFormState({ ...formState, animals: e.target.value.split(', ') })}
-                    />
-                </div>
-
-                <InventoryForm 
-                    inventory={formState.inventory} 
-                    setInventory={setInventory} 
-                />
-
-                <label>Monnaie</label>
-                <input 
-                    type="number" 
-                    value={formState.currency} 
-                    onChange={(e) => setFormState({ ...formState, currency: Number(e.target.value) })} 
-                />
-
-
-                <button type="submit">Submit</button>
+                    {typeof formState[key] === 'object' && !Array.isArray(formState[key]) ? (
+                        <div className=''>
+                            <h1 className='text-3xl font-bold'>{dico[key]}</h1>
+                            <div className=''>
+                                {Object.keys(formState[key]).map((subKey) => (
+                                    <SubForm key={key} subKey={subKey} elem={formState[key][subKey]} handleChange={handleChange}/>
+                                ))}
+                            </div>
+                        </div>
+                    ) : (
+                        <SimpleField
+                            key={key}
+                            label={dico[key]}
+                            type={typeof formState[key] === 'number' ? 'number' : 'text'}
+                            value={formState[key]}
+                            onChange={(e) => handleChange(e, [key])}
+                        />
+                    )}
+                    </>))}
             </form>
         </div>
     );
