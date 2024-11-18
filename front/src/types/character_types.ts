@@ -162,6 +162,14 @@ export type Religion = {
     [key: string]: any;
 };
 
+export type Skill = {
+    name: string;
+    category: string;
+    pureValue: number;
+    roleValue: number;
+    [key: string]: any;
+};
+
 export type CharacterForm = {
     name: string;
     species: string;
