@@ -72,6 +72,55 @@ CREATE TABLE IF NOT EXISTS xp (
 
 -- ----------------------------
 -- ----------------------------
+-- Request (friend, character, session)
+-- ----------------------------
+-- ----------------------------
+
+CREATE TABLE IF NOT EXISTS `friends` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `friend_id1` BIGINT UNSIGNED NOT NULL,
+    `friend_id2` BIGINT UNSIGNED NOT NULL,
+    INDEX `idx_friend_id1` (`friend_id1`),
+    INDEX `idx_friend_id2` (`friend_id2`),
+    FOREIGN KEY (`friend_id1`) REFERENCES `users`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`friend_id2`) REFERENCES `users`(`id`) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS `friend_requests` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `sender_id` BIGINT UNSIGNED NOT NULL,
+    `receiver_id` BIGINT UNSIGNED NOT NULL,
+    INDEX `idx_sender_id` (`sender_id`),
+    INDEX `idx_receiver_id` (`receiver_id`),
+    FOREIGN KEY (`sender_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`receiver_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS `character_requests` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `sender_id` BIGINT UNSIGNED NOT NULL,
+    `room_id` BIGINT UNSIGNED NOT NULL,
+    `character_id` BIGINT UNSIGNED NOT NULL,
+    INDEX `idx_sender_id` (`sender_id`),
+    INDEX `idx_room_id` (`room_id`),
+    INDEX `idx_character_id` (`character_id`),
+    FOREIGN KEY (`sender_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`room_id`) REFERENCES `rooms`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`character_id`) REFERENCES `characters`(`id`) ON DELETE CASCADE
+)
+
+CREATE TABLE IF NOT EXISTS `session_requests` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `sender_id` BIGINT UNSIGNED NOT NULL,
+    `room_id` BIGINT UNSIGNED NOT NULL,
+    INDEX `idx_sender_id` (`sender_id`),
+    INDEX `idx_room_id` (`room_id`),
+    FOREIGN KEY (`sender_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`room_id`) REFERENCES `rooms`(`id`) ON DELETE CASCADE
+)
+
+-- ----------------------------
+-- ----------------------------
 -- Lore, Rules and anecdotes
 -- ----------------------------
 -- ----------------------------
