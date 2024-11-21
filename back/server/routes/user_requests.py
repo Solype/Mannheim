@@ -3,7 +3,7 @@ from server.routes.server_datatype.chara_type import *
 from server.mysql_db import getone_db, modify_db
 from server.access_manager import access_manager
 
-from server.routes.server_datatype import UserFriendRequest, UserCharacterSessionRequest, UserSessionRequest
+from server.routes.server_datatype.user_request_type import UserFriendRequest, UserCharacterSessionRequest, UserSessionRequest
 
 @app.get("/api/my/requests/friends", tags=["Requests"])
 async def get_friends_requests(credentials: HTTPAuthorizationCredentials = Depends(security)) -> list[UserFriendRequest]:
