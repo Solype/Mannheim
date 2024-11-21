@@ -1,4 +1,5 @@
 import { Attributes } from "@/types/character_types";
+import { dico } from "@/types/dico";
 
 interface AttributesFormProps {
     attributes: Attributes;
@@ -16,7 +17,7 @@ export default function AttributesForm({ attributes, setter }: AttributesFormPro
                 attribute && <>
                     <div key={attribute} className="">
                         <label htmlFor={attribute} className="font-semibold text-gray-700 capitalize">
-                            {attribute}
+                            {dico[attribute]}
                         </label>
                         <input
                             id={attribute}

@@ -199,3 +199,18 @@ export type CharacterForm = {
     currency: number;
     [key: string]: any;
 };
+
+export type CharacterBasicInfo = {
+    name: string;
+    age: number;
+    species: string;
+    gender: string;
+    [key: string]: any;
+};
+
+export type Priority = {
+    role: string;
+    attribute: string;
+    skills: string;
+    money: string;
+}
