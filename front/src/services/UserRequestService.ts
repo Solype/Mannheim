@@ -29,7 +29,7 @@ class UserRequestService
     }
 
     async getFriendsRequest(): Promise<string[]> {
-        return await this.request<string[]>('/api/friends/requests',
+        return await this.request<string[]>('/api/my/friends/requests',
             {
                 method: 'GET',
                 headers: this.getHeaders(),
@@ -38,7 +38,7 @@ class UserRequestService
     }
 
     async getRoomsRequest(): Promise<string[]> {
-        return await this.request<string[]>('/api/rooms/requests',
+        return await this.request<string[]>('/api/my/rooms/requests',
             {
                 method: 'GET',
                 headers: this.getHeaders(),
@@ -47,7 +47,7 @@ class UserRequestService
     }
 
     async getCharactersRequest(): Promise<string[]> {
-        return await this.request<string[]>('/api/characters/requests',
+        return await this.request<string[]>('/api/my/characters/requests',
             {
                 method: 'GET',
                 headers: this.getHeaders(),
@@ -56,7 +56,7 @@ class UserRequestService
     }
 
     async acceptFriendRequest(friendId: string): Promise<void> {
-        return await this.request<void>('/api/friends/requests/accept',
+        return await this.request<void>('/api/my/friends/requests/accept',
             {
                 method: 'POST',
                 headers: this.getHeaders(),
@@ -66,7 +66,7 @@ class UserRequestService
     }
 
     async acceptRoomRequest(roomId: string): Promise<void> {
-        return await this.request<void>('/api/rooms/requests/accept',
+        return await this.request<void>('/api/my/rooms/requests/accept',
             {
                 method: 'POST',
                 headers: this.getHeaders(),
@@ -76,7 +76,7 @@ class UserRequestService
     }
 
     async acceptCharacterRequest(characterId: string): Promise<void> {
-        return await this.request<void>('/api/characters/requests/accept',
+        return await this.request<void>('/api/my/characters/requests/accept',
             {
                 method: 'POST',
                 headers: this.getHeaders(),
@@ -86,7 +86,7 @@ class UserRequestService
     }
 
     async rejectFriendRequest(friendId: string): Promise<void> {
-        return await this.request<void>('/api/friends/requests/reject',
+        return await this.request<void>('/api/my/friends/requests/reject',
             {
                 method: 'POST',
                 headers: this.getHeaders(),
@@ -96,7 +96,7 @@ class UserRequestService
     }
 
     async rejectRoomRequest(roomId: string): Promise<void> {
-        return await this.request<void>('/api/rooms/requests/reject',
+        return await this.request<void>('/api/my/rooms/requests/reject',
             {
                 method: 'POST',
                 headers: this.getHeaders(),
@@ -106,7 +106,7 @@ class UserRequestService
     }
 
     async rejectCharacterRequest(characterId: string): Promise<void> {
-        return await this.request<void>('/api/characters/requests/reject',
+        return await this.request<void>('/api/my/characters/requests/reject',
             {
                 method: 'POST',
                 headers: this.getHeaders(),
