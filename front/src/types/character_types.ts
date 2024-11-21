@@ -6,8 +6,20 @@ export type Attributes = {
     vivacity: number;
     intelligence: number;
     sociality: number;
+    magic: number;
     [key: string]: number;
 };
+
+export const getDefaultAttributes = (): Attributes => ({
+    resistancy: 0,
+    strength: 0,
+    agility: 0,
+    dexterity: 0,
+    vivacity: 0,
+    intelligence: 0,
+    sociality: 0,
+    magic: 0,
+});
 
 export type RangedWeapons = {
     bow: number;

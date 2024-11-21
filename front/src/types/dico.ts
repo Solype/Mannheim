@@ -75,7 +75,7 @@ export const dico: { [key: string]: string }  = {
     warfare: "Guerrière",
     history: "Historique",
     linguistics: "Linguistique",
-    magic: "Magique",
+    magic: "Magie",
     mysticism: "Mystique",
     technology: "Technologique",
     concentration: "Concentration",
