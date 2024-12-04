@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Skill } from "@/types/character_types";
+import { dico } from "@/types/dico";
 
 export const listSkills = {
     ranged: [
@@ -148,8 +149,8 @@ const SingleSkillForm = ({ skillName, skillValueSetter }: SingleSkillFormProps) 
     };
 
     return (
-        <div className="flex items-center justify-between space-x-4 bg-gray-50 p-3 rounded-lg shadow-sm hover:bg-gray-100 transition">
-            <p className="font-semibold text-gray-700 capitalize">{skillName}</p>
+        <div className="flex items-center justify-between space-x-4 bg-white shadow-lg p-3 rounded-lg shadow-sm hover:bg-gray-100 transition">
+            <p className="font-semibold text-gray-700 capitalize">{dico[skillName] ?? skillName}</p>
             <div className="flex items-center space-x-4">
                 <div className="flex space-x-2 items-center">
                     <div className="flex flex-col items-center">
@@ -186,9 +187,9 @@ export default function SkillForm({ skillSetter }: SkillFormProps)
     return (
         <div className="space-y-8">
             {Object.entries(listSkills).map(([category, skills]) => (
-                <div key={category} className="bg-white p-6 rounded-lg shadow-md">
+                <div key={category} className="bg-white  bg-opacity-80 p-6 rounded-lg shadow-md">
                     <h1 className="text-2xl font-bold text-gray-800 border-b pb-2 mb-4 capitalize">
-                        {category}
+                        {dico[category] ?? category}
                     </h1>
                     <div className="space-y-4">
                         {skills.map((skillName: string) => (

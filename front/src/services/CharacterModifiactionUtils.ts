@@ -28,6 +28,17 @@ class CharacterModificationUtilsService {
     async getMagicLanguages(): Promise<string[]> {
         return await this.request<string[]>('/api/magic_languages');
     }
+
+    async createCharacter(character_data: any): Promise<void> {
+        await this.request('/api/my/characters', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify(character_data)
+        });
+    }
 }
 
 export default new CharacterModificationUtilsService();

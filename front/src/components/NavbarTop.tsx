@@ -7,17 +7,17 @@ import UserRequestService from '@/services/UserRequestService';
 const NavbarTop: React.FC = () => {
     const [ hasInvitations, setHasInvitations ] = useState<boolean>(false);
 
-    useEffect(() => {
-        UserRequestService.getCharactersRequest().then((res) => {
-            setHasInvitations(prev => prev || res.length > 0);
-        })
-        UserRequestService.getFriendsRequest().then((res) => {
-            setHasInvitations(prev => prev || res.length > 0);
-        })
-        UserRequestService.getRoomsRequest().then((res) => {
-            setHasInvitations(prev => prev || res.length > 0);
-        })
-    }, []);
+    // useEffect(() => {
+    //     UserRequestService.getCharactersRequest().then((res) => {
+    //         setHasInvitations(prev => prev || res.length > 0);
+    //     })
+    //     UserRequestService.getFriendsRequest().then((res) => {
+    //         setHasInvitations(prev => prev || res.length > 0);
+    //     })
+    //     UserRequestService.getRoomsRequest().then((res) => {
+    //         setHasInvitations(prev => prev || res.length > 0);
+    //     })
+    // }, []);
 
     return (
         <div className="fixed top-0 p-2 left-0 right-0 bg-foret text-white z-50 shadow-[0_0_18px_4px_rgba(255,255,255,0.2)]">

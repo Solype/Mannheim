@@ -17,7 +17,7 @@ const BasicForm = ({ formData, setFormData }: BasicFormProps) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded-lg shadow-md max-w-md mx-auto">
+        <form onSubmit={handleSubmit} className="space-y-4 bg-white bg-opacity-80 p-6 rounded-lg shadow-md max-w-md">
             <div>
                 <label className="block text-sm font-medium text-gray-700">Nom</label>
                 <input
@@ -74,12 +74,12 @@ const BasicForm = ({ formData, setFormData }: BasicFormProps) => {
                 </select>
             </div>
 
-            <button
+            {/* <button
                 type="submit"
                 className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none"
             >
                 Soumettre
-            </button>
+            </button> */}
         </form>
     );
 };

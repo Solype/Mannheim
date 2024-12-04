@@ -52,7 +52,7 @@ const ReligionForm = ({ listReligions, setter }: ReligionFormProps) => {
     };
 
     return (
-        <div className="bg-white p-6 rounded-lg shadow-md">
+        <div className="bg-white bg-opacity-80 p-6 rounded-lg shadow-md">
             <h1 className="text-2xl font-bold text-gray-800 border-b pb-2 mb-4">Religions</h1>
 
             <div className="space-y-4">
@@ -95,10 +95,10 @@ const ReligionForm = ({ listReligions, setter }: ReligionFormProps) => {
             {/* Bouton pour ajouter un dieu */}
             <button
                 onClick={handleAddReligion}
-                className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mt-4"
+                className="bg-light_foret hover:bg-foret text-white py-2 px-4 rounded mt-4"
                 disabled={availableReligions.length === 0}
             >
-                Add Religion
+                Ajouter une religion
             </button>
         </div>
     );

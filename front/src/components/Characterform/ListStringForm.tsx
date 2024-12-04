@@ -24,7 +24,7 @@ const ListStringForm = ({ title, listString, setter }: ListStringFormProps) => {
     };
 
     return (
-        <div className="bg-white p-6 rounded-lg shadow-md space-y-4">
+        <div className="bg-white bg-opacity-80 p-6 rounded-lg shadow-md space-y-4">
             <h2 className="text-xl font-bold text-gray-800">{title}</h2> {/* Affichage du titre */}
             
             <div className="flex items-center space-x-2">
@@ -37,7 +37,7 @@ const ListStringForm = ({ title, listString, setter }: ListStringFormProps) => {
                 />
                 <button
                     onClick={addRole}
-                    className="px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none"
+                    className="px-4 py-2 text-white bg-light_foret rounded-lg hover:bg-foret focus:outline-none"
                 >
                     Ajouter
                 </button>

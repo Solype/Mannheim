@@ -12,12 +12,12 @@ export default function AttributesForm({ attributes, setter }: AttributesFormPro
     };
 
     return (
-        <div className="">
+        <div className="space-y-4 bg-white bg-opacity-80 p-6 rounded-lg shadow-md max-w-md w-64">
             {Object.entries(attributes).map(([attribute, value]) => (
                 attribute && <>
-                    <div key={attribute} className="">
+                    <div key={attribute} className="flex justify-between">
                         <label htmlFor={attribute} className="font-semibold text-gray-700 capitalize">
-                            {dico[attribute]}
+                            {dico[attribute] ?? attribute}
                         </label>
                         <input
                             id={attribute}
