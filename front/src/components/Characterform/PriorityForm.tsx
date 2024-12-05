@@ -25,17 +25,17 @@ const PriorityForm = ({ initialPriority, onSubmit }: PriorityFormProps) => {
     const options = ["A", "B", "C", "D", "E"];
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4 bg-opacity-80  bg-white p-6 rounded-lg shadow-md max-w-md flex flex-col items-center w-52">
-            <h2 className="text-lg font-bold text-gray-800">Choisir les Priorités</h2>
+        <form onSubmit={handleSubmit} className="space-y-4 bg-white bg-opacity-80 p-7 rounded-lg shadow-md flex flex-col ">
+            <h2 className="text-lg font-bold text-gray-800 self-center">Priorités</h2>
 
             {Object.entries(priority).map(([key, value]) => (
-                <div key={key} className="flex flex-col space-y-2">
-                    <label className="block text-sm font-medium text-gray-700 capitalize">{dico[key] ?? key}</label>
+                <div key={key} >
+                    <label className="block text-sm font-medium text-gray-700 ">{dico[key] ?? key}</label>
                     <select
                         name={key}
                         value={value}
                         onChange={handleChange}
-                        className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                        className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-foret focus:outline-none"
                     >
                         {options.map((option) => (
                             <option key={option} value={option}>

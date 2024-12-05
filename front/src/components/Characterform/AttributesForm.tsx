@@ -12,7 +12,9 @@ export default function AttributesForm({ attributes, setter }: AttributesFormPro
     };
 
     return (
-        <div className="space-y-4 bg-white bg-opacity-80 p-6 rounded-lg shadow-md max-w-md w-64">
+        <div className="space-y-1 bg-white bg-opacity-80 p-6 rounded-lg shadow-md flex flex-col">
+            <h2 className="text-lg font-bold text-gray-800 self-center mb-5">Attributs</h2>
+
             {Object.entries(attributes).map(([attribute, value]) => (
                 attribute && <>
                     <div key={attribute} className="flex justify-between">

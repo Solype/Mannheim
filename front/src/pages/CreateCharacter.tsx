@@ -46,31 +46,47 @@ const CreateCharacterPage = () => {
     }
 
     return (
-        <div className=" flex gap-10 justify-between items-start pt-10 px-10" style={{backgroundImage: "url(/drag.png)", backgroundSize: 'cover', backgroundAttachment: 'fixed'}}>
-            <div className="w-1/2 space-y-4">
-                <h2 className="text-2xl font-semibold text-white">Objects / Info</h2>
-                <p className="text-white">Put any objects or information here</p>
-                <BasicForm formData={basicInfo} setFormData={setBasicInfo} />
-                <PriorityForm initialPriority={priority} onSubmit={setPriority} />
-                <AttributesForm attributes={attributes} setter={setAttributes} />
-                <ListStringForm title="Roles primaire" setter={setMainRoles} listString={mainRoles} />
-                <ListStringForm title="Roles secondaires" setter={setSecondaryRoles} listString={secondaryRoles} />
-                <ListStringForm title="Langues" setter={setLanguages} listString={languages} />
+        <div className="flex flex-col pt-10 px-40 relative overflow-auto h-full" style={{ backgroundImage: "url(/drag.png)", backgroundSize: 'cover', backgroundAttachment: 'fixed' }}>
+            <h1 className="text-5xl font-extrabold text-or mt-8 mb-20 self-center drop-shadow-lg stroke-white stroke-2">
+                Créer un personnage
+            </h1>
+            <div className='grid grid-cols-5 gap-7 justify-between items-start'>
+                <div className="col-span-2 space-y-4">
+                    <BasicForm formData={basicInfo} setFormData={setBasicInfo} />
+                    <div className='grid grid-cols-5 gap-3 '>
+                        <div className='col-span-2'>
+                            <PriorityForm initialPriority={priority} onSubmit={setPriority} />
+                        </div>
+                        <div className='col-span-3'>
+                            <AttributesForm attributes={attributes} setter={setAttributes} />
+                        </div>
+                    </div>
+                    <ListStringForm title="Roles primaire" setter={setMainRoles} listString={mainRoles} />
+                    <ListStringForm title="Roles secondaires" setter={setSecondaryRoles} listString={secondaryRoles} />
+                    <ListStringForm title="Langues" setter={setLanguages} listString={languages} />
 
-                <ReligionForm setter={setReligion} listReligions={religion} />
-            </div>
+                    <ReligionForm setter={setReligion} listReligions={religion} />
+                </div>
 
-            <div className="w-1/2">
-                <h1 className="text-3xl font-bold text-white mb-6">Create Character</h1>
-                <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
-                    <SkillForm skillSetter={handleChangeSkill} />
-                    <button type="submit" className="bg-light_foret text-white px-4 py-2 rounded-lg hover:bg-foret focus:outline-none">
-                        Create Character
-                    </button>
-                </form>
+                <div className="col-span-3">
+                    <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+                        <SkillForm skillSetter={handleChangeSkill} />
+                        <button type="submit" className="bg-light_foret text-white px-4 py-2 rounded-lg hover:bg-foret focus:outline-none">
+                            Sauvegarder
+                        </button>
+                    </form>
+                </div>
             </div>
+            <style jsx>{`
+                .stroke-white {
+                    -webkit-text-stroke: 1px black;
+                }
+            `}</style>
         </div>
+
     );
 };
+
+
 
 export default CreateCharacterPage;

@@ -149,8 +149,8 @@ const SingleSkillForm = ({ skillName, skillValueSetter }: SingleSkillFormProps) 
     };
 
     return (
-        <div className="flex items-center justify-between space-x-4 bg-white shadow-lg p-3 rounded-lg shadow-sm hover:bg-gray-100 transition">
-            <p className="font-semibold text-gray-700 capitalize">{dico[skillName] ?? skillName}</p>
+        <div className="flex items-center justify-between rounded-lg ">
+            <p className="font-semibold text-gray-700 capitalize text-sm">{dico[skillName] ?? skillName}</p>
             <div className="flex items-center space-x-4">
                 <div className="flex space-x-2 items-center">
                     <div className="flex flex-col items-center">
@@ -185,25 +185,28 @@ interface SkillFormProps {
 export default function SkillForm({ skillSetter }: SkillFormProps)
 {
     return (
-        <div className="space-y-8">
-            {Object.entries(listSkills).map(([category, skills]) => (
-                <div key={category} className="bg-white  bg-opacity-80 p-6 rounded-lg shadow-md">
-                    <h1 className="text-2xl font-bold text-gray-800 border-b pb-2 mb-4 capitalize">
-                        {dico[category] ?? category}
-                    </h1>
-                    <div className="space-y-4">
-                        {skills.map((skillName: string) => (
-                            <SingleSkillForm
-                                key={skillName}
-                                skillName={skillName}
-                                skillValueSetter={(pure: number, role: number) =>
-                                    skillSetter(skillName, category, pure, role)
-                                }
-                            />
-                        ))}
+        <div className="space-y-8 bg-white bg-opacity-80 p-5 rounded-lg flex flex-col">
+            <h1 className="text-2xl font-bold text-gray-800 self-center mt-4">Compétences</h1>
+            <div className=" grid grid-cols-2 gap-5">
+                {Object.entries(listSkills).map(([category, skills]) => (
+                    <div key={category} className="bg-white p-6 rounded-lg shadow-md flex flex-col">
+                        <h1 className="text-lg font-bold text-gray-800 pb-2 mb-4 capitalize self-center">
+                            {dico[category] ?? category}
+                        </h1>
+                        <div className="space-y-1 ">
+                            {skills.map((skillName: string) => (
+                                <SingleSkillForm
+                                    key={skillName}
+                                    skillName={skillName}
+                                    skillValueSetter={(pure: number, role: number) =>
+                                        skillSetter(skillName, category, pure, role)
+                                    }
+                                />
+                            ))}
+                        </div>
                     </div>
-                </div>
-            ))}
+                ))}
+            </div>
         </div>
     );
 };
