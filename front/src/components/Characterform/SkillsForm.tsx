@@ -110,42 +110,73 @@ export const listSkills = {
 }
 
 export function extractSkills(listSkills: Record<string, string[]>): Skill[] {
+    const storedSkills = JSON.parse(localStorage.getItem('skills') || '[]'); // Récupérer les compétences du localStorage
+    // console.log(storedSkills);
     const skills: Skill[] = [];
-    
+
     for (const category in listSkills) {
         if (listSkills.hasOwnProperty(category)) {
             const skillNames = listSkills[category];
+
             skillNames.forEach(skillName => {
+                const existingSkill = storedSkills.find(
+                    (skill: Skill) => skill.name === skillName && skill.category === category
+                );
                 skills.push({
                     name: skillName,
                     category,
-                    pureValue: 0,
-                    roleValue: 0
+                    pureValue: existingSkill ? existingSkill.pureValue : 0, // Valeurs par défaut si non présentes
+                    roleValue: existingSkill ? existingSkill.roleValue : 0
                 });
             });
         }
     }
-    
+
     return skills;
 }
 
+
+// export function extractSkills(listSkills: Record<string, string[]>): Skill[] {
+//     const skills: Skill[] = [];
+    
+//     for (const category in listSkills) {
+//         if (listSkills.hasOwnProperty(category)) {
+//             const skillNames = listSkills[category];
+//             skillNames.forEach(skillName => {
+//                 skills.push({
+//                     name: skillName,
+//                     category,
+//                     pureValue: 0,
+//                     roleValue: 0
+//                 });
+//             });
+//         }
+//     }
+    
+//     return skills;
+// }
+
 interface SingleSkillFormProps {
     skillName: string;
+    pureValue: number;
+    roleValue: number;
     skillValueSetter: (pure: number, role: number) => void;
 }
 
-const SingleSkillForm = ({ skillName, skillValueSetter }: SingleSkillFormProps) => {
-    const [ pureValue, setPureValue ] = useState(0);
-    const [ roleValue, setRoleValue ] = useState(0);
+const SingleSkillForm = ({ skillName, pureValue: initialPureValue, roleValue: initialRoleValue, skillValueSetter }: SingleSkillFormProps) => {
+    const [pureValue, setPureValue] = useState(initialPureValue);
+    const [roleValue, setRoleValue] = useState(initialRoleValue);
 
     const onPureValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setPureValue(Number(e.target.value));
-        skillValueSetter(pureValue, roleValue);
+        const newPureValue = Number(e.target.value);
+        setPureValue(newPureValue);
+        skillValueSetter(newPureValue, roleValue);
     };
 
     const onRoleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setRoleValue(Number(e.target.value));
-        skillValueSetter(pureValue, roleValue);
+        const newRoleValue = Number(e.target.value);
+        setRoleValue(newRoleValue);
+        skillValueSetter(pureValue, newRoleValue);
     };
 
     return (
@@ -175,34 +206,43 @@ const SingleSkillForm = ({ skillName, skillValueSetter }: SingleSkillFormProps) 
                 <p className="text-xl font-bold text-gray-900 self-center">= {pureValue + roleValue}</p>
             </div>
         </div>
-    )
-}
+    );
+};
+
 
 interface SkillFormProps {
     skillSetter: (skillName: string, skillCategory: string, pureValue: number, roleValue: number) => void;
+    skills: Skill[]; // Passer les compétences en tant que prop
 }
 
-export default function SkillForm({ skillSetter }: SkillFormProps)
-{
+export default function SkillForm({ skillSetter, skills }: SkillFormProps) {
     return (
         <div className="space-y-8 bg-white bg-opacity-80 p-5 rounded-lg flex flex-col">
             <h1 className="text-2xl font-bold text-gray-800 self-center mt-4">Compétences</h1>
-            <div className=" grid grid-cols-2 gap-5">
-                {Object.entries(listSkills).map(([category, skills]) => (
+            <div className="grid grid-cols-2 gap-5">
+                {Object.entries(listSkills).map(([category, skillNames]) => (
                     <div key={category} className="bg-white p-6 rounded-lg shadow-md flex flex-col">
                         <h1 className="text-lg font-bold text-gray-800 pb-2 mb-4 capitalize self-center">
                             {dico[category] ?? category}
                         </h1>
-                        <div className="space-y-1 ">
-                            {skills.map((skillName: string) => (
-                                <SingleSkillForm
-                                    key={skillName}
-                                    skillName={skillName}
-                                    skillValueSetter={(pure: number, role: number) =>
-                                        skillSetter(skillName, category, pure, role)
-                                    }
-                                />
-                            ))}
+                        <div className="space-y-1">
+                            {skillNames.map((skillName: string) => {
+                                // Récupérer la compétence correspondante depuis `skills`
+                                const currentSkill = skills.find(
+                                    skill => skill.name === skillName && skill.category === category
+                                );
+                                return (
+                                    <SingleSkillForm
+                                        key={skillName}
+                                        skillName={skillName}
+                                        pureValue={currentSkill?.pureValue || 0}
+                                        roleValue={currentSkill?.roleValue || 0}
+                                        skillValueSetter={(pure: number, role: number) =>
+                                            skillSetter(skillName, category, pure, role)
+                                        }
+                                    />
+                                );
+                            })}
                         </div>
                     </div>
                 ))}
@@ -210,3 +250,4 @@ export default function SkillForm({ skillSetter }: SkillFormProps)
         </div>
     );
 };
+

@@ -39,6 +39,16 @@ class CharacterModificationUtilsService {
             body: JSON.stringify(character_data)
         });
     }
+
+    async getCharacters(): Promise<any> {
+        return await this.request('/api/my/characters', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+        });
+    }
 }
 
 export default new CharacterModificationUtilsService();

@@ -1,9 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CharacterBasicInfo } from '@/types/character_types';
 import { Link } from 'react-router-dom';
+import CharacterModifiactionUtils from '@/services/CharacterModifiactionUtils';
 
 const CharactersPage = () => {
     const [characters, setCharacters] = useState<CharacterBasicInfo[]>([]);
+
+    useEffect(() => {
+        CharacterModifiactionUtils.getCharacters().then(setCharacters);
+    }, []);
     
     return (
         <div className="bg-slate-500 flex justify-between items-start pt-10 px-10">
