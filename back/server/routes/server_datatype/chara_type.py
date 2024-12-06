@@ -3,7 +3,7 @@ from pydantic import BaseModel
 class CharaBasicInfos(BaseModel):
     name:   str
     race:   str
-    age:    str
+    age:    int
     gender: str
 
 class CharaPriority(BaseModel):
@@ -20,6 +20,7 @@ class CharaAttributes(BaseModel):
     agility:        int
     vivacity:       int
     social:         int
+    magic:          int
 
 class CharaRoles(BaseModel):
     main:       list[str]
@@ -27,8 +28,8 @@ class CharaRoles(BaseModel):
 
 class CharaSkill(BaseModel):
     name:       str
-    pure:       int
-    role:       int
+    pureValue:       int
+    roleValue:       int
     category:   str
 
 class CharaReligion(BaseModel):
@@ -36,7 +37,7 @@ class CharaReligion(BaseModel):
     devotion:   int
 
 class CharaOtherData(BaseModel):
-    language:   list[str]
+    languages:   list[str]
     experience: int
     mana:       int
     money:      int

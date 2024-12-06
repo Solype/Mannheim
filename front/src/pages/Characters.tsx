@@ -17,7 +17,7 @@ const CharactersPage = () => {
                 <div key={index} className="w-1/2 space-y-4">
                     <h1>${character.name}</h1>
                     <p>${character.age}</p>
-                    <p>${character.species}</p>
+                    <p>${character.race}</p>
                     <p>${character.gender}</p>
                 </div>
             ))}

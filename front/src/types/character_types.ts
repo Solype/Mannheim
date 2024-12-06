@@ -1,23 +1,23 @@
 export type Attributes = {
-    resistancy: number;
+    resistance: number;
     strength: number;
     agility: number;
     dexterity: number;
     vivacity: number;
-    intelligence: number;
-    sociality: number;
+    intellect: number;
+    social: number;
     magic: number;
     [key: string]: number;
 };
 
 export const getDefaultAttributes = (): Attributes => ({
-    resistancy: 0,
+    resistance: 0,
     strength: 0,
     agility: 0,
     dexterity: 0,
     vivacity: 0,
-    intelligence: 0,
-    sociality: 0,
+    intellect: 0,
+    social: 0,
     magic: 0,
 });
 
@@ -184,7 +184,7 @@ export type Skill = {
 
 export type CharacterForm = {
     name: string;
-    species: string;
+    race: string;
     age: number;
     priority: string;
     attributes: Attributes;
@@ -203,10 +203,18 @@ export type CharacterForm = {
 export type CharacterBasicInfo = {
     name: string;
     age: number;
-    species: string;
+    race: string;
     gender: string;
     [key: string]: any;
 };
+
+export type CharacterOtherInfo = {
+    languages: string[];
+    experience: number;
+    mana:       number;
+    money:      number;
+    [key: string]: any;
+}
 
 export type Priority = {
     role: string;

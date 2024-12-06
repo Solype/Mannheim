@@ -53,8 +53,8 @@ const BasicForm = ({ formData, setFormData }: BasicFormProps) => {
                     <label className="block text-sm font-medium text-gray-700">Espèce</label>
                     <input
                         type="text"
-                        name="species"
-                        value={formData.species}
+                        name="race"
+                        value={formData.race}
                         onChange={handleChange}
                         className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-foret focus:outline-none"
                         placeholder="Entrez l'espèce"

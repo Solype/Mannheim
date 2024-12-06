@@ -3,7 +3,7 @@ import ReligionForm from '@/components/Characterform/ReligionForm';
 import { Religion, Skill } from '@/types/character_types';
 import SkillForm, { extractSkills, listSkills } from '@/components/Characterform/SkillsForm';
 import AttributesForm from '@/components/Characterform/AttributesForm';
-import { Attributes, getDefaultAttributes, CharacterBasicInfo, Priority } from '@/types/character_types';
+import { Attributes, getDefaultAttributes, CharacterBasicInfo, Priority, CharacterOtherInfo } from '@/types/character_types';
 import BasicForm from '@/components/Characterform/BasicInfoForm';
 import PriorityForm from '@/components/Characterform/PriorityForm';
 import ListStringForm from '@/components/Characterform/ListStringForm';
@@ -15,8 +15,8 @@ const CreateCharacterPage = () => {
     const [ attributes, setAttributes ] = useState<Attributes>(getDefaultAttributes());
     const [ mainRoles, setMainRoles ] = useState<string[]>([]);
     const [ secondaryRoles, setSecondaryRoles ] = useState<string[]>([]);
-    const [ languages, setLanguages ] = useState<string[]>([]);
-    const [ basicInfo, setBasicInfo ] = useState<CharacterBasicInfo>({ name: "", age: 0, species: "", gender: "" });
+    const [ otherInfos, setOtherInfos ] = useState<CharacterOtherInfo>({ languages: [], experience: 0, mana: 0, money: 0 });
+    const [ infos, setBasicInfo ] = useState<CharacterBasicInfo>({ name: "", age: 0, race: "", gender: "" });
     const [ priority, setPriority ] = useState<Priority>({ role: "", attribute: "", skills: "", money: "" });
 
 
@@ -42,12 +42,12 @@ const CreateCharacterPage = () => {
 
     const saveLanguages = (languages: string[]) => {
         localStorage.setItem('languages', JSON.stringify(languages));
-        setLanguages(languages);
+        setOtherInfos({ ...otherInfos, languages: languages });
     }
 
-    const saveBasicInfo = (basicInfo: CharacterBasicInfo) => {
-        localStorage.setItem('basicInfo', JSON.stringify(basicInfo));
-        setBasicInfo(basicInfo);
+    const saveBasicInfo = (infos: CharacterBasicInfo) => {
+        localStorage.setItem('infos', JSON.stringify(infos));
+        setBasicInfo(infos);
     }
 
     const savePriority = (priority: Priority) => {
@@ -64,9 +64,9 @@ const CreateCharacterPage = () => {
         }
         setMainRoles(JSON.parse(localStorage.getItem('mainRoles') || '[]'));
         setSecondaryRoles(JSON.parse(localStorage.getItem('secondaryRoles') || '[]'));
-        setLanguages(JSON.parse(localStorage.getItem('languages') || '[]'));
-        setBasicInfo(JSON.parse(localStorage.getItem('basicInfo') || '{}'));
-        setPriority(JSON.parse(localStorage.getItem('priority') || '{}'));
+        setOtherInfos(JSON.parse(localStorage.getItem('languages') || '{ "languages": [], "experience": 0, "mana": 0, "money": 0 }'));
+        setBasicInfo(JSON.parse(localStorage.getItem('infos') || '{"name": "", "age": 0, "race": "", "gender": ""}'));
+        setPriority(JSON.parse(localStorage.getItem('priority') || '{ "role": "", "attribute": "", "skills": "", "money": "" }'));
     }, []);
 
     const handleChangeSkill = (skillName: string, skillCategory: string, pureValue: number, roleValue: number) => {
@@ -87,10 +87,9 @@ const CreateCharacterPage = () => {
             skills,
             religion,
             attributes,
-            mainRoles,
-            secondaryRoles,
-            languages,
-            basicInfo,
+            roles : { main: mainRoles, secondary: secondaryRoles },
+            other : { ...otherInfos},
+            infos,
             priority
         }
         console.log(data);
@@ -104,15 +103,15 @@ const CreateCharacterPage = () => {
         localStorage.removeItem('mainRoles');
         localStorage.removeItem('secondaryRoles');
         localStorage.removeItem('languages');
-        localStorage.removeItem('basicInfo');
+        localStorage.removeItem('infos');
         localStorage.removeItem('priority');
         setSkills([]);
         setReligion([]);
         setAttributes(getDefaultAttributes());
         setMainRoles([]);
         setSecondaryRoles([]);
-        setLanguages([]);
-        setBasicInfo({ name: "", age: 0, species: "", gender: "" });
+        setOtherInfos({languages: [], experience: 0, mana: 0, money: 0});
+        setBasicInfo({ name: "", age: 0, race: "", gender: "" });
         setPriority({ role: "", attribute: "", skills: "", money: "" });
     }
 
@@ -137,7 +136,7 @@ const CreateCharacterPage = () => {
             </div>
             <div className='grid grid-cols-5 gap-7 justify-between items-start'>
                 <div className="col-span-2 space-y-4">
-                    <BasicForm formData={basicInfo} setFormData={saveBasicInfo} />
+                    <BasicForm formData={infos} setFormData={saveBasicInfo} />
                     <div className='grid grid-cols-5 gap-3 '>
                         <div className='col-span-2'>
                             <PriorityForm initialPriority={priority} onSubmit={savePriority} />
@@ -148,7 +147,7 @@ const CreateCharacterPage = () => {
                     </div>
                     <ListStringForm title="Roles primaire" setter={saveMainRoles} listString={mainRoles} />
                     <ListStringForm title="Roles secondaires" setter={saveSecondaryRoles} listString={secondaryRoles} />
-                    <ListStringForm title="Langues" setter={saveLanguages} listString={languages} />
+                    <ListStringForm title="Langues" setter={saveLanguages} listString={otherInfos.languages} />
 
                     <ReligionForm setter={saveReligion} listReligions={religion} />
                 </div>
