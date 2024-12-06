@@ -13,19 +13,19 @@ async def my_chget_one_characteraracters(credentials: HTTPAuthorizationCredentia
     if not token or not access_manager.isTokenValid(token):
         raise HTTPException(status_code=401, detail="Unauthorized")
     user_id = access_manager.getTokenData(token).id
-    characters = get_db("SELECT * FROM `characters` WHERE user_id = %s", (user_id,))
+    characters = get_db("SELECT id, character_data FROM `characters` WHERE user_id = %s", (user_id,))
 
     result = [
         CharaAllDataWithIdShort(
             **{**json.loads(char_data), "id": char_id}
         )
-        for char_id, _, char_data in characters
+        for char_id, char_data in characters
     ]
 
     return result
 
 @app.get("/api/my/characters/{id}", tags=["Character"])
-async def get_one_character(id: int, credentials: HTTPAuthorizationCredentials = Depends(security)) -> CharaAllData:
+async def get_one_character(id: int, credentials: HTTPAuthorizationCredentials = Depends(security)) -> any:
     token = credentials.credentials
 
     if not token or not access_manager.isTokenValid(token):

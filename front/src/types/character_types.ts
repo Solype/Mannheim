@@ -182,6 +182,19 @@ export type Skill = {
     [key: string]: any;
 };
 
+export type BasicCharaInfo = {
+    name: string;
+    age: number;
+    race: string;
+    gender: string;
+    [key: string]: any;
+};
+
+export type CharaRoles = {
+    main:       string[];
+    secondary:  string[];
+}
+
 export type CharacterForm = {
     name: string;
     race: string;
@@ -201,10 +214,8 @@ export type CharacterForm = {
 };
 
 export type CharacterBasicInfo = {
-    name: string;
-    age: number;
-    race: string;
-    gender: string;
+    info : BasicCharaInfo;
+    roles: CharaRoles;
     [key: string]: any;
 };
 

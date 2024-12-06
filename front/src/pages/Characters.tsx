@@ -7,7 +7,12 @@ const CharactersPage = () => {
     const [characters, setCharacters] = useState<CharacterBasicInfo[]>([]);
 
     useEffect(() => {
-        CharacterModifiactionUtils.getCharacters().then(setCharacters);
+        CharacterModifiactionUtils.getCharacters().then(
+            (characters) => {
+                setCharacters(characters);
+                console.log(characters);
+            }
+        );
     }, []);
     
     return (
@@ -15,10 +20,10 @@ const CharactersPage = () => {
             <Link to="/create-character" className="bg-white text-black p-3 rounded-lg">Create Character</Link>
             {characters.map((character, index) => (
                 <div key={index} className="w-1/2 space-y-4">
-                    <h1>${character.name}</h1>
-                    <p>${character.age}</p>
-                    <p>${character.race}</p>
-                    <p>${character.gender}</p>
+                    <h1>${character.infos.name}</h1>
+                    <p>${character.infos.age}</p>
+                    <p>${character.infos.race}</p>
+                    <p>${character.infos.gender}</p>
                 </div>
             ))}
         </div>
