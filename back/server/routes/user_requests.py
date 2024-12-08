@@ -5,10 +5,6 @@ from server.access_manager import access_manager
 
 from server.routes.server_datatype.user_request_type import UserFriendRequest, UserCharacterSessionRequest, UserSessionRequest
 
-@app.get("/api/my/requests/friends", tags=["Requests"])
-async def get_friends_requests(credentials: HTTPAuthorizationCredentials = Depends(security)) -> list[UserFriendRequest]:
-    return []
-
 @app.get("/api/my/requests/sessions", tags=["Requests"])
 async def get_sessions_requests(credentials: HTTPAuthorizationCredentials = Depends(security)) -> list[UserSessionRequest]:
     return []
