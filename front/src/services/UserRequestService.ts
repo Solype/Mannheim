@@ -1,36 +1,9 @@
-class UserRequestService
-{
-    private baseURL = __DOCKER_HOST_IP__ ? `http://${__DOCKER_HOST_IP__}:8080` : `http://${__MY_LOCAL_IP__}:8080`;
+import AService from "@/services/AService";
 
-    private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-        try {
-            const response = await fetch(`${this.baseURL}${endpoint}`, options);
-            if (!response.ok) {
-                throw new Error('Erreur réseau');
-            }
-            return await response.json();
-        } catch (error) {
-            console.error(`Erreur sur ${endpoint}:`, error);
-            throw error;
-        }
-    }
-
-    private getHeaders(includeAuth: boolean = true): HeadersInit {
-        const headers: HeadersInit = {
-            'Content-Type': 'application/json',
-        };
-        if (includeAuth) {
-            const token = localStorage.getItem('token');
-            if (token) {
-                headers['Authorization'] = `Bearer ${token}`;
-            }
-        }
-        return headers;
-    }
+class UserRequestService extends AService {
 
     async getFriendsRequest(): Promise<string[]> {
-        return await this.request<string[]>('/api/my/friends/requests',
-            {
+        return await this.request<string[]>('/api/my/requests/friends', {
                 method: 'GET',
                 headers: this.getHeaders(),
             }
@@ -38,8 +11,7 @@ class UserRequestService
     }
 
     async getRoomsRequest(): Promise<string[]> {
-        return await this.request<string[]>('/api/my/rooms/requests',
-            {
+        return await this.request<string[]>('/api/my/requests/sessions', {
                 method: 'GET',
                 headers: this.getHeaders(),
             }
@@ -47,8 +19,7 @@ class UserRequestService
     }
 
     async getCharactersRequest(): Promise<string[]> {
-        return await this.request<string[]>('/api/my/characters/requests',
-            {
+        return await this.request<string[]>('/api/my/requests/characters', {
                 method: 'GET',
                 headers: this.getHeaders(),
             }
@@ -65,8 +36,7 @@ class UserRequestService
     ///////////////////////////////////////////////////////
 
     async acceptFriendRequest(friendId: string): Promise<void> {
-        return await this.request<void>('/api/my/friends/requests/accept',
-            {
+        return await this.request<void>('/api/my/friends/requests/accept', {
                 method: 'POST',
                 headers: this.getHeaders(),
                 body: JSON.stringify({ friendId }),
@@ -75,8 +45,7 @@ class UserRequestService
     }
 
     async acceptRoomRequest(roomId: string): Promise<void> {
-        return await this.request<void>('/api/my/rooms/requests/accept',
-            {
+        return await this.request<void>('/api/my/rooms/requests/accept', {
                 method: 'POST',
                 headers: this.getHeaders(),
                 body: JSON.stringify({ roomId }),
@@ -85,8 +54,7 @@ class UserRequestService
     }
 
     async acceptCharacterRequest(characterId: string): Promise<void> {
-        return await this.request<void>('/api/my/characters/requests/accept',
-            {
+        return await this.request<void>('/api/my/characters/requests/accept', {
                 method: 'POST',
                 headers: this.getHeaders(),
                 body: JSON.stringify({ characterId }),
@@ -103,8 +71,7 @@ class UserRequestService
     ///////////////////////////////////////////////////////
 
     async rejectFriendRequest(friendId: string): Promise<void> {
-        return await this.request<void>('/api/my/friends/requests/reject',
-            {
+        return await this.request<void>('/api/my/friends/requests/reject', {
                 method: 'POST',
                 headers: this.getHeaders(),
                 body: JSON.stringify({ friendId }),
@@ -113,8 +80,7 @@ class UserRequestService
     }
 
     async rejectRoomRequest(roomId: string): Promise<void> {
-        return await this.request<void>('/api/my/rooms/requests/reject',
-            {
+        return await this.request<void>('/api/my/rooms/requests/reject', {
                 method: 'POST',
                 headers: this.getHeaders(),
                 body: JSON.stringify({ roomId }),
@@ -123,8 +89,7 @@ class UserRequestService
     }
 
     async rejectCharacterRequest(characterId: string): Promise<void> {
-        return await this.request<void>('/api/my/characters/requests/reject',
-            {
+        return await this.request<void>('/api/my/characters/requests/reject', {
                 method: 'POST',
                 headers: this.getHeaders(),
                 body: JSON.stringify({ characterId }),
