@@ -5,6 +5,32 @@ from server.mysql_db import get_db, getone_db
 from fastapi.responses import FileResponse
 import os
 
+
+
+def get_story_linked_to_story(story_id: int) -> list[int]:
+    link1 = get_db("SELECT lore_story_id2 FROM `lore_story_link` WHERE lore_story_id1 = %s", (story_id,))
+    link2 = get_db("SELECT lore_story_id1 FROM `lore_story_link` WHERE lore_story_id2 = %s", (story_id,))
+
+    return [link[0] for link in link1] + [link[0] for link in link2]
+
+
+def get_character_linked_to_character(character_id: int) -> list[int]:
+    link1 = get_db("SELECT lore_chara_id1 FROM `lore_character_link` WHERE lore_chara_id2 = %s", (character_id,))
+    link2 = get_db("SELECT lore_chara_id2 FROM `lore_character_link` WHERE lore_chara_id1 = %s", (character_id,))
+
+    return [link[0] for link in link1] + [link[0] for link in link2]
+
+def get_character_linked_to_story(story_id: int) -> list[int]:
+    chara = get_db("SELECT lore_chara_id FROM `lore_character_story_link` WHERE lore_story_id = %s", (story_id,))
+    return [chara[0] for chara in chara]
+
+def get_story_linked_to_character(character_id: int) -> list[int]:
+    story = get_db("SELECT lore_story_id FROM `lore_character_story_link` WHERE lore_chara_id = %s", (character_id,))
+    return [story[0] for story in story]
+
+
+
+
 @app.get("/api/lore/stories", tags=["Lore"])
 async def lore_stories() -> list[LoreStoryShort]:
     stories = get_db("SELECT id, title, short_description, image FROM `lore_story`", ())
@@ -12,7 +38,7 @@ async def lore_stories() -> list[LoreStoryShort]:
 
 @app.get("/api/lore/entities", tags=["Lore"])
 async def lore_entities() -> list[LoreEntityShort]:
-    entities = get_db("SELECT id, name, short_description, image FROM `lore_entity`", ())
+    entities = get_db("SELECT id, name, short_description FROM `lore_character`", ())
     return [ packDbElement(LoreEntityShort, entity) for entity in entities ]
 
 
@@ -33,31 +59,8 @@ async def lore_story(id: int) -> LoreStory:
     else:
         raise HTTPException(status_code=404, detail="Story image not found")
 
-    related_stories = get_db(
-        """
-        SELECT id FROM `lore_story` 
-        WHERE id IN (
-            SELECT lore_id2 FROM `lore_story_link` WHERE lore_id1 = %s
-            UNION
-            SELECT lore_id1 FROM `lore_story_link` WHERE lore_id2 = %s
-        )
-        """,
-        (id, id)
-    )
-
-    related_stories = [story[0] for story in related_stories]
-
-    related_entities = get_db(
-        """
-        SELECT id FROM `lore_entity` 
-        WHERE id IN (
-            SELECT entity_id FROM `lore_entity_link` WHERE story_id = %s
-        )
-        """,
-        (id,)
-    )
-
-    related_entities = [entity[0] for entity in related_entities]
+    related_stories = get_story_linked_to_story(id)
+    related_entities = get_character_linked_to_story(id)
 
     story = dict(zip(["id", "title", "short_description", "image"], story))
 

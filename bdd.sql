@@ -38,15 +38,15 @@ CREATE TABLE IF NOT EXISTS `sessions` (
 
 
 -- Connection entre les participant d'une session et la session elle-meme
-CREATE TABLE IF NOT EXISTS `session_participant` (
+CREATE TABLE IF NOT EXISTS `session_participants` (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `user_id` BIGINT UNSIGNED NOT NULL,
     `session_id` BIGINT UNSIGNED NOT NULL,
-    INDEX `idx_usr_id` (`user_id`),
+    INDEX `idx_user_id` (`user_id`),
     INDEX `idx_session_id` (`session_id`),
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`session_id`) REFERENCES `sessions`(`id`) ON DELETE CASCADE
-)
+);
 
 
 
@@ -172,15 +172,40 @@ CREATE TABLE IF NOT EXISTS `lore_character` (
     `image` VARCHAR(255)
 );
 
+
 -- Table des liens entre personnages et histoires
-CREATE TABLE IF NOT EXISTS `lore_entity_link` (
+CREATE TABLE IF NOT EXISTS `lore_character_story_link` (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `lore_chara_id` BIGINT UNSIGNED NOT NULL,
     `lore_story_id` BIGINT UNSIGNED NOT NULL,
-    INDEX `idx_lore_chara_id` (`lore_chara_id`),
+    `lore_chara_id` BIGINT UNSIGNED NOT NULL,
     INDEX `idx_lore_story_id` (`lore_story_id`),
-    FOREIGN KEY (`lore_chara_id`) REFERENCES `lore_character`(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`lore_story_id`) REFERENCES `lore_story`(`id`) ON DELETE CASCADE
+    INDEX `idx_lore_chara_id` (`lore_chara_id`),
+    FOREIGN KEY (`lore_story_id`) REFERENCES `lore_story`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`lore_chara_id`) REFERENCES `lore_character`(`id`) ON DELETE CASCADE
+);
+
+
+-- Table des liens entre histoires
+CREATE TABLE IF NOT EXISTS `lore_story_link` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `lore_story_id2` BIGINT UNSIGNED NOT NULL,
+    `lore_story_id1` BIGINT UNSIGNED NOT NULL,
+    INDEX `idx_lore_story_id2` (`lore_story_id2`),
+    INDEX `idx_lore_story_id1` (`lore_story_id1`),
+    FOREIGN KEY (`lore_story_id2`) REFERENCES `lore_story`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`lore_story_id1`) REFERENCES `lore_story`(`id`) ON DELETE CASCADE
+);
+
+
+-- Table des liens entre personnages
+CREATE TABLE IF NOT EXISTS `lore_character_link` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `lore_chara_id1` BIGINT UNSIGNED NOT NULL,
+    `lore_chara_id2` BIGINT UNSIGNED NOT NULL,
+    INDEX `idx_lore_chara_id1` (`lore_chara_id1`),
+    INDEX `idx_lore_chara_id2` (`lore_chara_id2`),
+    FOREIGN KEY (`lore_chara_id1`) REFERENCES `lore_character`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`lore_chara_id2`) REFERENCES `lore_character`(`id`) ON DELETE CASCADE
 );
 
 -- Insertions initiales
