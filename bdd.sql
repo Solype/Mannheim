@@ -9,6 +9,8 @@ CREATE TABLE IF NOT EXISTS `users` (
     `password` VARCHAR(255) NOT NULL
 );
 
+
+
 -- Table des relations amicales
 CREATE TABLE IF NOT EXISTS `friends` (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -20,15 +22,7 @@ CREATE TABLE IF NOT EXISTS `friends` (
     FOREIGN KEY (`friend_id2`) REFERENCES `users`(`id`) ON DELETE CASCADE
 );
 
--- Table des personnages
-CREATE TABLE IF NOT EXISTS `characters` (
-    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `user_id` BIGINT UNSIGNED NOT NULL,
-    `character_data` JSON NOT NULL,
-    `image` VARCHAR(255),
-    INDEX `idx_user_id` (`user_id`),
-    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
-);
+
 
 -- Table des sessions
 CREATE TABLE IF NOT EXISTS `sessions` (
@@ -40,6 +34,42 @@ CREATE TABLE IF NOT EXISTS `sessions` (
     INDEX `idx_gamemaster_id` (`gamemaster_id`),
     FOREIGN KEY (`gamemaster_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
 );
+
+
+
+-- Connection entre les participant d'une session et la session elle-meme
+CREATE TABLE IF NOT EXISTS `session_participant` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `user_id` BIGINT UNSIGNED NOT NULL,
+    `session_id` BIGINT UNSIGNED NOT NULL,
+    INDEX `idx_usr_id` (`user_id`),
+    INDEX `idx_session_id` (`session_id`),
+    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`session_id`) REFERENCES `sessions`(`id`) ON DELETE CASCADE
+)
+
+
+
+-- Table des personnages
+CREATE TABLE IF NOT EXISTS `characters` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `user_id` BIGINT UNSIGNED NOT NULL,
+    `character_data` JSON NOT NULL,
+    `image` VARCHAR(255),
+    INDEX `idx_user_id` (`user_id`),
+    FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
+);
+
+
+
+-- for later implementation
+
+
+
+
+
+
+
 
 -- Table des entités
 CREATE TABLE IF NOT EXISTS `entities` (
@@ -60,17 +90,6 @@ CREATE TABLE IF NOT EXISTS `entities` (
     INDEX `idx_character_id` (`character_id`),
     FOREIGN KEY (`character_id`) REFERENCES `characters`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`owner_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`session_id`) REFERENCES `sessions`(`id`) ON DELETE CASCADE
-);
-
--- Table des personnages joués
-CREATE TABLE IF NOT EXISTS `characters_played` (
-    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `character_id` BIGINT UNSIGNED NOT NULL,
-    `session_id` BIGINT UNSIGNED NOT NULL,
-    INDEX `idx_character_id` (`character_id`),
-    INDEX `idx_session_id` (`session_id`),
-    FOREIGN KEY (`character_id`) REFERENCES `characters`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`session_id`) REFERENCES `sessions`(`id`) ON DELETE CASCADE
 );
 
