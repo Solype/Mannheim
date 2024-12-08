@@ -18,16 +18,16 @@ class SessionService extends AService {
         );
     }
 
-    public async createSession(session: SessionShort): Promise<void> {
-        return await this.request<void>('/api/my/session', {
+    public async createSession(name : string, description : string): Promise<SessionShort> {
+        return await this.request<SessionShort>('/api/my/session', {
             method: 'POST',
             headers: this.getHeaders(),
-            body: JSON.stringify(session),
+            body: JSON.stringify({ name, description }),
         });
     }
 
-    public async deleteSession(sessionId: string): Promise<void> {
-        return await this.request<void>(`/api/my/session/${sessionId}`, {
+    public async deleteSession(sessionId: number): Promise<SessionShort> {
+        return await this.request<SessionShort>(`/api/my/session/${sessionId}`, {
             method: 'DELETE',
             headers: this.getHeaders(),
         });
