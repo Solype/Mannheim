@@ -27,7 +27,7 @@ def get_my_session(credentials: HTTPAuthorizationCredentials = Depends(security)
     
     user_id = access_manager.getTokenData(token).id
 
-    session_i_am_in = get_db("SELECT session_id FROM `session_participant` WHERE user_id = %s", (user_id,))
+    session_i_am_in = get_db("SELECT session_id FROM `session_participants` WHERE user_id = %s", (user_id,))
     return [compose_session_short(session_id[0]) for session_id in session_i_am_in]
 
 @app.get("/api/my/owned/sessions", tags=["Session"])

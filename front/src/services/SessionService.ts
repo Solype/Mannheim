@@ -3,11 +3,19 @@ import { SessionShort } from "@/types/sesssion_types";
 
 class SessionService extends AService {
     public async getAllSessions(): Promise<SessionShort[]> {
-        return await this.request<SessionShort[]>('/api/my/sessions');
+        return await this.request<SessionShort[]>('/api/my/sessions', {
+                method: 'GET',
+                headers: this.getHeaders(),
+            }
+        );
     }
 
     public async getMySession(): Promise<SessionShort> {
-        return await this.request<SessionShort>('/api/my/owned/sessions');
+        return await this.request<SessionShort>('/api/my/owned/sessions', {
+                method: 'GET',
+                headers: this.getHeaders(),
+            }
+        );
     }
 
     public async createSession(session: SessionShort): Promise<void> {

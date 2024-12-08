@@ -58,7 +58,7 @@ const NavbarTop: React.FC = () => {
                                 )}
                             </Link>
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="flex items-center space-x-2 hover:bg-foret">
+                        <DropdownMenuItem className="flex items-center space-x-2 hover:bg-foret" onClick={() => window.location.href = "/login"}>
                             <FaSignOutAlt className="w-4 h-4" />
                             <span>Logout</span>
                         </DropdownMenuItem>
