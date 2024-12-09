@@ -109,8 +109,8 @@ export const listSkills = {
     ]
 }
 
-export function extractSkills(listSkills: Record<string, string[]>): Skill[] {
-    const storedSkills = JSON.parse(localStorage.getItem('skills') || '[]'); // Récupérer les compétences du localStorage
+export function extractSkills(listSkills: Record<string, string[]>, skillsData: Skill[] | null): Skill[] {
+    const storedSkills = skillsData ?? JSON.parse(localStorage.getItem('skills') || '[]');
     // console.log(storedSkills);
     const skills: Skill[] = [];
 
@@ -161,21 +161,18 @@ interface SingleSkillFormProps {
     pureValue: number;
     roleValue: number;
     skillValueSetter: (pure: number, role: number) => void;
+    disabled: boolean;
 }
 
-const SingleSkillForm = ({ skillName, pureValue: initialPureValue, roleValue: initialRoleValue, skillValueSetter }: SingleSkillFormProps) => {
-    const [pureValue, setPureValue] = useState(initialPureValue);
-    const [roleValue, setRoleValue] = useState(initialRoleValue);
+const SingleSkillForm = ({ skillName, pureValue, roleValue, skillValueSetter, disabled }: SingleSkillFormProps) => {
 
     const onPureValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newPureValue = Number(e.target.value);
-        setPureValue(newPureValue);
         skillValueSetter(newPureValue, roleValue);
     };
 
     const onRoleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newRoleValue = Number(e.target.value);
-        setRoleValue(newRoleValue);
         skillValueSetter(pureValue, newRoleValue);
     };
 
@@ -191,6 +188,7 @@ const SingleSkillForm = ({ skillName, pureValue: initialPureValue, roleValue: in
                             value={pureValue}
                             onChange={onPureValueChange}
                             className="w-16 px-2 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                            disabled={disabled}
                         />
                     </div>
                     <div className="flex flex-col items-center">
@@ -200,6 +198,7 @@ const SingleSkillForm = ({ skillName, pureValue: initialPureValue, roleValue: in
                             value={roleValue}
                             onChange={onRoleValueChange}
                             className="w-16 px-2 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                            disabled={disabled}
                         />
                     </div>
                 </div>
@@ -213,9 +212,10 @@ const SingleSkillForm = ({ skillName, pureValue: initialPureValue, roleValue: in
 interface SkillFormProps {
     skillSetter: (skillName: string, skillCategory: string, pureValue: number, roleValue: number) => void;
     skills: Skill[]; // Passer les compétences en tant que prop
+    disabled: boolean;
 }
 
-export default function SkillForm({ skillSetter, skills }: SkillFormProps) {
+export default function SkillForm({ skillSetter, skills, disabled }: SkillFormProps) {
     return (
         <div className="space-y-8 bg-white bg-opacity-80 p-5 rounded-lg flex flex-col">
             <h1 className="text-2xl font-bold text-gray-800 self-center mt-4">Compétences</h1>
@@ -240,6 +240,7 @@ export default function SkillForm({ skillSetter, skills }: SkillFormProps) {
                                         skillValueSetter={(pure: number, role: number) =>
                                             skillSetter(skillName, category, pure, role)
                                         }
+                                        disabled={disabled}
                                     />
                                 );
                             })}

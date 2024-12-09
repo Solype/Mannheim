@@ -23,8 +23,8 @@ class LoginService extends AService {
         return data;
     }
 
-    async whoami(): Promise<number> {
-        const data = await this.request<number>('/api/whoami', {
+    async whoami(): Promise<string | null> {
+        const data = await this.request<string>('/api/whoami', {
             method: 'GET',
             headers: this.getHeaders(),
         });

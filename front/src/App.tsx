@@ -12,6 +12,7 @@ import NotFound from '@/pages/NotFound';
 import Profile from '@/pages/Profile';
 import LoreStoryPage from '@/pages/LoreStory';
 import CreateCharacterPage from './pages/CreateCharacter';
+import CharacterViewPage from './pages/CharacterView';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/" element={<DashboardPage />} />
           <Route path="/dashboard" element={<DashboardPage/>} />
           <Route path="/characters" element={<CharactersPage />} />
+          <Route path="/characters/:id" element={<CharacterViewPage />} />
           <Route path="/create-character" element={<CreateCharacterPage />} />
           <Route path="/creatures" element={<Creatures />} />
           <Route path="/lores" element={<Lores />} />

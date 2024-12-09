@@ -49,6 +49,27 @@ class CharacterModificationUtilsService {
             },
         });
     }
+
+    async getCharacter(character_id: string): Promise<any> {
+        return await this.request(`/api/my/characters/${character_id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+        });
+    }
+
+    async updateCharacter(character_data: any, character_id: string): Promise<void> {
+        await this.request(`/api/my/characters/${character_id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify(character_data)
+        });
+    }
 }
 
 export default new CharacterModificationUtilsService();
