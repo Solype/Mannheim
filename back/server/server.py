@@ -10,6 +10,10 @@ from server.socket import socketio_mount
 async def lifespan(app: FastAPI):
     print("Le serveur s'initialise !", flush=True)
     cursor.execute("USE mannheim")
+    cursor.execute("SET NAMES utf8mb4;")
+    cursor.execute("SET CHARACTER SET utf8mb4;")
+    cursor.execute("SET collation_connection = 'utf8mb4_unicode_ci';")
+
     mydb.commit()
     try:
         yield

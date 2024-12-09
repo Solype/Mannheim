@@ -2,6 +2,8 @@
 CREATE DATABASE IF NOT EXISTS `mannheim` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
 USE `mannheim`;
 
+ALTER DATABASE `mannheim` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- Table des utilisateurs
 CREATE TABLE IF NOT EXISTS `users` (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,

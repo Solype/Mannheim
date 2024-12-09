@@ -16,6 +16,7 @@ services:
         volumes:
             - db:/var/lib/mysql
             - ./bdd.sql:/docker-entrypoint-initdb.d/bdd.sql
+            - ./my.cnf:/etc/mysql/conf.d/my.cnf
         networks:
             - mannheim
 

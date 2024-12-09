@@ -11,6 +11,8 @@ for i in range(10):
             password="root",
             database="mannheim",
             port="3306",
+            charset="utf8mb4",         # Important pour les caractères spéciaux
+            collation="utf8mb4_unicode_ci"
         )
         break
     except Exception as e:
