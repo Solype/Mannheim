@@ -3,9 +3,12 @@ import { DropdownMenu, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuConten
 import { FaSignOutAlt, FaHatWizard, FaInbox } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import UserRequestService from '@/services/UserRequestService';
+import LoginService from '@/services/LoginService';
+import { useNavigate } from 'react-router-dom';
 
 const NavbarTop: React.FC = () => {
     const [ hasInvitations, setHasInvitations ] = useState<boolean>(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         UserRequestService.getCharactersRequest().then((res) => {
@@ -17,6 +20,13 @@ const NavbarTop: React.FC = () => {
         UserRequestService.getRoomsRequest().then((res) => {
             setHasInvitations(prev => prev || res.length > 0);
         })
+    }, []);
+
+
+    useEffect(() => {
+        LoginService.whoami().catch(() => {
+            navigate('/login');
+        });
     }, []);
 
     return (

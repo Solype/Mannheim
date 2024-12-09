@@ -3,11 +3,12 @@ import ReligionForm from '@/components/Characterform/ReligionForm';
 import { Religion, Skill } from '@/types/character_types';
 import SkillForm, { extractSkills, listSkills } from '@/components/Characterform/SkillsForm';
 import AttributesForm from '@/components/Characterform/AttributesForm';
-import { Attributes, getDefaultAttributes, CharacterBasicInfo, Priority, CharacterOtherInfo } from '@/types/character_types';
+import { Attributes, getDefaultAttributes, Priority, CharacterOtherInfo, BasicCharaInfo } from '@/types/character_types';
 import BasicForm from '@/components/Characterform/BasicInfoForm';
 import PriorityForm from '@/components/Characterform/PriorityForm';
 import ListStringForm from '@/components/Characterform/ListStringForm';
 import CharacterModifiactionUtils from '@/services/CharacterModifiactionUtils';
+import { useNavigate } from 'react-router-dom';
 
 const CreateCharacterPage = () => {
     const [ skills, setSkills ] = useState<Skill[]>(extractSkills(listSkills));
@@ -16,8 +17,9 @@ const CreateCharacterPage = () => {
     const [ mainRoles, setMainRoles ] = useState<string[]>([]);
     const [ secondaryRoles, setSecondaryRoles ] = useState<string[]>([]);
     const [ otherInfos, setOtherInfos ] = useState<CharacterOtherInfo>({ languages: [], experience: 0, mana: 0, money: 0 });
-    const [ infos, setBasicInfo ] = useState<CharacterBasicInfo>({ name: "", age: 0, race: "", gender: "" });
+    const [ infos, setBasicInfo ] = useState<BasicCharaInfo>({ name: "", age: 0, race: "", gender: "" });
     const [ priority, setPriority ] = useState<Priority>({ role: "", attribute: "", skills: "", money: "" });
+    const navigate = useNavigate();
 
 
     const saveReligion = (religion: Religion[]) => {
@@ -45,7 +47,7 @@ const CreateCharacterPage = () => {
         setOtherInfos({ ...otherInfos, languages: languages });
     }
 
-    const saveBasicInfo = (infos: CharacterBasicInfo) => {
+    const saveBasicInfo = (infos: BasicCharaInfo) => {
         localStorage.setItem('infos', JSON.stringify(infos));
         setBasicInfo(infos);
     }
@@ -94,6 +96,7 @@ const CreateCharacterPage = () => {
         }
         console.log(data);
         CharacterModifiactionUtils.createCharacter(data);
+        navigate('/characters');
     }
 
     const reinitializeLocalStorage = () => {
@@ -136,26 +139,26 @@ const CreateCharacterPage = () => {
             </div>
             <div className='grid grid-cols-5 gap-7 justify-between items-start'>
                 <div className="col-span-2 space-y-4">
-                    <BasicForm formData={infos} setFormData={saveBasicInfo} />
+                    <BasicForm formData={infos} setFormData={saveBasicInfo} disabled={false}/>
                     <div className='grid grid-cols-5 gap-3 '>
                         <div className='col-span-2'>
-                            <PriorityForm initialPriority={priority} onSubmit={savePriority} />
+                            <PriorityForm initialPriority={priority} onSubmit={savePriority} disabled={false}/>
                         </div>
                         <div className='col-span-3'>
-                            <AttributesForm attributes={attributes} setter={saveAttributes} />
+                            <AttributesForm attributes={attributes} setter={saveAttributes} disabled={false}/>
                         </div>
                     </div>
-                    <ListStringForm title="Roles primaire" setter={saveMainRoles} listString={mainRoles} />
-                    <ListStringForm title="Roles secondaires" setter={saveSecondaryRoles} listString={secondaryRoles} />
-                    <ListStringForm title="Langues" setter={saveLanguages} listString={otherInfos.languages} />
+                    <ListStringForm title="Roles primaire" setter={saveMainRoles} listString={mainRoles} disabled={false}/>
+                    <ListStringForm title="Roles secondaires" setter={saveSecondaryRoles} listString={secondaryRoles} disabled={false}/>
+                    <ListStringForm title="Langues" setter={saveLanguages} listString={otherInfos.languages} disabled={false}/>
 
-                    <ReligionForm setter={saveReligion} listReligions={religion} />
+                    <ReligionForm setter={saveReligion} listReligions={religion} disabled={false}/>
                 </div>
 
                 <div className="col-span-3">
                     <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
-                    <SkillForm skillSetter={handleChangeSkill} skills={skills} />
-                    <button type="submit" className="bg-or border border-white/70 text-light_foret font-bold text-2xl  p-4  hover:shadow-[0_0_10px_4px_rgba(255,255,255,0.7)] transition-all duration-30 rounded-lg focus:outline-none">
+                        <SkillForm skillSetter={handleChangeSkill} skills={skills} disabled={false}/>
+                        <button type="submit" className="bg-or border border-white/70 text-light_foret font-bold text-2xl  p-4  hover:shadow-[0_0_10px_4px_rgba(255,255,255,0.7)] transition-all duration-30 rounded-lg focus:outline-none">
                             Sauvegarder
                         </button>
                     </form>
@@ -169,8 +172,6 @@ const CreateCharacterPage = () => {
         </div>
 
     );
-};
-
-
+}
 
 export default CreateCharacterPage;

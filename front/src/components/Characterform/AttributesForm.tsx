@@ -4,9 +4,10 @@ import { dico } from "@/types/dico";
 interface AttributesFormProps {
     attributes: Attributes;
     setter: (attributes: Attributes) => void;
+    disabled: boolean;
 }
 
-export default function AttributesForm({ attributes, setter }: AttributesFormProps) {
+export default function AttributesForm({ attributes, setter, disabled }: AttributesFormProps) {
     const onRoleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setter({ ...attributes, [e.target.name]: Number(e.target.value) });
     };
@@ -28,6 +29,7 @@ export default function AttributesForm({ attributes, setter }: AttributesFormPro
                             value={value}
                             onChange={onRoleValueChange}
                             className="w-16 px-2 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                            disabled={disabled}
                         />
                     </div>
                 </>

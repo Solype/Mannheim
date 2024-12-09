@@ -5,27 +5,25 @@ import { dico } from "@/types/dico";
 interface PriorityFormProps {
     initialPriority?: Priority;
     onSubmit: (priority: Priority) => void;
+    disabled: boolean;
 }
 
-const PriorityForm = ({ initialPriority, onSubmit }: PriorityFormProps) => {
+const PriorityForm = ({ initialPriority, onSubmit, disabled }: PriorityFormProps) => {
     const [priority, setPriority] = useState<Priority>(
-        initialPriority || { role: "A", attribute: "A", skills: "A", money: "A" }
+        initialPriority ?? { role: "A", attribute: "A", skills: "A", money: "A" }
     );
 
+    console.log(priority);
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const { name, value } = e.target;
         setPriority({ ...priority, [name]: value });
-    };
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        onSubmit(priority);
+        onSubmit({ ...priority, [name]: value });
     };
 
     const options = ["A", "B", "C", "D", "E"];
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4 bg-white bg-opacity-80 p-7 rounded-lg shadow-md flex flex-col ">
+        <form className="space-y-4 bg-white bg-opacity-80 p-7 rounded-lg shadow-md flex flex-col ">
             <h2 className="text-lg font-bold text-gray-800 self-center">Priorités</h2>
 
             {Object.entries(priority).map(([key, value]) => (
@@ -36,6 +34,7 @@ const PriorityForm = ({ initialPriority, onSubmit }: PriorityFormProps) => {
                         value={value}
                         onChange={handleChange}
                         className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-foret focus:outline-none"
+                        disabled={disabled}
                     >
                         {options.map((option) => (
                             <option key={option} value={option}>

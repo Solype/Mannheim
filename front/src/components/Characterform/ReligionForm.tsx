@@ -5,9 +5,10 @@ import { Religion } from '@/types/character_types';
 interface ReligionFormProps {
     listReligions: Religion[];
     setter: (gods: Religion[]) => void;
+    disabled: boolean;
 }
 
-const ReligionForm = ({ listReligions, setter }: ReligionFormProps) => {
+const ReligionForm = ({ listReligions, setter, disabled }: ReligionFormProps) => {
     const [availableReligions, setAvailableReligions] = useState<string[]>([]);
 
     useEffect(() => {
@@ -26,11 +27,9 @@ const ReligionForm = ({ listReligions, setter }: ReligionFormProps) => {
         const updatedReligions = [...listReligions];
         const oldName = updatedReligions[index].god;
 
-        // Met à jour le nom du dieu
         updatedReligions[index].god = newName;
         setter(updatedReligions);
 
-        // Gère la liste des dieux disponibles
         setAvailableReligions((prev) => {
             const updatedAvailableReligions = prev.filter((god) => god !== newName);
             if (oldName) updatedAvailableReligions.push(oldName);
@@ -58,11 +57,11 @@ const ReligionForm = ({ listReligions, setter }: ReligionFormProps) => {
             <div className="space-y-4">
                 {listReligions.map((god, index) => (
                     <div key={index} className="flex items-center space-x-4">
-                        {/* Dropdown pour sélectionner un dieu */}
                         <select
                             value={god.god}
                             onChange={(e) => handleReligionChange(index, e.target.value)}
                             className="border border-gray-300 rounded-lg px-2 py-1"
+                            disabled={disabled}
                         >
                             <option value={god.god}>{god.god}</option>
                             {availableReligions.map((availableReligion) => (
@@ -72,7 +71,6 @@ const ReligionForm = ({ listReligions, setter }: ReligionFormProps) => {
                             ))}
                         </select>
 
-                        {/* Input pour définir la dévotion */}
                         <input
                             type="number"
                             value={god.devotion}
@@ -81,25 +79,27 @@ const ReligionForm = ({ listReligions, setter }: ReligionFormProps) => {
                             placeholder="Devotion"
                         />
 
-                        {/* Bouton pour supprimer un dieu */}
-                        <button
-                            onClick={() => handleRemoveReligion(index)}
-                            className="text-red-500 hover:text-red-600"
-                        >
-                            Remove
-                        </button>
+                        {!disabled && (
+                            <button
+                                onClick={() => handleRemoveReligion(index)}
+                                className="text-red-500 hover:text-red-600"
+                            >
+                                Remove
+                            </button>
+                        )}
                     </div>
                 ))}
             </div>
-
-            {/* Bouton pour ajouter un dieu */}
-            <button
-                onClick={handleAddReligion}
-                className="bg-light_foret hover:bg-foret text-white py-2 px-4 rounded mt-4"
-                disabled={availableReligions.length === 0}
-            >
-                Ajouter une religion
-            </button>
+            
+            {!disabled && (
+                <button
+                    onClick={handleAddReligion}
+                    className="bg-light_foret hover:bg-foret text-white py-2 px-4 rounded mt-4"
+                    disabled={availableReligions.length === 0}
+                >
+                    Ajouter une religion
+                </button>
+            )}
         </div>
     );
 };

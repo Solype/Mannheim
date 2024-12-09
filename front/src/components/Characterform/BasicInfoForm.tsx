@@ -1,11 +1,12 @@
-import { CharacterBasicInfo } from "@/types/character_types";
+import { BasicCharaInfo } from "@/types/character_types";
 
 interface BasicFormProps {
-    formData: CharacterBasicInfo;
-    setFormData: (formData: CharacterBasicInfo) => void;
+    formData: BasicCharaInfo;
+    setFormData: (formData: BasicCharaInfo) => void;
+    disabled: boolean;
 }
 
-const BasicForm = ({ formData, setFormData }: BasicFormProps) => {
+const BasicForm = ({ formData, setFormData, disabled }: BasicFormProps) => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -31,6 +32,7 @@ const BasicForm = ({ formData, setFormData }: BasicFormProps) => {
                         className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-foret focus:outline-none"
                         placeholder="Entrez le nom"
                         required
+                        disabled={disabled}
                     />
                 </div>
 
@@ -45,6 +47,7 @@ const BasicForm = ({ formData, setFormData }: BasicFormProps) => {
                         placeholder="Entrez l'âge"
                         min="0"
                         required
+                        disabled={disabled}
                     />
                 </div>
             </div>
@@ -59,6 +62,7 @@ const BasicForm = ({ formData, setFormData }: BasicFormProps) => {
                         className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-foret focus:outline-none"
                         placeholder="Entrez l'espèce"
                         required
+                        disabled={disabled}
                     />
                 </div>
 
@@ -70,6 +74,7 @@ const BasicForm = ({ formData, setFormData }: BasicFormProps) => {
                         onChange={handleChange}
                         className="mt-1  text-gray-700 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-foret focus:outline-none"
                         required
+                        disabled={disabled}
                     >
                         <option value="" disabled>choisissez le genre</option>
                         <option value="male">Masculin</option>
