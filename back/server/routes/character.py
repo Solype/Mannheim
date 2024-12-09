@@ -25,7 +25,7 @@ async def my_chget_one_characteraracters(credentials: HTTPAuthorizationCredentia
     return result
 
 @app.get("/api/my/characters/{id}", tags=["Character"])
-async def get_one_character(id: int, credentials: HTTPAuthorizationCredentials = Depends(security)) -> any:
+async def get_one_character(id: int, credentials: HTTPAuthorizationCredentials = Depends(security)) -> CharaAllData:
     token = credentials.credentials
 
     if not token or not access_manager.isTokenValid(token):
