@@ -12,4 +12,4 @@ Avec ce mince filet d'ordre naquirent deux êtres : Kelnémore et Kélinenilèk.
 Kelnémore incarnait la volonté du chaos originel qui ne cessait de s'enrager face à l'ordre naissant.
 Kélinenilèk, quant à lui, était un voyageur du temps, émergeant dans cet espace où le temps venait d’apparaître, voyageant dans toutes les possibilité temporel qu’offrait l’ordre.
 
-![alt text]("http://localhost:8080/api/lore/stories/image/beginning.jpg")
+![alt text]("http://localhost:8080/api/lore/story/image/beginning.jpg")

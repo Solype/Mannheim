@@ -1,7 +1,6 @@
 import React from 'react';
-import MyMarkdown from '@/components/Markdown';
 import LoresService from '@/services/LoresService';
-import { LoreEntities, LoreStories } from '@/types/LoreTypes';
+import { LoreEntities, LoreStories } from '@/types/lore_types';
 import { Link } from 'react-router-dom';
 
 const LoresPage: React.FC = () => {

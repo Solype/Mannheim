@@ -49,26 +49,32 @@ const ListItem: React.FC<React.HTMLProps<HTMLLIElement>> = ({ children, ...props
     );
 };
 
-const Image: React.FC<React.HTMLProps<HTMLImageElement>> = ({ children, ...props }) => {
+
+const Image = ({ children, ...props }: { children?: any; }) => {
+    console.log(props);
+
+
     return (
-        <img className="rounded mx-auto w-2/3 h-2/3 object-contain my-7" {...props} />
+        <>
+            {children}
+        </>
     );
-}
+};
 
 
 const MyMarkdown: React.FC<{ src: string }> = ({ src }) => {
-    const components: Components = {
-        h1: (props) => <Title1 {...props} />,
-        h2: (props) => <Title2 {...props} />,
-        h3: (props) => <Title3 {...props} />,
-        p: (props) => <Paragraph {...props} />,
-        ul: (props) => <List {...props} />,
-        li: (props) => <ListItem {...props} />,
-        img: (props) => <Image {...props} /> 
-    };
+    // const components: Components = {
+        // h1: (props) => <Title1 {...props} />,
+        // h2: (props) => <Title2 {...props} />,
+        // h3: (props) => <Title3 {...props} />,
+        // p: (props) => <Paragraph {...props} />,
+        // ul: (props) => <List {...props} />,
+        // li: (props) => <ListItem {...props} />,
+        // img: (props) => <Image {...props} /> 
+    // };
 
     return (
-        <ReactMarkdown components={components}>
+        <ReactMarkdown>
             {src}
         </ReactMarkdown>
     );

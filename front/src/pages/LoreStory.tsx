@@ -1,7 +1,7 @@
 import React from 'react';
 import MyMarkdown from '@/components/Markdown';
 import LoresService from '@/services/LoresService';
-import { LoreStory } from '@/types/LoreTypes';
+import { LoreStory } from '@/types/lore_types';
 import { useParams } from 'react-router-dom';
 
 const LoreStoryPage: React.FC = () => {
@@ -12,7 +12,10 @@ const LoreStoryPage: React.FC = () => {
         if (!id) {
             return;
         }
-        LoresService.getLoreStory(id).then((story) => setLoreStory(story));
+        LoresService.getLoreStory(id).then((story) => {
+            setLoreStory(story)
+            console.log(story);
+        });
     }, []);
 
     if (!loreStory) {
