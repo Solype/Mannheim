@@ -125,13 +125,13 @@ const CreateCharacterPage = () => {
             </h1>
 
             <div className="flex justify-between items-start mb-10">
-                <button className="bg-pierre border border-black text-black font-bold text-xl p-2 px-4 hover:shadow-[0_0_10px_4px_rgba(255,255,255,0.7)] transition-all duration-30 rounded-lg focus:outline-none"
+                <button className="bg-pierre border border-black text-black font-bold text-xl p-2 px-4 hover:bg-light_pierre hover:shadow-[0_0_10px_4px_rgba(255,255,255,0.7)] transition-all duration-30 rounded-lg focus:outline-none"
                     onClick={reinitializeLocalStorage}>
                     Réinitialiser
                 </button>
 
                 <button
-                    className={`bg-or border border-white/70 text-light_foret font-bold text-xl p-2 px-4 hover:shadow-[0_0_10px_4px_rgba(255,255,255,0.7)] transition-all duration-30 rounded-lg focus:outline-none `}
+                    className={`bg-or border border-white/70 text-light_foret font-bold text-xl p-2 px-4 hover:bg-light_or hover:shadow-[0_0_10px_4px_rgba(255,255,255,0.7)] transition-all duration-30 rounded-lg focus:outline-none `}
                     onClick={handleSubmit}
                 >
                     Sauvegarder
@@ -158,7 +158,7 @@ const CreateCharacterPage = () => {
                 <div className="col-span-3">
                     <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
                         <SkillForm skillSetter={handleChangeSkill} skills={skills} disabled={false}/>
-                        <button type="submit" className="bg-or border border-white/70 text-light_foret font-bold text-2xl  p-4  hover:shadow-[0_0_10px_4px_rgba(255,255,255,0.7)] transition-all duration-30 rounded-lg focus:outline-none">
+                        <button type="submit" className="bg-or border border-white/70 text-light_foret font-bold text-2xl  p-4 hover:bg-light_or hover:shadow-[0_0_10px_4px_rgba(255,255,255,0.7)] transition-all duration-30 rounded-lg focus:outline-none">
                             Sauvegarder
                         </button>
                     </form>

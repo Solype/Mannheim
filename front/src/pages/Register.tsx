@@ -100,7 +100,7 @@ export default function RegisterPage() {
                         </div>
                         {error && <CardDescription className="text-red-500">{error}</CardDescription>}
                         <CardFooter>
-                            <Button className="w-full mt-5 text-xl bg-foret p-6 hover:bg-foret hover:shadow-[0_0_10px_4px_rgba(255,255,255,0.7)] transition-all duration-300" type="submit">
+                            <Button className="w-full mt-5 text-xl bg-foret p-6 hover:bg-light_foret hover:shadow-[0_0_10px_4px_rgba(255,255,255,0.7)] transition-all duration-300" type="submit">
                                 <img src="/ring.png" alt="sword" className="w-6 h-6 mr-2" />
                                 Register
                             </Button>

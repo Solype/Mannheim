@@ -24,7 +24,7 @@ const CharactersPage = () => {
             <div className="flex justify-end mb-5">
                 <Link 
                     to="/create-character" 
-                    className="bg-or border border-white/70 text-light_foret font-bold text-2xl p-3 px-6 rounded-lg shadow-lg hover:shadow-[0_0_15px_6px_rgba(255,255,255,0.8)] focus:outline-none focus:ring-4 focus:ring-white/50"
+                    className="bg-or border border-white/70 text-light_foret font-bold text-2xl p-3 px-6 rounded-lg shadow-lg hover:bg-light_or hover:shadow-[0_0_15px_6px_rgba(255,255,255,0.8)] focus:outline-none focus:ring-4 focus:ring-white/50"
                 >
                     + Créer un personnage
                 </Link>
