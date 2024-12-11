@@ -76,7 +76,7 @@ const RoomsPage: React.FC = () => {
                                 key={room.id}
                                 className="flex justify-between items-center border-b p-4 hover:bg-white/10 hover:shadow-[0_0_10px_4px_rgba(255,255,255,0.7)] transition-all duration-300 rounded-t-md"
                             >
-                                <span className="text-lg font-medium">{room.name}</span>
+                                <span className="text-lg font-medium">{room.name} - {room.gm_name}</span>
                                 <button
                                     onClick={() => handleDeleteRoom(room.id)}
                                     className="bg-red-500/80 text-white p-2 rounded-md hover:bg-red-800"

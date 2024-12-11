@@ -27,6 +27,7 @@ class Monitor(BaseModel):
 
 class Pawn(BaseModel):
     id:             int
+    chara_id:       int
     name:           str
     mana :          Monitor
     physical:       Monitor
@@ -36,5 +37,5 @@ class Pawn(BaseModel):
 
 
 class SessionLong(SessionShort):
-    players: list[Player]
-
+    players:    list[Player]
+    entities:   list[Pawn]

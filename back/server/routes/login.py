@@ -18,6 +18,7 @@ async def login(user: UserLogin) -> str:
         print("Invalid user:", user.username, user.password)
         raise HTTPException(status_code=401, detail="Invalid credentials")
     token = access_manager.addToken(id[0])
+    print(token, flush=True)
     return token
 
 @app.post("/register", tags=["Login"])
@@ -42,6 +43,7 @@ async def register(user: UserLogin) -> str:
     mydb.commit()
 
     token = access_manager.addToken(id[0])
+    print(token, flush=True)
     return token
 
 
