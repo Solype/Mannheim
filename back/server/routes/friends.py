@@ -21,7 +21,7 @@ async def get_friends(credentials: HTTPAuthorizationCredentials = Depends(securi
         if not friend_name:
             raise HTTPException(status_code=404, detail="Friend not found")
         friend_name = friend_name[0]
-        final_friends.append(Friend(friend_id, friend_name))
+        final_friends.append(Friend(id=friend_id, name=friend_name))
 
     return final_friends
 
@@ -109,7 +109,7 @@ async def accept_friend_request(request_id: int, credentials: HTTPAuthorizationC
         raise HTTPException(status_code=401, detail="Unauthorized")
     user_id = access_manager.getTokenData(token).id
 
-    sender_id = getone_db("SELECT sender_id FROM `friend_requests` WHERE id = %s", (request_id,))
+    sender_id = getone_db("SELECT sender_id FROM `friend_requests` WHERE id = %s AND status = 'pending'", (request_id,))
     if not sender_id:
         raise HTTPException(status_code=404, detail="Friend request not found")
     sender_id = sender_id[0]
@@ -130,7 +130,7 @@ async def decline_friend_request(request_id: int, credentials: HTTPAuthorization
         raise HTTPException(status_code=401, detail="Unauthorized")
     user_id = access_manager.getTokenData(token).id
 
-    success = modify_db("UPDATE `friend_requests` SET status = 'refused' WHERE id = %s AND user_id = %s", (request_id, user_id))
+    success = modify_db("UPDATE `friend_requests` SET status = 'refused' WHERE id = %s AND status = 'pending'", (request_id,))
     if not success:
         raise HTTPException(status_code=500, detail="Failed to decline friend request")
     return
