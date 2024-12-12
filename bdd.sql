@@ -129,12 +129,12 @@ CREATE TABLE IF NOT EXISTS `friend_requests` (
 
 CREATE TABLE IF NOT EXISTS `sessions_requests` (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `sender_id` BIGINT UNSIGNED NOT NULL,
+    `receiver_id` BIGINT UNSIGNED NOT NULL,
     `session_id` BIGINT UNSIGNED NOT NULL,
     `status` ENUM('pending', 'accepted', 'refused') NOT NULL,
-    INDEX `idx_sender_id` (`sender_id`),
+    INDEX `idx_receiver_id` (`receiver_id`),
     INDEX `idx_session_id` (`session_id`),
-    FOREIGN KEY (`sender_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`receiver_id`) REFERENCES `users`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`session_id`) REFERENCES `sessions`(`id`) ON DELETE CASCADE
 );
 

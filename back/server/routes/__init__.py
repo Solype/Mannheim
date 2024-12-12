@@ -5,3 +5,4 @@ import server.routes.character_utils
 import server.routes.user_requests
 import server.routes.session
 import server.routes.friends
+import server.routes.session_invitation
