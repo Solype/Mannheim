@@ -13,6 +13,7 @@ import Profile from '@/pages/Profile';
 import LoreStoryPage from '@/pages/LoreStory';
 import CreateCharacterPage from './pages/CreateCharacter';
 import CharacterViewPage from './pages/CharacterView';
+import InvitationsPage from './pages/Invitations';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
       <Container>
         <Routes>
           <Route path="/" element={<DashboardPage />} />
+          <Route path="/invitations" element={<InvitationsPage />} />
           <Route path="/dashboard" element={<DashboardPage/>} />
           <Route path="/characters" element={<CharactersPage />} />
           <Route path="/characters/:id" element={<CharacterViewPage />} />

@@ -1,6 +1,9 @@
 from pydantic import BaseModel
 from typing import Literal
 
+class FriendName(BaseModel):
+    friend_name: str
+
 class Friend(BaseModel):
     id: int
     name: str
