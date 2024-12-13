@@ -1,6 +1,11 @@
 from pydantic import BaseModel
 from typing import Literal
 
+class UserSessionRequestCreate(BaseModel):
+    session_id:         int
+    receiver_id:        int
+
+
 class UserSessionRequest(BaseModel):
     request_id:         int # done
     gm_id:              int # done
