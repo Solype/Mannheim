@@ -17,7 +17,17 @@ async def login(user: UserLogin) -> str:
     if not id:
         print("Invalid user:", user.username, user.password)
         raise HTTPException(status_code=401, detail="Invalid credentials")
+
+    tkns_to_rem = []
+    for tkn, usr in access_manager.tokens.items() :
+        if usr.id == id[0]:
+            tkns_to_rem.append(tkn)
+    for tkn in tkns_to_rem :
+        access_manager.removeToken(tkn)
+
     token = access_manager.addToken(id[0])
+
+    print(access_manager.tokens, flush=True)
     print(token, flush=True)
     return token
 
