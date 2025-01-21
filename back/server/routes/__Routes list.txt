@@ -1,0 +1,65 @@
+
+
+character_utils.py
+    - liste des langues (magie)
+    - liste des races
+    - liste des dieux
+    - récupération de l'image
+    - défini l'image du perso
+
+
+
+
+character.py
+    - récupération de tous les perso
+    - récupération de 1 perso
+    - modification de perso
+    - ajout de perso
+
+
+
+friends.py
+    - récupère les amis
+    - demande d'ami
+    - récupère les demandes d'ami reçu
+    - récupère les demandes d'ami envoyé
+    - accepte une demande
+    - rejette une demande
+    - supprimer une demande
+
+
+
+
+login.py
+    - se login
+    - se register
+    - récupérer son id
+
+
+
+lore.py
+    - récupérer les histoires
+    - récupérer 1 histoire
+    - download le lore (WIP)
+
+
+
+session_invitation.py
+    - récupère les invitations à une room (session)
+    - récupère les invitations envoyé
+    - créer une requête
+    - supprimer une requête
+    - accepter
+    - refuser
+
+
+
+session.py
+    - récupérer mes sessions
+    - récupérer les session dont je suis le MJ
+    - créer une nouvelle session
+    - modifier une session (nom, description)
+    - supprimer une session
+    - récupère les entités dans la session
+
+

@@ -51,6 +51,7 @@ async def disconnect(sid):
     print("<< disconnect", flush=True)
     print("-- sid:", sid, flush=True)
     for room in sio.rooms(sid):
+        sio.emit("leave", sid, room=room)
         sio.leave_room(sid, room)
 
 class Damage(BaseModel):

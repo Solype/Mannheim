@@ -7,7 +7,7 @@ from server.access_manager import access_manager
 import json
 
 @app.get("/api/my/characters", tags=["Character"])
-async def my_chget_one_characteraracters(credentials: HTTPAuthorizationCredentials = Depends(security)) -> list[CharaAllDataWithIdShort]:
+async def my_characters(credentials: HTTPAuthorizationCredentials = Depends(security)) -> list[CharaAllDataWithIdShort]:
     token = credentials.credentials
 
     if not token or not access_manager.isTokenValid(token):
