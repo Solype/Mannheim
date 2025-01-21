@@ -2,6 +2,7 @@ from server.server import app, HTTPAuthorizationCredentials, security, Depends, 
 from server.mysql_db import getone_db, modify_db, get_db
 from server.access_manager import access_manager
 from server.routes.server_datatype.session_type import SessionShort, CreateSessionRequest, SessionLong, Player, Pawn, Monitor
+from typing import Optional
 
 
 
@@ -108,26 +109,34 @@ async def delete_session(id: int, credentials: HTTPAuthorizationCredentials = De
 
 
 
-def get_pawns_of_session(session_id: int) -> list[Pawn]:
-    pawns = get_db("""SELECT id, character_id, owner_id,
+def compose_pawn(pawn : tuple, is_gm : bool) -> Optional[Pawn] :
+    if (is_gm or pawn[14] == None) :
+        return  Pawn(id=pawn[0], name=pawn[1], chara_id=pawn[2],
+                        physical=Monitor(current=pawn[3], max=pawn[8]),
+                        mental=Monitor(current=pawn[4], max=pawn[9]),
+                        pathological=Monitor(current=pawn[5], max=pawn[10]),
+                        endurance=Monitor(current=pawn[6], max=pawn[11]),
+                        mana=Monitor(current=pawn[7], max=pawn[12]),
+                        side=pawn[13])
+
+    if (pawn[14] == "partially") :
+        return Pawn(id=pawn[0], name=pawn[1], chara_id=pawn[2], physical= None, mental= None, pathological= None, endurance= None, mana= None, side=pawn[13])
+
+    if (pawn[14] == "totally") :
+        return None
+
+@app.get("/api/test/get_pawns_of_session/{session_id}/{is_gm}", tags=["Session"])
+def get_pawns_of_session(session_id: int, is_gm : bool) -> list[Pawn]:
+    pawns = get_db("""SELECT id, name, character_id,
                    current_physical_health, current_mental_health, current_path_health, current_endurance, current_mana,
-                   max_physical_health, max_mental_health, max_path_health, max_endurance, max_mana
+                   max_physical_health, max_mental_health, max_path_health, max_endurance, max_mana, side_camp, hidden
                    FROM `entities`
                    WHERE session_id = %s""", (session_id,))
 
-
-    sql = """SELECT JSON_EXTRACT(character_data, '$.infos.name') AS name
-                FROM characters
-                WHERE id = ?;"""
-
-    pawn_names = [getone_db(sql, (pawn[1],))[0] for pawn in pawns]
-
-    return [Pawn(id=pawn[0], chara_id=pawn[1], name=pawn_names[i],
-                    physical=Monitor(current=pawn[3], max=pawn[8]),
-                    mental=Monitor(current=pawn[4], max=pawn[9]),
-                    pathological=Monitor(current=pawn[5], max=pawn[10]),
-                    endurance=Monitor(current=pawn[6], max=pawn[11]),
-                    mana=Monitor(current=pawn[7], max=pawn[12])) for i, pawn in enumerate(pawns)]
+    return [
+        result for pawn in pawns
+        if (result := compose_pawn(pawn, is_gm)) is not None
+    ]
 
 
 
@@ -153,7 +162,7 @@ async def get_session(id: int, credentials: HTTPAuthorizationCredentials = Depen
     names = [getone_db("SELECT username FROM `users` WHERE id = %s", (player_id,))[0] for player_id in player_ids]
     players = [Player(id=player_id, name=name) for player_id, name in zip(player_ids, names)]
 
-    pawns = get_pawns_of_session(id)
+    pawns = get_pawns_of_session(id, getone_db("SELECT name FROM sessions WHERE id = %s AND gamemaster_id = %s", (id, user_id) != None))
 
     return SessionLong(
         id=session.id,

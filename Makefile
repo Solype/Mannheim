@@ -6,7 +6,8 @@
 ##
 
 # Récupère l'adresse IP de l'hôte
-HOST_IP := $(shell ip route get 1 | awk '{print $$7;exit}')
+# HOST_IP := $(shell ip route get 1 | awk '{print $$7;exit}')
+HOST_IP := localhost
 
 all: run
 

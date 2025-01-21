@@ -76,6 +76,7 @@ CREATE TABLE IF NOT EXISTS `characters` (
 -- Table des entités
 CREATE TABLE IF NOT EXISTS `entities` (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(255) NOT NULL,
     `owner_id` BIGINT UNSIGNED NOT NULL,
     `session_id` BIGINT UNSIGNED NOT NULL,
     `current_physical_health` BIGINT NOT NULL,
@@ -90,6 +91,7 @@ CREATE TABLE IF NOT EXISTS `entities` (
     `max_mana` BIGINT NOT NULL,
     `character_id` BIGINT UNSIGNED NOT NULL,
     `side_camp` INT UNSIGNED NOT NULL DEFAULT 0,
+    `hidden` ENUM('partially', 'totally') DEFAULT NULL,
     INDEX `idx_owner_id` (`owner_id`),
     INDEX `idx_session_id` (`session_id`),
     INDEX `idx_character_id` (`character_id`),

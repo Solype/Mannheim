@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Literal
 
 
 class CreateSessionRequest(BaseModel):
@@ -29,11 +29,17 @@ class Pawn(BaseModel):
     id:             int
     chara_id:       int
     name:           str
-    mana :          Monitor
-    physical:       Monitor
-    mental:         Monitor
-    pathological:   Monitor
-    endurance:      Monitor
+    mana :          Optional[Monitor]
+    physical:       Optional[Monitor]
+    mental:         Optional[Monitor]
+    pathological:   Optional[Monitor]
+    endurance:      Optional[Monitor]
+    side:           int
+
+class PawnSeed(BaseModel):
+    linked_id:      int
+    pawn_type:      Literal["monster", "character"]
+    hidden:         Literal["totally", "partially", None]
 
 
 class SessionLong(SessionShort):
