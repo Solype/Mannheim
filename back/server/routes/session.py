@@ -129,6 +129,7 @@ def compose_pawn(pawn : tuple, is_gm : bool) -> Optional[Pawn] :
 
 @app.get("/api/test/get_pawns_of_session/{session_id}/{is_gm}", tags=["Session"])
 def get_pawns_of_session(session_id: int, is_gm : bool) -> list[Pawn]:
+    print(is_gm)
     pawns = get_db("""SELECT id, name, character_id,
                    current_physical_health, current_mental_health, current_path_health, current_endurance, current_mana,
                    max_physical_health, max_mental_health, max_path_health, max_endurance, max_mana, side_camp, hidden
@@ -147,7 +148,14 @@ async def get_session(id: int, credentials: HTTPAuthorizationCredentials = Depen
     token = credentials.credentials
     if not token or not access_manager.isTokenValid(token):
         raise HTTPException(status_code=401, detail="Unauthorized")
-    
+
+    gm = getone_db("SELECT gamemaster_id FROM `sessions` WHERE id = %s", (id,))
+    print(gm, id, flush=True)
+    if not gm:
+        raise HTTPException(status_code=404, detail="Session not found")
+
+    gm_id = gm[0]
+
     user_id = access_manager.getTokenData(token).id
 
     session = compose_session_short(id)
@@ -164,7 +172,8 @@ async def get_session(id: int, credentials: HTTPAuthorizationCredentials = Depen
     names = [getone_db("SELECT username FROM `users` WHERE id = %s", (player_id,))[0] for player_id in player_ids]
     players = [Player(id=player_id, name=name) for player_id, name in zip(player_ids, names)]
 
-    pawns = get_pawns_of_session(id, getone_db("SELECT name FROM sessions WHERE id = %s AND gamemaster_id = %s", (id, user_id) != None))
+    print(gm_id, user_id, flush=True)
+    pawns = get_pawns_of_session(id, user_id == gm_id)
 
     return SessionLong(
         id=session.id,

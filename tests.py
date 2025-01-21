@@ -22,4 +22,8 @@ headers["Authorization"] = f"Bearer {token.json()}"
 #   "side": 0
 # })
 
+result = get(f"{base_url}/api/my/sessions", headers=headers)
+print(result.json())
 
+result = get(f"{base_url}/api/session/1", headers=headers)
+print(result.json())
