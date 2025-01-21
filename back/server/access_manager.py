@@ -12,6 +12,12 @@ class AccessManager:
         self.tokens : dict[uuid.UUID, UserTokenLink] = {}
 
     def __generateToken(self) -> str:
+        token_to_remove = []
+        for token in self.tokens.keys():
+            if time.time() - self.tokens[token].time > 3600:
+                token_to_remove.append(token)
+        for token in token_to_remove:
+            del self.tokens[token]
         while True:
             token = str(uuid.uuid4())
             if token not in self.tokens.keys():

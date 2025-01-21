@@ -2,16 +2,18 @@
 
 from requests import get, post, put
 
-headers = {
-    'Content-Type': 'application/json'
-}
-
 base_url = "http://localhost:8080"
 
-token = post(f"{base_url}/login", headers=headers, json={"username":"a", "password":"a"})
 
-print(token.json())
+headers = {'Content-Type': 'application/json'}
+token = post(f"{base_url}/login", headers=headers, json={"username":"a", "password":"a"})
 headers["Authorization"] = f"Bearer {token.json()}"
+
+headers2 = {'Content-Type': 'application/json'}
+token = post(f"{base_url}/login", headers=headers2, json={"username":"b", "password":"a"})
+headers2["Authorization"] = f"Bearer {token.json()}"
+
+
 
 # sessions = get(f"{base_url}/api/my/requests/sessions", headers=headers)
 # print(sessions.json())
@@ -21,9 +23,33 @@ headers["Authorization"] = f"Bearer {token.json()}"
 #   "hidden": "totally",
 #   "side": 0
 # })
+# result = get(f"{base_url}/api/session/1", headers=headers)
+# print(result.json())
 
 result = get(f"{base_url}/api/my/sessions", headers=headers)
+print("U1 sessions:", result.json())
+
+result = get(f"{base_url}/api/my/sessions", headers=headers2)
+print("U2 sessions:",result.json())
+
+
+result = get(f"{base_url}/api/my/requests/sessions", headers=headers)
+print("U1 req sessions:", result.json())
+
+result = get(f"{base_url}/api/my/requests/sessions", headers=headers2)
+print("U2 req sessions:", result.json())
+
+
+result = post(f"{base_url}/api/my/requests/sessions", headers=headers, json={
+    "session_id": 1, 
+    "receiver_id": 2
+})
 print(result.json())
 
-result = get(f"{base_url}/api/session/1", headers=headers)
-print(result.json())
+
+result = get(f"{base_url}/api/my/requests/sessions", headers=headers)
+print("U1 req sessions:", result.json())
+
+result = get(f"{base_url}/api/my/requests/sessions", headers=headers2)
+print("U2 req sessions:", result.json())
+

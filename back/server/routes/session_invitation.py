@@ -5,7 +5,7 @@ from server.routes.server_datatype.user_request_type import UserSessionRequest, 
 
 
 def compose_session_request_with_session(session_id: int, session_name: str, gm_id: int, gm_name: str) -> UserSessionRequest:
-    requests = get_db("SELECT id, receiver_id FROM `sessions_requests` WHERE session_id = %s", (session_id,))
+    requests = get_db("SELECT id, receiver_id, status FROM `sessions_requests` WHERE session_id = %s", (session_id,))
     if not requests:
         raise HTTPException(status_code=404, detail="Session request not found")
 
@@ -21,12 +21,13 @@ def compose_session_request_with_session(session_id: int, session_name: str, gm_
             gm_id=gm_id,
             gm_name=gm_name,
             receiver_id=request[1],
-            receiver_name=receiver_name[0]
+            receiver_name=receiver_name[0],
+            status=request[2]
         ))
     return final
 
 
-def compose_session_request(request_id: int, session_id: int, user_id: int, user_name: str) -> UserSessionRequest:
+def compose_session_request(request_id: int, session_id: int, user_id: int, user_name: str, status: str) -> UserSessionRequest:
     session_infos = getone_db("SELECT name, gamemaster_id FROM `sessions` WHERE id = %s", (session_id,))
     if not session_infos:
         raise HTTPException(status_code=404, detail="Session request not found")
@@ -44,7 +45,8 @@ def compose_session_request(request_id: int, session_id: int, user_id: int, user
         gm_id=gm_id,
         gm_name=gm_name[0],
         receiver_id=user_id,
-        receiver_name=user_name[0]
+        receiver_name=user_name[0],
+        status=status
     )
 
 
@@ -57,8 +59,8 @@ def get_sessions_requests(credentials: HTTPAuthorizationCredentials = Depends(se
 
     user_id = access_manager.getTokenData(token).id
     my_name = getone_db("SELECT username FROM `users` WHERE id = %s", (user_id,))[0]
-    requests = get_db("SELECT id, session_id FROM `sessions_requests` WHERE receiver_id = %s", (user_id,))
-    return [compose_session_request(request[0], request[1], user_id, my_name) for request in requests]
+    requests = get_db("SELECT id, session_id, status FROM `sessions_requests` WHERE receiver_id = %s", (user_id,))
+    return [compose_session_request(request[0], request[1], user_id, my_name, request[2]) for request in requests]
 
 
 
