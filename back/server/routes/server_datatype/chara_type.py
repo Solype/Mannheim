@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 class CharaBasicInfos(BaseModel):
     name:   str
@@ -14,23 +15,23 @@ class CharaPriority(BaseModel):
 
 class CharaAttributes(BaseModel):
     resistance:     int
-    strength:       int
-    dexterity:      int
-    intellect:      int
-    agility:        int
-    vivacity:       int
-    social:         int
-    magic:          int
+    strength:       Optional[int]
+    dexterity:      Optional[int]
+    intellect:      Optional[int]
+    agility:        Optional[int]
+    vivacity:       Optional[int]
+    social:         Optional[int]
+    magic:          Optional[int]
 
 class CharaRoles(BaseModel):
     main:       list[str]
     secondary:  list[str]
 
 class CharaSkill(BaseModel):
-    name:       str
-    pureValue:       int
-    roleValue:       int
-    category:   str
+    name:           str
+    pureValue:      int
+    roleValue:      int
+    category:       str
 
 class CharaReligion(BaseModel):
     god:        str
@@ -44,12 +45,12 @@ class CharaOtherData(BaseModel):
 
 class CharaAllData(BaseModel):
     infos:          CharaBasicInfos
-    priority:       CharaPriority
+    priority:       Optional[CharaPriority]
     attributes:     CharaAttributes
-    roles:          CharaRoles
+    roles:          Optional[CharaRoles]
     skills:         list[CharaSkill]
-    religion:       list[CharaReligion]
-    other:          CharaOtherData
+    religion:       Optional[list[CharaReligion]]
+    other:          Optional[CharaOtherData]
 
 class CharaAllDataShort(BaseModel):
     infos:          CharaBasicInfos

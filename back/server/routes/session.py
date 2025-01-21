@@ -1,8 +1,10 @@
 from server.server import app, HTTPAuthorizationCredentials, security, Depends, HTTPException
 from server.mysql_db import getone_db, modify_db, get_db
 from server.access_manager import access_manager
-from server.routes.server_datatype.session_type import SessionShort, CreateSessionRequest, SessionLong, Player, Pawn, Monitor
-from typing import Optional
+from server.routes.server_datatype.session_type import SessionShort, CreateSessionRequest, SessionLong, Player, Pawn, Monitor, PawnSeed
+from server.routes.server_datatype.chara_type import CharaAllData
+from typing import Optional, Literal
+import json
 
 
 
@@ -113,10 +115,10 @@ def compose_pawn(pawn : tuple, is_gm : bool) -> Optional[Pawn] :
     if (is_gm or pawn[14] == None) :
         return  Pawn(id=pawn[0], name=pawn[1], chara_id=pawn[2],
                         physical=Monitor(current=pawn[3], max=pawn[8]),
-                        mental=Monitor(current=pawn[4], max=pawn[9]),
-                        pathological=Monitor(current=pawn[5], max=pawn[10]),
-                        endurance=Monitor(current=pawn[6], max=pawn[11]),
-                        mana=Monitor(current=pawn[7], max=pawn[12]),
+                        mental=(Monitor(current=pawn[4], max=pawn[9]) if (pawn[9] != 0) else None),
+                        pathological=(Monitor(current=pawn[5], max=pawn[10]) if (pawn[10] != 0) else None),
+                        endurance=(Monitor(current=pawn[6], max=pawn[11]) if (pawn[11] != 0) else None),
+                        mana=(Monitor(current=pawn[7], max=pawn[12]) if (pawn[12] != 0) else None),
                         side=pawn[13])
 
     if (pawn[14] == "partially") :
@@ -174,3 +176,65 @@ async def get_session(id: int, credentials: HTTPAuthorizationCredentials = Depen
         entities=pawns
     )
 
+
+def insert_pawn_in_db(pawn : Pawn, hidden : Literal["totally", "partially", None], owner_id : int, session_id) :
+    sql = """INSERT INTO `entities` (name, owner_id, session_id,
+        current_physical_health, current_path_health, current_mental_health, current_endurance, current_mana,
+        max_physical_health, max_mental_health, max_path_health, max_endurance, max_mana, 
+        character_id, side_camp, hidden) """
+    
+    params = ( pawn.name, owner_id, session_id,
+        pawn.physical.current, pawn.pathological.current, pawn.mental.current, pawn.endurance.current, pawn.mana.current,
+        pawn.physical.max, pawn.mental.max, pawn.pathological.max, pawn.endurance.max, pawn.mana.max,
+        pawn.chara_id, pawn.side, hidden
+    )
+    success = modify_db(sql, params)
+    if (success != True) :
+        raise HTTPException(status_code=500, detail="Failed to insert")
+
+
+@app.post("/api/my/session/{id}/pawn", tags=["Pawn"])
+async def create_pawn(session_id: int, pawn: PawnSeed, credentials: HTTPAuthorizationCredentials = Depends(security)) -> None:
+    token = credentials.credentials
+    if not token or not access_manager.isTokenValid(token):
+        raise HTTPException(status_code=401, detail="Not Authentificated")
+    
+    user_id = access_manager.getTokenData(token).id
+    gm_id = getone_db("SELECT gamemaster_id FROM sessions WHERE id = %s", (session_id,))
+
+    if (gm_id != user_id) :
+        raise HTTPException(status_code=403, detail="Not the GameMaster")
+
+    chara_data_raw = getone_db("SELECT character_data FROM characters WHERE user_id = %s AND id = %s", (user_id, pawn.linked_id))
+    if (chara_data_raw == None) :
+        raise HTTPException(status_code=404, detail="Character not found !")
+
+    chara_data_raw = chara_data_raw[0]
+    chara_data_json = json.loads(chara_data_raw)
+
+    chara : CharaAllData = CharaAllData(**chara_data_json)
+
+    dictio = {}
+    for skill in chara.skills :
+        if skill.category == "resistance" :
+            dictio[skill] = chara.attributes.resistance + skill.pureValue + skill.roleValue
+
+    mana_monitor = Monitor(max=chara.other.mana, current=chara.other.mana) if chara.other != None else None
+    physical_monitor = Monitor(max=dictio["physical"], current=dictio["physical"]) if "physical" in dictio.keys() else None
+    mental_monitor = Monitor(max=dictio["mental"], current=dictio["mental"]) if "mental" in dictio.keys() else None
+    pathological_monitor = Monitor(max=dictio["pathological"], current=dictio["pathological"]) if "pathological" in dictio.keys() else None
+    endurance_monitor = Monitor(max=dictio["endurance"], current=dictio["endurance"]) if "endurance" in dictio.keys() else None
+
+
+    to_insert : Pawn = Pawn(
+        id = 0,
+        chara_id = pawn.linked_id,
+        name = chara.infos.name,
+        mana = mana_monitor,
+        physical = physical_monitor,
+        mental = mental_monitor,
+        pathological = pathological_monitor,
+        endurance = endurance_monitor,
+        side = pawn.side
+    )
+    insert_pawn_in_db(to_insert, pawn.hidden)

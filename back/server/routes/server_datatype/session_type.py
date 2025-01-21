@@ -38,8 +38,8 @@ class Pawn(BaseModel):
 
 class PawnSeed(BaseModel):
     linked_id:      int
-    pawn_type:      Literal["monster", "character"]
     hidden:         Literal["totally", "partially", None]
+    side:           int
 
 
 class SessionLong(SessionShort):
