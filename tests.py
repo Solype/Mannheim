@@ -13,7 +13,11 @@ token = post(f"{base_url}/login", headers=headers, json={"username":"a", "passwo
 print(token.json())
 headers["Authorization"] = f"Bearer {token.json()}"
 
-sessions = get(f"{base_url}/api/my/requests/sessions", headers=headers)
-print(sessions.json())
+# sessions = get(f"{base_url}/api/my/requests/sessions", headers=headers)
+# print(sessions.json())
 
-
+result = post(f"{base_url}/api/my/session/1/pawn", headers=headers, json={
+  "linked_id": 2,
+  "hidden": "totally",
+  "side": 0
+})

@@ -178,22 +178,28 @@ async def get_session(id: int, credentials: HTTPAuthorizationCredentials = Depen
 
 
 def insert_pawn_in_db(pawn : Pawn, hidden : Literal["totally", "partially", None], owner_id : int, session_id) :
-    sql = """INSERT INTO `entities` (name, owner_id, session_id,
-        current_physical_health, current_path_health, current_mental_health, current_endurance, current_mana,
-        max_physical_health, max_mental_health, max_path_health, max_endurance, max_mana, 
-        character_id, side_camp, hidden) """
+    sql = """
+        INSERT INTO `entities` (
+            name, owner_id, session_id,
+            current_physical_health, current_path_health, current_mental_health, current_endurance, current_mana,
+            max_physical_health, max_mental_health, max_path_health, max_endurance, max_mana,
+            character_id, side_camp, hidden
+        ) VALUES (
+            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+        )
+        """
     
     params = ( pawn.name, owner_id, session_id,
         pawn.physical.current, pawn.pathological.current, pawn.mental.current, pawn.endurance.current, pawn.mana.current,
         pawn.physical.max, pawn.mental.max, pawn.pathological.max, pawn.endurance.max, pawn.mana.max,
-        pawn.chara_id, pawn.side, hidden
-    )
+        pawn.chara_id, pawn.side, hidden)
     success = modify_db(sql, params)
     if (success != True) :
         raise HTTPException(status_code=500, detail="Failed to insert")
+    return
 
 
-@app.post("/api/my/session/{id}/pawn", tags=["Pawn"])
+@app.post("/api/my/session/{session_id}/pawn", tags=["Pawn"])
 async def create_pawn(session_id: int, pawn: PawnSeed, credentials: HTTPAuthorizationCredentials = Depends(security)) -> None:
     token = credentials.credentials
     if not token or not access_manager.isTokenValid(token):
@@ -202,7 +208,10 @@ async def create_pawn(session_id: int, pawn: PawnSeed, credentials: HTTPAuthoriz
     user_id = access_manager.getTokenData(token).id
     gm_id = getone_db("SELECT gamemaster_id FROM sessions WHERE id = %s", (session_id,))
 
-    if (gm_id != user_id) :
+    if gm_id == None :
+        raise HTTPException(status_code=404, detail="Session Not Found !")
+
+    if (gm_id[0] != user_id) :
         raise HTTPException(status_code=403, detail="Not the GameMaster")
 
     chara_data_raw = getone_db("SELECT character_data FROM characters WHERE user_id = %s AND id = %s", (user_id, pawn.linked_id))
@@ -217,7 +226,7 @@ async def create_pawn(session_id: int, pawn: PawnSeed, credentials: HTTPAuthoriz
     dictio = {}
     for skill in chara.skills :
         if skill.category == "resistance" :
-            dictio[skill] = chara.attributes.resistance + skill.pureValue + skill.roleValue
+            dictio[skill.name] = chara.attributes.resistance + skill.pureValue + skill.roleValue
 
     mana_monitor = Monitor(max=chara.other.mana, current=chara.other.mana) if chara.other != None else None
     physical_monitor = Monitor(max=dictio["physical"], current=dictio["physical"]) if "physical" in dictio.keys() else None
