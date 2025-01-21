@@ -237,4 +237,4 @@ async def create_pawn(session_id: int, pawn: PawnSeed, credentials: HTTPAuthoriz
         endurance = endurance_monitor,
         side = pawn.side
     )
-    insert_pawn_in_db(to_insert, pawn.hidden)
+    insert_pawn_in_db(to_insert, pawn.hidden, user_id, session_id)
