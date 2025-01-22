@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Priority } from "@/types/character_types";
 import { dico } from "@/types/dico";
 
@@ -12,6 +12,10 @@ const PriorityForm = ({ initialPriority, onSubmit, disabled }: PriorityFormProps
     const [priority, setPriority] = useState<Priority>(
         initialPriority ?? { role: "A", attribute: "A", skills: "A", money: "A" }
     );
+
+    useEffect(() => {
+        setPriority(initialPriority ?? { role: "A", attribute: "A", skills: "A", money: "A" });
+    }, [initialPriority]);
 
     console.log(priority);
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
