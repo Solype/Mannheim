@@ -143,7 +143,7 @@ def get_pawns_of_session(session_id: int, is_gm : bool) -> list[Pawn]:
 
 
 
-@app.get("/api/session/{id}", tags=["Session"])
+@app.get("/api/my/session/{id}", tags=["Session"])
 async def get_session(id: int, credentials: HTTPAuthorizationCredentials = Depends(security)) -> SessionLong:
     token = credentials.credentials
     if not token or not access_manager.isTokenValid(token):
