@@ -18,6 +18,13 @@ class SessionService extends AService {
         );
     }
 
+    public async getRoom(sessionId: string): Promise<SessionShort> {
+        return await this.request<SessionShort>(`/api/my/session/${sessionId}`, {
+            method: 'GET',
+            headers: this.getHeaders(),
+        });
+    }
+
     public async createSession(name : string, description : string): Promise<SessionShort> {
         return await this.request<SessionShort>('/api/my/session', {
             method: 'POST',

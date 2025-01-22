@@ -14,6 +14,7 @@ import LoreStoryPage from '@/pages/LoreStory';
 import CreateCharacterPage from './pages/CreateCharacter';
 import CharacterViewPage from './pages/CharacterView';
 import InvitationsPage from './pages/Invitations';
+import RoomView from './pages/RoomView';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route path="/creatures" element={<Creatures />} />
           <Route path="/lores" element={<Lores />} />
           <Route path="/rooms" element={<Rooms />} />
+          <Route path="/room/:id" element={<RoomView />} />
           <Route path="/rules" element={<Rules />} />
           <Route path="/profile" element={<Profile/>} />
           <Route path="/lore/story/:id" element={<LoreStoryPage />} />
