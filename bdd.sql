@@ -75,23 +75,23 @@ CREATE TABLE IF NOT EXISTS `characters` (
 
 -- Table des entités
 CREATE TABLE IF NOT EXISTS `entities` (
-    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(255) NOT NULL,
-    `owner_id` BIGINT UNSIGNED NOT NULL,
-    `session_id` BIGINT UNSIGNED NOT NULL,
-    `current_physical_health` BIGINT NOT NULL,
-    `current_path_health` BIGINT NOT NULL,
-    `current_mental_health` BIGINT NOT NULL,
-    `current_endurance` BIGINT NOT NULL,
-    `current_mana` BIGINT NOT NULL,
-    `max_physical_health` BIGINT NOT NULL,
-    `max_mental_health` BIGINT NOT NULL,
-    `max_path_health` BIGINT NOT NULL,
-    `max_endurance` BIGINT NOT NULL,
-    `max_mana` BIGINT NOT NULL,
-    `character_id` BIGINT UNSIGNED NOT NULL,
-    `side_camp` INT UNSIGNED NOT NULL DEFAULT 0,
-    `hidden` ENUM('partially', 'totally') DEFAULT NULL,
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,   -- 0
+    `name` VARCHAR(255) NOT NULL,                               -- 1
+    `owner_id` BIGINT UNSIGNED NOT NULL,                        -- 2
+    `session_id` BIGINT UNSIGNED NOT NULL,                      -- 3
+    `current_physical_health` BIGINT NOT NULL,                  -- 4
+    `current_path_health` BIGINT NOT NULL,                      -- 5
+    `current_mental_health` BIGINT NOT NULL,                    -- 6
+    `current_endurance` BIGINT NOT NULL,                        -- 7
+    `current_mana` BIGINT NOT NULL,                             -- 8
+    `max_physical_health` BIGINT NOT NULL,                      -- 9
+    `max_mental_health` BIGINT NOT NULL,                        -- 10
+    `max_path_health` BIGINT NOT NULL,                          -- 11
+    `max_endurance` BIGINT NOT NULL,                            -- 12
+    `max_mana` BIGINT NOT NULL,                                 -- 13
+    `character_id` BIGINT UNSIGNED NOT NULL,                    -- 14
+    `side_camp` INT UNSIGNED NOT NULL DEFAULT 0,                -- 15
+    `hidden` ENUM('partially', 'totally') DEFAULT NULL,         -- 16
     INDEX `idx_owner_id` (`owner_id`),
     INDEX `idx_session_id` (`session_id`),
     INDEX `idx_character_id` (`character_id`),
