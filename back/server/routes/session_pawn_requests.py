@@ -26,7 +26,7 @@ def compose_character_request(request_id: int, session_id: int, character_id: in
 
 
 @app.get("/api/my/session/pawn/requests")
-def get_my_pawn_requests(credentials: HTTPAuthorizationCredentials = Depends(security)):
+def get_my_pawn_requests(credentials: HTTPAuthorizationCredentials = Depends(security)) -> list[UserPawnRequest]:
     if (not access_manager.isTokenValid(credentials.credentials)):
         raise HTTPException(status_code=401, detail="Unauthorized")
     user_id = access_manager.getTokenData(credentials.credentials).id
@@ -37,7 +37,7 @@ def get_my_pawn_requests(credentials: HTTPAuthorizationCredentials = Depends(sec
 
 
 @app.get("/api/my/session/pawn/requests/sent")
-def get_my_pawn_requests_sent(credentials: HTTPAuthorizationCredentials = Depends(security)):
+def get_my_pawn_requests_sent(credentials: HTTPAuthorizationCredentials = Depends(security)) -> list[UserPawnRequest]:
     if (not access_manager.isTokenValid(credentials.credentials)):
         raise HTTPException(status_code=401, detail="Unauthorized")
     user_id = access_manager.getTokenData(credentials.credentials).id
@@ -103,7 +103,7 @@ def accept_pawn_request(request_id: int, credentials: HTTPAuthorizationCredentia
     return
 
 @app.post("/api/my/session/pawn/request/{request_id}/decline")
-def reject_pawn_request(request_id: int, credentials: HTTPAuthorizationCredentials = Depends(security)):
+def reject_pawn_request(request_id: int, credentials: HTTPAuthorizationCredentials = Depends(security)) -> None:
     if (not access_manager.isTokenValid(credentials.credentials)):
         raise HTTPException(status_code=401, detail="Unauthorized")
     user_id = access_manager.getTokenData(credentials.credentials).id
@@ -122,7 +122,7 @@ def reject_pawn_request(request_id: int, credentials: HTTPAuthorizationCredentia
 
 
 @app.delete("/api/my/session/pawn/request/{request_id}")
-def delete_pawn_request(request_id: int, credentials: HTTPAuthorizationCredentials = Depends(security)):
+def delete_pawn_request(request_id: int, credentials: HTTPAuthorizationCredentials = Depends(security)) -> None:
     if (not access_manager.isTokenValid(credentials.credentials)):
         raise HTTPException(status_code=401, detail="Unauthorized")
     user_id = access_manager.getTokenData(credentials.credentials).id
