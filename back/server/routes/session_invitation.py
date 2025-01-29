@@ -59,7 +59,7 @@ def get_sessions_requests(credentials: HTTPAuthorizationCredentials = Depends(se
 
     user_id = access_manager.getTokenData(token).id
     my_name = getone_db("SELECT username FROM `users` WHERE id = %s", (user_id,))[0]
-    requests = get_db("SELECT id, session_id, status FROM `sessions_requests` WHERE receiver_id = %s", (user_id,))
+    requests = get_db("SELECT id, session_id, status FROM `sessions_requests` WHERE receiver_id = %s AND status = 'pending'", (user_id,))
     return [compose_session_request(request[0], request[1], user_id, my_name, request[2]) for request in requests]
 
 
@@ -97,6 +97,13 @@ async def send_session_request(data: UserSessionRequestCreate, credentials: HTTP
 
     if owner[0] != user_id:
         raise HTTPException(status_code=401, detail="Unauthorized")
+
+    already_sent = getone_db("SELECT id FROM `sessions_requests` WHERE session_id = %s AND receiver_id = %s", (data.session_id, data.receiver_id))
+    if already_sent:
+        raise HTTPException(status_code=400, detail="Already sent")
+    already_sent = getone_db("SELECT id FROM `session_participants` WHERE session_id = %s AND user_id = %s", (data.session_id, data.receiver_id))
+    if already_sent:
+        raise HTTPException(status_code=400, detail="Already in session")
 
     success = modify_db("INSERT INTO `sessions_requests` (session_id, receiver_id, status) VALUES (%s, %s, 'pending')", (data.session_id, data.receiver_id))
     if not success:

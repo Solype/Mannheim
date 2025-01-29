@@ -37,6 +37,13 @@ async def request_friend(data: FriendName, credentials: HTTPAuthorizationCredent
     if not friend_id:
         raise HTTPException(status_code=404, detail="Friend not found")
 
+    already_sent = getone_db("SELECT id FROM `friend_requests` WHERE sender_id = %s AND receiver_id = %s", (user_id, friend_id[0]))
+    if already_sent:
+        raise HTTPException(status_code=400, detail="Already sent")
+    already_sent = getone_db("SELECT id FROM `friends` WHERE (friend_id1 = %s AND friend_id2 = %s) OR (friend_id1 = %s AND friend_id2 = %s)", (user_id, friend_id[0], friend_id[0], user_id))
+    if already_sent:
+        raise HTTPException(status_code=400, detail="Already friends")
+
     success = modify_db("INSERT INTO `friend_requests` (sender_id, receiver_id, status) VALUES (%s, %s, 'pending')", (user_id, friend_id[0]))
     if not success:
         raise HTTPException(status_code=500, detail="Failed to send friend request")
