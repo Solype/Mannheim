@@ -84,4 +84,4 @@ result = post(f"{base_url}/api/my/session/pawn/request", headers=headers2, json=
     "session_id": 1
 })
 
-result = get(f"{base_url}/api/my/session/pawn/requests", headers=1)
+# result = get(f"{base_url}/api/my/session/pawn/requests", headers=1)

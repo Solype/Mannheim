@@ -31,7 +31,9 @@ def get_my_session(credentials: HTTPAuthorizationCredentials = Depends(security)
     user_id = access_manager.getTokenData(token).id
 
     session_i_am_in = get_db("SELECT session_id FROM `session_participants` WHERE user_id = %s", (user_id,))
-    return [compose_session_short(session_id[0]) for session_id in session_i_am_in]
+    lst = [compose_session_short(session_id[0]) for session_id in session_i_am_in]
+    print(lst, flush=True)
+    return lst
 
 @app.get("/api/my/owned/sessions", tags=["Session"])
 def get_my_owned_session(credentials: HTTPAuthorizationCredentials = Depends(security)) -> list[SessionShort]:
@@ -42,7 +44,9 @@ def get_my_owned_session(credentials: HTTPAuthorizationCredentials = Depends(sec
     user_id = access_manager.getTokenData(token).id
 
     session_i_own = get_db("SELECT id FROM `sessions` WHERE gamemaster_id = %s", (user_id,))
-    return [compose_session_short(session_id[0]) for session_id in session_i_own]
+    lst = [compose_session_short(session_id[0]) for session_id in session_i_own]
+    print(lst, flush=True)
+    return lst
 
 
 
@@ -166,7 +170,7 @@ async def get_session(id: int, credentials: HTTPAuthorizationCredentials = Depen
         raise HTTPException(status_code=404, detail="Session not found")
 
     player_ids = [player[0] for player in players]
-    if user_id not in player_ids:
+    if user_id not in player_ids and user_id != gm_id:
         raise HTTPException(status_code=401, detail="Unauthorized")
 
     names = [getone_db("SELECT username FROM `users` WHERE id = %s", (player_id,))[0] for player_id in player_ids]
