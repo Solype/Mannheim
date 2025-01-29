@@ -70,9 +70,9 @@ CREATE TABLE IF NOT EXISTS `characters_access` (
     `player_id` BIGINT UNSIGNED NOT NULL,
     INDEX `idx_character_id` (`character_id`),
     INDEX `idx_player_id` (`player_id`),
-    FOREIGN KEY (`character_id`) REFERENCES `characters`(`id`) ON DELETE CASCADE
+    FOREIGN KEY (`character_id`) REFERENCES `characters`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`player_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
-)
+);
 
 
 

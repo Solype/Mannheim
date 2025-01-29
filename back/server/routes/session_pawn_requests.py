@@ -66,9 +66,6 @@ def post_new_pawn(data: UserPawnRequestCreate, credentials: HTTPAuthorizationCre
     success = modify_db("INSERT INTO `characters_requests` (sender_id, receiver_id, session_id, character_id, status) VALUES (%s, %s, %s, %s, 'pending')", (user_id, receiver_id, data.character_id, data.session_id))
     if not success:
         raise HTTPException(status_code=500, detail="Failed to send character request")
-    success = modify_db("INSERT INTO `characters_access` (character_id, player_id) VALUES (%s, %s)", (data.character_id, receiver_id))
-    if not success:
-        raise HTTPException(status_code=500, detail="Failed to grant access to character")
     return
 
 
