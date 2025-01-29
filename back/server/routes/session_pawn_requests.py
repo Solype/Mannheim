@@ -55,7 +55,13 @@ def post_new_pawn(data: UserPawnRequestCreate, credentials: HTTPAuthorizationCre
 
     # to do : check if the invitation is not already sent
 
-    receiver_id = getone_db("SELECT gamemaster_id FROM `sessions` WHERE id = %s", (data.character_id,))
+    chara_owner = getone_db("SELECT user_id FROM `characters` WHERE id = %s", (data.character_id))
+    if (not chara_owner) :
+        raise HTTPException(status_code=404, detail="chara not found")
+    if (chara_owner[0] != user_id) :
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    receiver_id = getone_db("SELECT gamemaster_id FROM `sessions` WHERE id = %s", (data.session_id,))
     if not receiver_id:
         raise HTTPException(status_code=404, detail="Session not found")
     receiver_id = receiver_id[0]

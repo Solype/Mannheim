@@ -57,4 +57,31 @@ if (len(lst_request)) :
     result = post(f"{base_url}/api/my/requests/sessions/{lst_request[0]["request_id"]}/accept", headers=headers2)
     print(result.json())
 
+result = get(f"{base_url}/api/my/sessions", headers=headers)
+print("U1 sessions:", result.json())
 
+result = get(f"{base_url}/api/my/owned/sessions", headers=headers)
+print("U1 sessions:", result.json())
+
+result = get(f"{base_url}/api/my/sessions", headers=headers2)
+print("U2 sessions:",result.json())
+
+result = get(f"{base_url}/api/my/owned/sessions", headers=headers2)
+print("U2 sessions:",result.json())
+
+################################
+##### CHARACTERS
+################################
+
+result = get(f"{base_url}/api/my/characters", headers=headers)
+print("U1 characters:", result.json())
+
+result = get(f"{base_url}/api/my/characters", headers=headers2)
+print("U2 characters:", result.json())
+
+result = post(f"{base_url}/api/my/session/pawn/request", headers=headers2, json={
+    "character_id" : 1,
+    "session_id": 1
+})
+
+result = get(f"{base_url}/api/my/session/pawn/requests", headers=1)
