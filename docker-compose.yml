@@ -20,17 +20,17 @@ services:
         networks:
             - mannheim
 
-    # server:
-    #     build:
-    #         context: ./back
-    #         dockerfile: Dockerfile
-    #     ports:
-    #         - "8080:8080"
-    #     depends_on:
-    #         db:
-    #             condition: service_started
-    #     networks:
-    #         - mannheim
+    server:
+        build:
+            context: ./back
+            dockerfile: Dockerfile
+        ports:
+            - "8080:8080"
+        depends_on:
+            db:
+                condition: service_started
+        networks:
+            - mannheim
 
     # frontend:
     #     build:

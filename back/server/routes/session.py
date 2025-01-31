@@ -165,18 +165,19 @@ async def get_session(id: int, credentials: HTTPAuthorizationCredentials = Depen
     session = compose_session_short(id)
 
     players = get_db("SELECT user_id FROM `session_participants` WHERE session_id = %s", (id,))
-
     if not players:
         raise HTTPException(status_code=404, detail="Session not found")
 
+    print("processing players", flush=True)
     player_ids = [player[0] for player in players]
     if user_id not in player_ids and user_id != gm_id:
         raise HTTPException(status_code=401, detail="Unauthorized")
 
+    print("User in session", flush=True)
     names = [getone_db("SELECT username FROM `users` WHERE id = %s", (player_id,))[0] for player_id in player_ids]
     players = [Player(id=player_id, name=name) for player_id, name in zip(player_ids, names)]
 
-    print(gm_id, user_id, flush=True)
+    print("gm_id", gm_id, "user_id", user_id, flush=True)
     pawns = get_pawns_of_session(id, user_id == gm_id)
 
     return SessionLong(
@@ -201,7 +202,7 @@ def insert_pawn_in_db(pawn : Pawn, hidden : Literal["totally", "partially", None
             %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
         )
         """
-    
+    print("inserted pawn", pawn, flush=True)
     params = ( pawn.name, owner_id, session_id,
         pawn.physical.current, pawn.pathological.current, pawn.mental.current, pawn.endurance.current, pawn.mana.current,
         pawn.physical.max, pawn.mental.max, pawn.pathological.max, pawn.endurance.max, pawn.mana.max,
@@ -209,6 +210,7 @@ def insert_pawn_in_db(pawn : Pawn, hidden : Literal["totally", "partially", None
     success = modify_db(sql, params)
     if (success != True) :
         raise HTTPException(status_code=500, detail="Failed to insert")
+    print("inserted pawn success", flush=True)
     return
 
 

@@ -24,8 +24,9 @@ const RoomsPage: React.FC = () => {
     const fetchRooms = async () => {
         try {
             const fetchedRooms = await sessionService.getAllSessions();
-            const fetchedOwnedRooms = await sessionService.getMySession();
-            setRooms([...fetchedRooms, ...fetchedOwnedRooms]);
+            // const fetchedOwnedRooms = await sessionService.getMySession();
+            // setRooms([...fetchedRooms, ...fetchedOwnedRooms]);
+            setRooms(fetchedRooms);
         } catch (error) {
             console.error('Error fetching rooms:', error);
         }
