@@ -10,7 +10,7 @@ token = post(f"{base_url}/login", headers=headers, json={"username":"a", "passwo
 headers["Authorization"] = f"Bearer {token.json()}"
 
 headers2 = {'Content-Type': 'application/json'}
-token = post(f"{base_url}/login", headers=headers2, json={"username":"b", "password":"a"})
+token = post(f"{base_url}/login", headers=headers2, json={"username":"b", "password":"b"})
 headers2["Authorization"] = f"Bearer {token.json()}"
 
 
@@ -51,5 +51,37 @@ result = get(f"{base_url}/api/my/requests/sessions", headers=headers)
 print("U1 req sessions:", result.json())
 
 result = get(f"{base_url}/api/my/requests/sessions", headers=headers2)
-print("U2 req sessions:", result.json())
+lst_request : list = result.json()
+print("U2 req sessions:", lst_request)
+if (len(lst_request)) :
+    result = post(f"{base_url}/api/my/requests/sessions/{lst_request[0]["request_id"]}/accept", headers=headers2)
+    print(result.json())
 
+result = get(f"{base_url}/api/my/sessions", headers=headers)
+print("U1 sessions:", result.json())
+
+result = get(f"{base_url}/api/my/owned/sessions", headers=headers)
+print("U1 sessions:", result.json())
+
+result = get(f"{base_url}/api/my/sessions", headers=headers2)
+print("U2 sessions:",result.json())
+
+result = get(f"{base_url}/api/my/owned/sessions", headers=headers2)
+print("U2 sessions:",result.json())
+
+################################
+##### CHARACTERS
+################################
+
+result = get(f"{base_url}/api/my/characters", headers=headers)
+print("U1 characters:", result.json())
+
+result = get(f"{base_url}/api/my/characters", headers=headers2)
+print("U2 characters:", result.json())
+
+result = post(f"{base_url}/api/my/session/pawn/request", headers=headers2, json={
+    "character_id" : 1,
+    "session_id": 1
+})
+
+result = get(f"{base_url}/api/my/session/pawn/requests", headers=1)

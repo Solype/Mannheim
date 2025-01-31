@@ -2,6 +2,7 @@ from server.server import sio
 from server.access_manager import access_manager
 from pydantic import BaseModel
 from typing import Literal, Optional
+from server.mysql_db import getone_db, get_db, modify_db
 
 @sio.on('message')
 async def message(sid, data):
@@ -29,8 +30,9 @@ async def join(sid, data : str):
 
 
 class JoinSession(BaseModel):
-    name:   str
-    token:  str
+    name:       str
+    seccion_id: int
+    token:      str
 
 
 @sio.on("connect")
@@ -38,12 +40,17 @@ async def connect(sid, data: JoinSession):
     print("<< connect", flush=True)
     print("-- sid:", sid, flush=True)
     print("-- data:", data, flush=True)
-    if access_manager.isTokenValid(data.token):
-        sio.enter_room(sid, data.name)
-        for room in sio.rooms(sid):
-            sio.emit("join", data.name, room=room)
-    else:
+    user = access_manager.isTokenValid(data.token)
+    if not user:
         sio.disconnect(sid)
+
+    result = getone_db("SELECT id FROM session_participants WHERE session_id = %s AND user_id = %s", (data.seccion_id, user.id))
+    if not result:
+        sio.disconnect(sid)
+
+    sio.enter_room(sid, data.session_id)
+    for room in sio.rooms(sid):
+        sio.emit("join", data.name, room=room)
 
 
 @sio.on("disconnect")
@@ -54,30 +61,69 @@ async def disconnect(sid):
         sio.emit("leave", sid, room=room)
         sio.leave_room(sid, room)
 
-class Damage(BaseModel):
-    damage:     int
-    receiver:   int
-    dealer:     int
-    monitor:    Literal["Physical", "Mental", "Pathological", "Endurance", "Mana"]
-    method:     Optional[str]
+class MonitorAction(BaseModel):
+    damage_phys:    int
+    damage_path:    int
+    damage_ment:    int
+    damage_endu:    int
+    receiver:       int
+    dealer:         int
+    method:         Optional[str]
 
 @sio.on("damage")
-async def damage(sid, data: Damage):
+async def damage(sid, data: MonitorAction):
     print("<< damage", flush=True)
     print("-- sid:", sid, flush=True)
     print("-- data:", data, flush=True)
+
+    pawn = getone_db("SELECT id FROM entities WHERE id = %s", (data.receiver,))
+    if not pawn:
+        return
+
+    if (data.damage_endu > 0) :
+        modify_db("UPDATE entities SET current_endurance = current_endurance - %s WHERE id = %s", (data.damage_endu, data.receiver))
+    if (data.damage_ment > 0) :
+        modify_db("UPDATE entities SET current_mental = current_mental - %s WHERE id = %s", (data.damage_ment, data.receiver))
+    if (data.damage_path > 0) :
+        modify_db("UPDATE entities SET current_path = current_path - %s WHERE id = %s", (data.damage_path, data.receiver))
+    if (data.damage_phys > 0) :
+        modify_db("UPDATE entities SET current_physical = current_physical - %s WHERE id = %s", (data.damage_phys, data.receiver))
+
     for room in sio.rooms(sid):
         sio.emit("damage", data, room=room)
 
-class Heal(BaseModel):
-    heal:       int
-    dealer:     int
-    receiver:   int
-
 @sio.on("heal")
-async def heal(sid, data: Heal):
+async def heal(sid, data: MonitorAction):
     print("<< heal", flush=True)
     print("-- sid:", sid, flush=True)
     print("-- data:", data, flush=True)
+
+
+    pawn = getone_db("SELECT id FROM entities WHERE id = %s", (data.receiver,))
+    if not pawn:
+        return
+
+    if (data.damage_endu > 0) :
+        modify_db("UPDATE entities SET current_endurance = current_endurance + %s WHERE id = %s", (data.damage_endu, data.receiver))
+    if (data.damage_ment > 0) :
+        modify_db("UPDATE entities SET current_mental = current_mental + %s WHERE id = %s", (data.damage_ment, data.receiver))
+    if (data.damage_path > 0) :
+        modify_db("UPDATE entities SET current_path = current_path + %s WHERE id = %s", (data.damage_path, data.receiver))
+    if (data.damage_phys > 0) :
+        modify_db("UPDATE entities SET current_physical = current_physical + %s WHERE id = %s", (data.damage_phys, data.receiver))
+
     for room in sio.rooms(sid):
         sio.emit("heal", data, room=room)
+
+
+class Focus(BaseModel):
+    player_id:  int
+    pawn_id:    int
+
+@sio.on("focus")
+async def focus(sid, data):
+    print("<< focus", flush=True)
+    print("-- sid:", sid, flush=True)
+    print("-- data:", data, flush=True)
+    for room in sio.rooms(sid):
+        sio.emit("focus", data, room=room)
