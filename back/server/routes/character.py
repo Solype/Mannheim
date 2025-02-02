@@ -32,9 +32,17 @@ async def get_one_character(id: int, credentials: HTTPAuthorizationCredentials =
         raise HTTPException(status_code=401, detail="Unauthorized")
     data = access_manager.getTokenData(token).id
 
-    character = getone_db("SELECT character_data FROM `characters` WHERE id = %s AND user_id = %s", (id, data))
+    character = getone_db("SELECT character_data, user_id FROM `characters` WHERE id = %s", (id))
     if not character:
         raise HTTPException(status_code=404, detail="Character not found")
+
+    owner_id = character[1]
+
+    if owner_id != data:
+        fst_request = getone_db("SELECT id FROM `characters_access` WHERE character_id = %s AND player_id = %s", (id, data))
+        snd_request = getone_db("SELECT id FROM `characters_requests` WHERE character_id = %s AND receiver_id = %s AND status != 'refused'", (id, data))
+        if (not fst_request) and (not snd_request):
+            raise HTTPException(status_code=401, detail="Unauthorized")
 
     character = json.loads(character[0])
 

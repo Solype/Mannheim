@@ -4,18 +4,28 @@ import sessionService from '@/services/SessionService';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import LoginService from '@/services/LoginService';
 
 const RoomsPage: React.FC = () => {
     const [rooms, setRooms] = useState<SessionShort[]>([]);
     const [newRoomName, setNewRoomName] = useState<string>("");
+    const [myId, setMyId] = useState<number>(0);
 
     useEffect(() => {
         fetchRooms();
+        LoginService.whoami().then((data) => {
+            if (data) {
+                setMyId(parseInt(data));
+            }
+        })
     }, []);
 
     const fetchRooms = async () => {
         try {
             const fetchedRooms = await sessionService.getAllSessions();
+            // const fetchedOwnedRooms = await sessionService.getMySession();
+            // setRooms([...fetchedRooms, ...fetchedOwnedRooms]);
             setRooms(fetchedRooms);
         } catch (error) {
             console.error('Error fetching rooms:', error);
@@ -77,12 +87,21 @@ const RoomsPage: React.FC = () => {
                                 className="flex justify-between items-center border-b p-4 hover:bg-white/10 hover:shadow-[0_0_10px_4px_rgba(255,255,255,0.7)] transition-all duration-300 rounded-t-md"
                             >
                                 <span className="text-lg font-medium">{room.name} - {room.gm_name}</span>
-                                <button
-                                    onClick={() => handleDeleteRoom(room.id)}
-                                    className="bg-red-500/80 text-white p-2 rounded-md hover:bg-red-800"
-                                >
-                                    <Trash2 />
-                                </button>
+                                <div className='flex gap-2'>
+                                    <Link to={`/room/${room.id}`} className="bg-green-500/80 text-white p-2 rounded-md hover:bg-green-800">
+                                        Entrer
+                                    </Link>
+                                    
+                                        {room.gm_id == myId &&
+                                        (    <button
+                                                onClick={() => handleDeleteRoom(room.id)}
+                                                className="bg-red-500/80 text-white p-2 rounded-md hover:bg-red-800"
+                                            >
+                                                <Trash2 />
+                                            </button>)
+                                        }
+                                    
+                                </div>
                             </div>
                         ))
                     ) : (
