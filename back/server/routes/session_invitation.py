@@ -4,6 +4,8 @@ from server.access_manager import access_manager
 from server.routes.server_datatype.user_request_type import UserSessionRequest, UserSessionRequestCreate
 
 
+import json
+
 def compose_session_request_with_session(session_id: int, session_name: str, gm_id: int, gm_name: str) -> UserSessionRequest:
     requests = get_db("SELECT id, receiver_id, status FROM `sessions_requests` WHERE session_id = %s", (session_id,))
     if not requests:
@@ -109,6 +111,23 @@ async def send_session_request(data: UserSessionRequestCreate, credentials: HTTP
     if not success:
         raise HTTPException(status_code=500, detail="Failed to send session request")
     return
+
+@app.get("/api/users/{user_name}", tags=["Requests"])
+async def get_user(user_name: str, credentials: HTTPAuthorizationCredentials = Depends(security)) -> int:
+
+    
+    token = credentials.credentials
+
+    if not token or not access_manager.isTokenValid(token):
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    user_id = getone_db("SELECT id FROM `users` WHERE username = %s", (user_name,))
+
+    user_id = json.loads(str(user_id[0]))
+
+    if not user_id:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    return user_id
 
 @app.delete("/api/my/requests/sessions/{request_id}", tags=["Requests"])
 async def delete_session_request(request_id: int, credentials: HTTPAuthorizationCredentials = Depends(security)) -> None:

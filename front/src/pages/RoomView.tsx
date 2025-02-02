@@ -6,10 +6,13 @@ import sessionService from '@/services/SessionService';
 // import { Trash2 } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import { SessionShort } from '@/types/sesssion_types';
+import UserRequestService, { sendRoomInvitation } from '@/services/UserRequestService';
 
 const RoomView: React.FC = () => {
     const { id } = useParams<{id: string}>();
     const [room, setRoom] = useState<SessionShort | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [playerName, setPlayerName] = useState("");
 
     useEffect(() => {
         loadRoom();
@@ -21,91 +24,73 @@ const RoomView: React.FC = () => {
             sessionService.getRoom(id).then((room) => {
                 setRoom(room);
             });
-            // console.log(room);
+            console.log(room);
         } catch (error) {
             console.error('Error fetching rooms:', error);
         }
     };
 
-    // const handleAddRoom = async () => {
-    //     if (!newRoomName.trim()) return;
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setPlayerName("");
+    };
 
-    //     try {
-    //         const newRoom = await sessionService.createSession(newRoomName, "");
-    //         setRooms([...rooms, newRoom]);
-    //         setNewRoomName("");
-    //     } catch (error) {
-    //         console.error('Error adding room:', error);
-    //     }
-    // };
-
-    // const handleDeleteRoom = async (roomId: number) => {
-    //     try {
-    //         await sessionService.deleteSession(roomId);
-    //         setRooms(rooms.filter((room) => room.id !== roomId));
-    //     } catch (error) {
-    //         console.error('Error deleting room:', error);
-    //     }
-    // };
+    const handleSessionInvite = async () => {
+        if (playerName.trim() !== "") {
+            await UserRequestService.sendRoomInvitation(room?.id as number, playerName as string);
+            closeModal();
+        } else {
+            alert("Veuillez entrer un nom de joueur !");
+        }
+    };
 
     return (
         <div className="relative overflow-auto h-full" style={{ backgroundImage: 'url(/bg-rooms.jpg)', backgroundSize: 'cover', backgroundAttachment: 'fixed' }}>
             <div className="fixed inset-0 bg-black opacity-50 z-10" />
 
             <div className="relative z-20 mt-14 text-white px-96 flex flex-col gap-20">
-                <div>
-                    <h1 className="text-5xl font-bold text-center text-or stroke-white ">Room: {room?.name}</h1>
-                    <p>{room?.description}</p>
-                    {/* <p className="text-lg mt-4 text-center">Gérer vos rooms ci-dessous</p> */}
+                <div className="flex justify-between items-center">
+                    <button onClick={openModal} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-10">
+                        Invite a player
+                    </button>
+                    <h1 className="text-5xl font-bold text-or stroke-white text-center flex-1 mx-10">
+                        Room: {room?.name}
+                    </h1>
+                    <p className="text-lg text-right mx-10">Game Master: {room?.gm_name}</p>
                 </div>
-
-                {/* <div className="mt-6 flex justify-center">
-                    <Input
-                        type="text"
-                        value={newRoomName}
-                        onChange={(e) => setNewRoomName(e.target.value)}
-                        placeholder="Entrez le nom de la room"
-                        className="border rounded-md mr-2 bg-white bg-opacity-80 py-5 text-black"
-                    />
-                    <Button
-                        onClick={handleAddRoom}
-                        className="bg-foret text-xl text-white w-1/3 p-5 rounded-md hover:bg-light_foret hover:shadow-[0_0_10px_4px_rgba(255,255,255,0.7)] transition-all duration-300"
-                    >
-                        Créer
-                    </Button>
-                </div> */}
-
-                {/* <div className="mt-8 bg-black rounded-md bg-opacity-70 ">
-                    {rooms.length > 0 ? (
-                        rooms.map((room) => (
-                            <div
-                                key={room.id}
-                                className="flex justify-between items-center border-b p-4 hover:bg-white/10 hover:shadow-[0_0_10px_4px_rgba(255,255,255,0.7)] transition-all duration-300 rounded-t-md"
-                            >
-                                <span className="text-lg font-medium">{room.name} - {room.gm_name}</span>
-                                <button
-                                    onClick={() => handleDeleteRoom(room.id)}
-                                    className="bg-red-500/80 text-white p-2 rounded-md hover:bg-red-800"
-                                >
-                                    <Trash2 />
-                                </button>
-                            </div>
-                        ))
-                    ) : (
-                        <div className='opacity-80 flex flex-col gap-10'>
-                            <img src="/door.png" alt="No rooms" className="mx-auto w-64" />
-                            <p className="text-center text-2xl">No rooms available.</p>
-                        </div>
-                    )}
-                </div> */}
+                <p>{room?.description}</p>
             </div>
+
+            {isModalOpen && (
+                <div className="fixed inset-0 flex items-center justify-center z-50">
+                    <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-96">
+                        <h2 className="text-xl font-bold text-white mb-4">Invite a Player</h2>
+                        <input 
+                            type="text" 
+                            value={playerName} 
+                            onChange={(e) => setPlayerName(e.target.value)} 
+                            placeholder="Enter player name" 
+                            className="w-full p-2 rounded border-gray-300 mb-4 text-black"
+                        />
+                        <div className="flex justify-end space-x-4">
+                            <button onClick={closeModal} className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                                Close
+                            </button>
+                            <button onClick={handleSessionInvite} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                                Send
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             <style jsx>{`
                 .stroke-white {
                     -webkit-text-stroke: 0.5px black;
                 }
             `}</style>
         </div>
-
     );
 };
 
