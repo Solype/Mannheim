@@ -16,7 +16,12 @@ class UserSessionRequest(BaseModel):
     receiver_name:      str
     status:             Literal["pending", "accepted", "refused"]
 
-class UserCharacterSessionRequest(BaseModel):
+
+class UserPawnRequestCreate(BaseModel):
+    session_id:         int
+    character_id:       int
+
+class UserPawnRequest(BaseModel):
     request_id:         int
     sender_id:          int
     sender_name:        str
