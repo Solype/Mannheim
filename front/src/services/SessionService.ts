@@ -10,8 +10,8 @@ class SessionService extends AService {
         );
     }
 
-    public async getMySession(): Promise<SessionShort> {
-        return await this.request<SessionShort>('/api/my/owned/sessions', {
+    public async getMySession(): Promise<SessionShort[]> {
+        return await this.request<SessionShort[]>('/api/my/owned/sessions', {
                 method: 'GET',
                 headers: this.getHeaders(),
             }
