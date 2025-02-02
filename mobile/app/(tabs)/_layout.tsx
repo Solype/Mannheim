@@ -48,9 +48,30 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="register"
         options={{
-          title: 'Tab Two',
+          title: 'Register',
+          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="characters"
+        options={{
+          title: 'Personnages',
+          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="character_detail"
+        options={{
+          title: 'Character Detail',
+          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="create_character"
+        options={{
+          title: 'Create Character',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
       />

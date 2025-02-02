@@ -28,7 +28,7 @@ export default function LoginPage() {
 
     try {
       await LoginService.login(formData.username, formData.password);
-      navigation.navigate('Home'); // Replace 'Home' with the screen name you want to navigate to
+      navigation.navigate('Home');
     } catch (error) {
       setError('Error logging in. Please try again.');
       console.error('Error logging in:', error);

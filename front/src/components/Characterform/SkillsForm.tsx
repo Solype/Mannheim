@@ -125,7 +125,7 @@ export function extractSkills(listSkills: Record<string, string[]>, skillsData: 
                 skills.push({
                     name: skillName,
                     category,
-                    pureValue: existingSkill ? existingSkill.pureValue : 0, // Valeurs par défaut si non présentes
+                    pureValue: existingSkill ? existingSkill.pureValue : 0,
                     roleValue: existingSkill ? existingSkill.roleValue : 0
                 });
             });
@@ -135,26 +135,6 @@ export function extractSkills(listSkills: Record<string, string[]>, skillsData: 
     return skills;
 }
 
-
-// export function extractSkills(listSkills: Record<string, string[]>): Skill[] {
-//     const skills: Skill[] = [];
-    
-//     for (const category in listSkills) {
-//         if (listSkills.hasOwnProperty(category)) {
-//             const skillNames = listSkills[category];
-//             skillNames.forEach(skillName => {
-//                 skills.push({
-//                     name: skillName,
-//                     category,
-//                     pureValue: 0,
-//                     roleValue: 0
-//                 });
-//             });
-//         }
-//     }
-    
-//     return skills;
-// }
 
 interface SingleSkillFormProps {
     skillName: string;
@@ -211,7 +191,7 @@ const SingleSkillForm = ({ skillName, pureValue, roleValue, skillValueSetter, di
 
 interface SkillFormProps {
     skillSetter: (skillName: string, skillCategory: string, pureValue: number, roleValue: number) => void;
-    skills: Skill[]; // Passer les compétences en tant que prop
+    skills: Skill[];
     disabled: boolean;
 }
 
@@ -227,7 +207,6 @@ export default function SkillForm({ skillSetter, skills, disabled }: SkillFormPr
                         </h1>
                         <div className="space-y-1">
                             {skillNames.map((skillName: string) => {
-                                // Récupérer la compétence correspondante depuis `skills`
                                 const currentSkill = skills.find(
                                     skill => skill.name === skillName && skill.category === category
                                 );
