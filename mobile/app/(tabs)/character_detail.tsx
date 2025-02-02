@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, TextInput, ScrollView, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
+import { View, Text, Button, TextInput, ScrollView, StyleSheet, TouchableOpacity, ImageBackground, KeyboardAvoidingView  } from 'react-native';
 import ReligionForm from '@/components/ReligionForm';
 import { Religion, Skill } from '@/types/character_types';
 import SkillForm, { extractSkills, listSkills } from '@/components/SkillForm';
@@ -79,47 +79,60 @@ const CharacterViewPage = () => {
     const reinitializeData = () => loadCharacter();
 
     return (
-        <ImageBackground
-                    source={require('@/assets/drag.png')}
-                    style={styles.background}
-                >
-            <ScrollView style={styles.container}>
-                <Text style={styles.header}>{infos.name}</Text>
-                <View style={styles.buttonContainer}>
-                    {isDisabled ? (
-                        <Button title="Modifier" onPress={() => setIsDisabled(false)} color="#FF6F61" />
-                    ) : (
-                        <>
-                            <Button title="Réinitialiser" onPress={reinitializeData} color="#D8BFBF" />
-                            <Button title="Sauvegarder" onPress={handleSubmit} color="#FF6F61" />
-                        </>
-                    )}
+      <ImageBackground source={require('@/assets/drag.png')} style={styles.background}>
+        <KeyboardAvoidingView 
+          style={{ flex: 1 }}
+        >
+          <ScrollView 
+            style={styles.container} 
+            keyboardShouldPersistTaps="handled"
+            nestedScrollEnabled={true}
+          >
+            <Text style={styles.header}>{infos.name}</Text>
+            
+            <View style={styles.buttonContainer}>
+              {isDisabled ? (
+                <Button title="Modifier" onPress={() => setIsDisabled(false)} color="#FF6F61" />
+              ) : (
+                <>
+                  <Button title="Réinitialiser" onPress={reinitializeData} color="#D8BFBF" />
+                  <Button title="Sauvegarder" onPress={handleSubmit} color="#FF6F61" />
+                </>
+              )}
+            </View>
+    
+            <View style={styles.formContainer}>
+              <BasicForm formData={infos} setFormData={saveBasicInfo} disabled={isDisabled} />
+    
+              <View style={styles.row}>
+                <View style={styles.halfWidth}>
+                  <PriorityForm initialPriority={priority} onSubmit={savePriority} disabled={isDisabled} />
                 </View>
-                <View style={styles.formContainer}>
-                    <BasicForm formData={infos} setFormData={saveBasicInfo} disabled={isDisabled} />
-                    <View style={styles.row}>
-                        <View style={styles.halfWidth}>
-                            <PriorityForm initialPriority={priority} onSubmit={savePriority} disabled={isDisabled} />
-                        </View>
-                        <View style={styles.halfWidth}>
-                            <AttributesForm attributes={attributes} setter={saveAttributes} disabled={isDisabled} />
-                        </View>
-                    </View>
-                    <ListStringForm title="Roles primaire" setter={saveMainRoles} listString={mainRoles} disabled={isDisabled} />
-                    <ListStringForm title="Roles secondaires" setter={saveSecondaryRoles} listString={secondaryRoles} disabled={isDisabled} />
-                    <ListStringForm title="Langues" setter={saveLanguages} listString={otherInfos.languages} disabled={isDisabled} />
-                    <ReligionForm setter={saveReligion} listReligions={religion} disabled={isDisabled} />
-                    <SkillForm skillSetter={handleChangeSkill} skills={skills} disabled={isDisabled} />
+                <View style={styles.halfWidth}>
+                  <AttributesForm attributes={attributes} setter={saveAttributes} disabled={isDisabled} />
                 </View>
-                {!isDisabled && (
-                    <TouchableOpacity onPress={handleSubmit} style={styles.submitButton}>
-                        <Text style={styles.submitText}>Sauvegarder</Text>
-                    </TouchableOpacity>
-                )}
-            </ScrollView>
-        </ImageBackground>
+              </View>
+    
+              <View style={{ flex: 1 }}>
+                <ListStringForm title="Roles primaire" setter={saveMainRoles} listString={mainRoles} disabled={isDisabled} />
+                <ListStringForm title="Roles secondaires" setter={saveSecondaryRoles} listString={secondaryRoles} disabled={isDisabled} />
+                <ListStringForm title="Langues" setter={saveLanguages} listString={otherInfos.languages} disabled={isDisabled} />
+              </View>
+    
+              <ReligionForm setter={saveReligion} listReligions={religion} disabled={isDisabled} />
+              <SkillForm skillSetter={handleChangeSkill} skills={skills} disabled={isDisabled} />
+            </View>
+    
+            {!isDisabled && (
+              <TouchableOpacity onPress={handleSubmit} style={styles.submitButton}>
+                <Text style={styles.submitText}>Sauvegarder</Text>
+              </TouchableOpacity>
+            )}
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </ImageBackground>
     );
-};
+  }; 
 
 const styles = StyleSheet.create({
     background: {

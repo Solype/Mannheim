@@ -78,7 +78,6 @@ const BasicForm = ({ formData, setFormData, disabled }: BasicFormProps) => {
         </Picker>
       </View>
 
-      <Button title="Soumettre" onPress={handleSubmit} disabled={disabled} />
     </View>
   );
 };

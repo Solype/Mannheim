@@ -24,39 +24,39 @@ const ListStringForm = ({ title, listString, setter, disabled }: ListStringFormP
   };
 
   return (
-        <FlatList
-          ListHeaderComponent={
-            <View style={styles.container}>
-              <Text style={styles.title}>{title}</Text>
-              <View style={styles.inputContainer}>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Enter a role"
-                  value={inputValue}
-                  onChangeText={setInputValue}
-                  editable={!disabled}
-                />
-                {!disabled && (
-                  <TouchableOpacity onPress={addRole} style={styles.button}>
-                    <Text style={styles.buttonText}>Add</Text>
-                  </TouchableOpacity>
-                )}
-              </View>
-            </View>
-          }
-          data={listString}
-          renderItem={({ item, index }) => (
-            <View style={styles.roleContainer}>
-              <Text>{item}</Text>
-              {!disabled && (
-                <TouchableOpacity onPress={() => removeRole(index)}>
-                  <Text style={styles.removeText}>Remove</Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          )}
-          keyExtractor={(item, index) => index.toString()}
-        /> 
+    <View style={styles.container}>
+      <Text style={styles.title}>{title}</Text>
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter a role"
+          value={inputValue}
+          onChangeText={setInputValue}
+          editable={!disabled}
+        />
+        {!disabled && (
+          <TouchableOpacity onPress={addRole} style={styles.button}>
+            <Text style={styles.buttonText}>Add</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+
+      <FlatList
+        data={listString}
+        nestedScrollEnabled={true} // Permet un bon comportement de défilement
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item, index }) => (
+          <View style={styles.roleContainer}>
+            <Text>{item}</Text>
+            {!disabled && (
+              <TouchableOpacity onPress={() => removeRole(index)}>
+                <Text style={styles.removeText}>Remove</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        )}
+      />
+    </View>
   );
 };
 
@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.5,
     elevation: 5,
+    flex: 1,
   },
   title: {
     fontSize: 18,

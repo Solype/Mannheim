@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 class LoginService extends AService {
 
     async login(username: string, password: string): Promise<string | null> {
+        console.log(username, password);
         const data = await this.request<string>('/login', {
             method: 'POST',
             headers: this.getHeaders(false), // Pas de token pour le login

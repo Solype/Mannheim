@@ -32,7 +32,7 @@ const RegisterPage = () => {
 
         try {
             await LoginService.register(formData.username, formData.password);
-            navigation.navigate('Home');
+            navigation.navigate('characters');
         } catch (error) {
             setError('Error registering. Please try again.');
             console.error('Error registering:', error);
