@@ -4,20 +4,24 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 class LoginService extends AService {
 
     async login(username: string, password: string): Promise<string | null> {
-        console.log(username, password);
+        const headers = await this.getHeaders(false);
+
         const data = await this.request<string>('/login', {
             method: 'POST',
-            headers: this.getHeaders(false), // Pas de token pour le login
+            headers,
             body: JSON.stringify({ username, password }),
         });
+
         await AsyncStorage.setItem('token', data);
         return data;
     }
 
     async register(username: string, password: string): Promise<string | null> {
+        const headers = await this.getHeaders(false);
+
         const data = await this.request<string>('/register', {
             method: 'POST',
-            headers: this.getHeaders(false), // Pas de token pour le register
+            headers,
             body: JSON.stringify({ username, password }),
         });
         await AsyncStorage.setItem('token', data);
@@ -25,9 +29,11 @@ class LoginService extends AService {
     }
 
     async whoami(): Promise<string | null> {
+        const headers = await this.getHeaders();
+
         const data = await this.request<string>('/api/whoami', {
             method: 'GET',
-            headers: this.getHeaders(),
+            headers,
         });
         return data;
     }

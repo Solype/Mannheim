@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class CharacterModificationUtilsService {
     // private baseURL = __DOCKER_HOST_IP__ ? `http://${__DOCKER_HOST_IP__}:8080` : `http://${__MY_LOCAL_IP__}:8080`;
-    private baseURL = `172.18.144.1:8080`;
+    private baseURL = `http://192.168.178.93:8080`;
 
     private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
         try {

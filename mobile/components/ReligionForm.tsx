@@ -22,7 +22,6 @@ const ReligionForm = ({ listReligions, setter, disabled }: ReligionFormProps) =>
 
     const firstReligion = availableReligions[0];
     setter([...listReligions, { god: firstReligion, devotion: 0 }]);
-    setAvailableReligions((prev) => prev.filter((god) => god !== firstReligion));
   };
 
   const handleReligionChange = (index: number, newName: string) => {
@@ -32,11 +31,6 @@ const ReligionForm = ({ listReligions, setter, disabled }: ReligionFormProps) =>
     updatedReligions[index].god = newName;
     setter(updatedReligions);
 
-    setAvailableReligions((prev) => {
-      const updatedAvailableReligions = prev.filter((god) => god !== newName);
-      if (oldName) updatedAvailableReligions.push(oldName);
-      return updatedAvailableReligions;
-    });
   };
 
   const handleDevotionChange = (index: number, devotion: number) => {
@@ -47,9 +41,7 @@ const ReligionForm = ({ listReligions, setter, disabled }: ReligionFormProps) =>
 
   const handleRemoveReligion = (index: number) => {
     const updatedReligions = [...listReligions];
-    const [removedReligion] = updatedReligions.splice(index, 1);
     setter(updatedReligions);
-    setAvailableReligions((prev) => [...prev, removedReligion.god].sort());
   };
 
   return (
@@ -111,6 +103,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.5,
     elevation: 5,
+    marginBottom: 20,
   },
   header: {
     fontSize: 24,

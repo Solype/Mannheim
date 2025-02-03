@@ -52,7 +52,9 @@ interface SingleSkillFormProps {
 
 const SingleSkillForm = ({ skillName, pureValue, roleValue, skillValueSetter, disabled }: SingleSkillFormProps) => {
   const onPureValueChange = (value: string) => {
+    console.log(value);
     const newPureValue = Number(value);
+    console.log(newPureValue);
     skillValueSetter(newPureValue, roleValue);
   };
 
@@ -63,31 +65,33 @@ const SingleSkillForm = ({ skillName, pureValue, roleValue, skillValueSetter, di
 
   return (
     <View style={styles.skillContainer}>
-      <Text style={styles.skillName}>{dico[skillName] ?? skillName}</Text>
-      <View style={styles.inputContainer}>
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Pure</Text>
-          <TextInput
-            style={styles.input}
-            value={String(pureValue)}
-            onChangeText={onPureValueChange}
-            keyboardType="numeric"
-            editable={!disabled}
-          />
-        </View>
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Role</Text>
-          <TextInput
-            style={styles.input}
-            value={String(roleValue)}
-            onChangeText={onRoleValueChange}
-            keyboardType="numeric"
-            editable={!disabled}
-          />
-        </View>
+    <Text style={styles.skillName}>{dico[skillName] ?? skillName}</Text>
+    <View style={styles.inputContainer}>
+      <View style={styles.inputGroup}>
+        <Text style={styles.label}>Pure</Text>
+        <TextInput
+          style={styles.input}
+          value={pureValue.toString()}
+          onChangeText={(value) => onPureValueChange(value)}
+          keyboardType="numeric"
+          min="0"
+          editable={!disabled}
+        />
       </View>
-      <Text style={styles.total}>= {pureValue + roleValue}</Text>
+      <View style={styles.inputGroup}>
+        <Text style={styles.label}>Role</Text>
+        <TextInput
+          style={styles.input}
+          value={roleValue.toString()}
+          onChangeText={(value) => onRoleValueChange(value)}
+          keyboardType="numeric"
+          min="0"
+          editable={!disabled}
+        />
+      </View>
     </View>
+    <Text style={styles.total}>= {pureValue + roleValue}</Text>
+  </View>
   );
 };
 
@@ -115,8 +119,10 @@ const SkillForm = ({ skillSetter, skills, disabled }: SkillFormProps) => {
                   skillName={skillName}
                   pureValue={currentSkill?.pureValue || 0}
                   roleValue={currentSkill?.roleValue || 0}
-                  skillValueSetter={(pure: number, role: number) =>
+                  skillValueSetter={(pure: number, role: number) => {
+                    console.log(pure, role);
                     skillSetter(skillName, category, pure, role)
+                  }
                   }
                   disabled={disabled}
                 />

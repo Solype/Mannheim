@@ -89,15 +89,30 @@ const CreateCharacterPage = () => {
         fetchData();
     }, []);
 
-    const handleChangeSkill = (skillName: string, skillCategory: string, pureValue: number, roleValue: number) => {
-        const newSkills = skills.map(skill => {
-            if (skill.name === skillName && skill.category === skillCategory) {
-                return { ...skill, pureValue, roleValue };
-            }
-            return skill;
+    useEffect(() => {
+        const loadSkills = async () => {
+          const storedSkills = await AsyncStorage.getItem('skills');
+          if (storedSkills) {
+            setSkills(JSON.parse(storedSkills));
+          }
+        };
+        loadSkills();
+      }, []);
+
+    const handleSkillChange = (skillName: string, category: string, pureValue: number, roleValue: number) => {
+        setSkills(prevSkills => {
+          const updatedSkills = prevSkills.map(skill =>
+            skill.name === skillName && skill.category === category
+              ? { ...skill, pureValue, roleValue }
+              : skill
+          );
+          
+          AsyncStorage.setItem('skills', JSON.stringify(updatedSkills));
+      
+          return updatedSkills;
         });
-        setSkills(newSkills);
-    };
+      };
+      
     
     const handleSubmit = () => {
         const data = {
@@ -152,18 +167,18 @@ const CreateCharacterPage = () => {
                         <PriorityForm initialPriority={priority} onSubmit={savePriority} disabled={false} />
                     </View>
                     <View style={styles.halfWidth}>
-                    <AttributesForm attributes={attributes} setter={saveAttributes} disabled={false} />
+                        <AttributesForm attributes={attributes} setter={saveAttributes} disabled={false} />
                     </View>
                 </View>
         
-                <View style={{ flex: 1 }}>
+                <View style={{ flex: 1, gap: 20, marginBottom: 20 }}>
                     <ListStringForm title="Roles primaire" setter={saveMainRoles} listString={mainRoles} disabled={false} />
                     <ListStringForm title="Roles secondaires" setter={saveSecondaryRoles} listString={secondaryRoles} disabled={false} />
                     <ListStringForm title="Langues" setter={saveLanguages} listString={otherInfos.languages} disabled={false} />
                 </View>
         
                 <ReligionForm setter={saveReligion} listReligions={religion} disabled={false} />
-                <SkillForm skillSetter={handleChangeSkill} skills={skills} disabled={false} />
+                <SkillForm skillSetter={handleSkillChange} skills={skills} disabled={false} />
                 </View>
     
             
@@ -190,6 +205,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         marginBottom: 20,
+        color: 'white',
     },
     buttons: {
         flexDirection: 'row',
@@ -205,6 +221,7 @@ const styles = StyleSheet.create({
     },
     halfWidth: {
         width: '48%',
+        marginBottom: 20,
     },
     submitButton: {
         backgroundColor: '#FF6F61',
