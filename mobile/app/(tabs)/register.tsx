@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import LoginService from '@/services/LoginService';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const RegisterPage = () => {
     const [formData, setFormData] = useState({
         username: '',
         password: '',
         confirmPassword: '',
+        ip: '',
     });
     const [error, setError] = useState<string | null>(null);
     const navigation = useNavigation();
@@ -20,7 +22,7 @@ const RegisterPage = () => {
     };
 
     const handleSubmit = async () => {
-        if (!formData.username || !formData.password || !formData.confirmPassword) {
+        if (!formData.username || !formData.password || !formData.confirmPassword || !formData.ip) {
             setError('Please fill out all fields.');
             return;
         }
@@ -29,6 +31,8 @@ const RegisterPage = () => {
             setError('Passwords do not match.');
             return;
         }
+
+        await AsyncStorage.setItem('ip', formData.ip);
 
         try {
             await LoginService.register(formData.username, formData.password);
@@ -46,6 +50,15 @@ const RegisterPage = () => {
           <View style={styles.card}>
             <Text style={styles.header}>Register</Text>
             <View style={styles.form}>
+              <View style={styles.inputContainer}>
+                <Text style={styles.label}>IP</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="IP"
+                  value={formData.ip}
+                  onChangeText={value => handleChange('ip', value)}
+                />
+              </View>
               <View style={styles.inputContainer}>
                 <Text style={styles.label}>Username</Text>
                 <TextInput

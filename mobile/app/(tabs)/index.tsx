@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import LoginService from '@/services/LoginService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const initialFormState = {
   username: '',
   password: '',
+  ip: '',
 };
 
 export default function LoginPage() {
@@ -21,10 +24,12 @@ export default function LoginPage() {
   };
 
   const handleSubmit = async () => {
-    if (!formData.username || !formData.password) {
+    if (!formData.username || !formData.password || !formData.ip) {
       setError('Please fill out all fields.');
       return;
     }
+
+    await AsyncStorage.setItem('ip', formData.ip);
 
     try {
       await LoginService.login(formData.username, formData.password);
@@ -42,6 +47,15 @@ export default function LoginPage() {
       <View style={styles.card}>
         <Text style={styles.header}>Login</Text>
         <View style={styles.form}>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>IP</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="IP"
+              value={formData.ip}
+              onChangeText={value => handleChange('ip', value)}
+            />
+          </View>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Username</Text>
             <TextInput

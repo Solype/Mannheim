@@ -9,12 +9,22 @@ class HTTPError extends Error {
 
 class AService {
     private baseURL: string;
+    private ip: string | null = "1";
 
     constructor() {
-        // this.baseURL = __DOCKER_HOST_IP__ ? `http://${__DOCKER_HOST_IP__}:8080` : `http://${__MY_LOCAL_IP__}:8080`;
-        this.baseURL = `http://10.116.120.100:8080`;
+        this.init();
     }
 
+    private async init() {
+        if (typeof window !== 'undefined') {
+            console.log('AsyncStorage is available in this environment.');
+            this.ip = await AsyncStorage.getItem('ip');
+        } else {
+            console.warn('AsyncStorage is not available in this environment.');
+        }
+        this.baseURL = `http://${this.ip}:8080`;
+    }
+    
     protected async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
         try {
             const response = await fetch(`${this.baseURL}${endpoint}`, options);

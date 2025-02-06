@@ -4,47 +4,59 @@ import { SessionShort } from "@/types/sesssion_types";
 
 class SessionService extends AService {
     public async getAllSessions(): Promise<SessionShort[]> {
+        const headers = await this.getHeaders();
+
         return await this.request<SessionShort[]>('/api/my/sessions', {
                 method: 'GET',
-                headers: this.getHeaders(),
+                headers,
             }
         );
     }
 
     public async getMySession(): Promise<SessionShort> {
+        const headers = await this.getHeaders();
+
         return await this.request<SessionShort>('/api/my/owned/sessions', {
                 method: 'GET',
-                headers: this.getHeaders(),
+                headers,
             }
         );
     }
 
     public async getRoom(sessionId: string): Promise<SessionShort> {
+        const headers = await this.getHeaders();
+
         return await this.request<SessionShort>(`/api/my/session/${sessionId}`, {
             method: 'GET',
-            headers: this.getHeaders(),
+            headers,
         });
     }
 
     public async createSession(name : string, description : string): Promise<SessionShort> {
+        const headers = await this.getHeaders();
+
         return await this.request<SessionShort>('/api/my/session', {
             method: 'POST',
-            headers: this.getHeaders(),
+            headers,
             body: JSON.stringify({ name, description }),
         });
     }
 
     public async deleteSession(sessionId: number): Promise<SessionShort> {
+        const headers = await this.getHeaders();
+
         return await this.request<SessionShort>(`/api/my/session/${sessionId}`, {
             method: 'DELETE',
-            headers: this.getHeaders(),
+            headers,
         });
     }
 
     public async updateSession(sessionId: string, session: SessionShort): Promise<void> {
+        const headers = await this.getHeaders();
+
         return await this.request<void>(`/api/my/session/${sessionId}`, {
             method: 'PUT',
-            headers: this.getHeaders(),
+            headers,
             body: JSON.stringify(session),
         });
     }

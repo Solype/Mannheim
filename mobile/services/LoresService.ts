@@ -1,10 +1,28 @@
-import { LoreEntities, LoreStories, LoreStory } from '@/types/LoreTypes';
+import { LoreEntities, LoreStories, LoreStory } from '@/types/lore_types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 class LoresService {
-    // private baseURL = __DOCKER_HOST_IP__ ? `http://${__DOCKER_HOST_IP__}:8080` : `http://${__MY_LOCAL_IP__}:8080`;
-    private baseURL = `http://10.116.120.100:8080`;
+    private ip: string | null = null;
+    private baseURL: string = '';
+
+    constructor() {
+        this.init();
+    }
+
+    private async init() {
+        if (typeof window !== 'undefined') {
+            this.ip = await AsyncStorage.getItem('ip');
+            if (this.ip) {
+                this.baseURL = `http://${this.ip}:8080`;
+            } else {
+                console.warn('IP non trouvée dans AsyncStorage');
+                this.baseURL = 'http://localhost:8080';
+            }
+        } else {
+            console.warn('AsyncStorage n\'est pas disponible dans cet environnement.');
+        }
+    }
 
     private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
         try {
