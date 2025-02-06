@@ -75,8 +75,8 @@ async def create_session(session : CreateSessionRequest, credentials: HTTPAuthor
     if not success:
         raise HTTPException(status_code=500, detail="Failed to create session")
 
-    new_session_id = getone_db("SELECT LAST_INSERT_ID()", ())[0]
-    
+    new_session_id = getone_db("SELECT id FROM `sessions` ORDER BY id DESC LIMIT 1", ())[0]
+
     success = modify_db(
         "INSERT INTO `session_participants` (user_id, session_id) VALUES (%s, %s)", 
         (user_id, new_session_id)
@@ -143,12 +143,11 @@ def compose_pawn(pawn : tuple, is_gm : bool) -> Optional[Pawn] :
                         side=pawn[13])
 
     if (pawn[14] == "partially") :
-        return Pawn(id=pawn[0], name=pawn[1], chara_id=pawn[2], physical= None, mental= None, pathological= None, endurance= None, mana= None, side=pawn[13])
+        return Pawn(id=pawn[0], name=pawn[1], chara_id=None, physical= None, mental= None, pathological= None, endurance= None, mana= None, side=pawn[13])
 
     if (pawn[14] == "totally") :
         return None
 
-@app.get("/api/test/get_pawns_of_session/{session_id}/{is_gm}", tags=["Session"])
 def get_pawns_of_session(session_id: int, is_gm : bool) -> list[Pawn]:
     print(is_gm)
     pawns = get_db("""SELECT id, name, character_id,
@@ -204,7 +203,7 @@ async def get_session(id: int, credentials: HTTPAuthorizationCredentials = Depen
         name=session.name,
         description=session.description,
         players=players,
-        entities=pawns
+        pawns=pawns
     )
 
 

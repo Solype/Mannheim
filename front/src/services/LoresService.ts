@@ -1,4 +1,4 @@
-import { LoreEntities, LoreStories, LoreStory } from '../types/LoreTypes';
+import { LoreEntities, LoreStories, LoreStory } from '@/types/lore_types';
 
 class LoresService {
     private baseURL = __DOCKER_HOST_IP__ ? `http://${__DOCKER_HOST_IP__}:8080` : `http://${__MY_LOCAL_IP__}:8080`;

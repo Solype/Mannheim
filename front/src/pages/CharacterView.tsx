@@ -164,7 +164,7 @@ const CharacterViewPage = () => {
                     </form>
                 </div>
             </div>
-            <style jsx>{`
+            <style>{`
                 .stroke-white {
                     -webkit-text-stroke: 1px black;
                 }

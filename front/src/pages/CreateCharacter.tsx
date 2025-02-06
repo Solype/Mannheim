@@ -11,7 +11,7 @@ import CharacterModifiactionUtils from '@/services/CharacterModifiactionUtils';
 import { useNavigate } from 'react-router-dom';
 
 const CreateCharacterPage = () => {
-    const [ skills, setSkills ] = useState<Skill[]>(extractSkills(listSkills));
+    const [ skills, setSkills ] = useState<Skill[]>(extractSkills(listSkills, null));
     const [ religion, setReligion ] = useState<Religion[]>([]);
     const [ attributes, setAttributes ] = useState<Attributes>(getDefaultAttributes());
     const [ mainRoles, setMainRoles ] = useState<string[]>([]);
@@ -164,7 +164,7 @@ const CreateCharacterPage = () => {
                     </form>
                 </div>
             </div>
-            <style jsx>{`
+            <style>{`
                 .stroke-white {
                     -webkit-text-stroke: 1px black;
                 }

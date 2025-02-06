@@ -1,5 +1,5 @@
 import AService from "@/services/AService";
-import { SessionShort } from "@/types/sesssion_types";
+import { SessionShort, Pawn } from "@/types/sesssion_types";
 
 class SessionService extends AService {
     public async getAllSessions(): Promise<SessionShort[]> {
@@ -45,6 +45,13 @@ class SessionService extends AService {
             method: 'PUT',
             headers: this.getHeaders(),
             body: JSON.stringify(session),
+        });
+    }
+
+    public async getPawns(sessionId: string, isGm: boolean): Promise<Pawn[]> {
+        return await this.request<Pawn[]>(`/api/my/session/${sessionId}/pawns/${isGm}`, {
+            method: 'GET',
+            headers: this.getHeaders(),
         });
     }
 }

@@ -27,8 +27,8 @@ class Monitor(BaseModel):
 
 class Pawn(BaseModel):
     id:             int
-    chara_id:       int
     name:           str
+    chara_id:       Optional[int]
     mana :          Optional[Monitor]
     physical:       Optional[Monitor]
     mental:         Optional[Monitor]
@@ -44,4 +44,4 @@ class PawnSeed(BaseModel):
 
 class SessionLong(SessionShort):
     players:    list[Player]
-    entities:   list[Pawn]
+    pawns:      list[Pawn]

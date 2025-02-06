@@ -5,19 +5,21 @@ import sessionService from '@/services/SessionService';
 // import { Button } from '@/components/ui/button';
 // import { Trash2 } from 'lucide-react';
 import { useParams } from 'react-router-dom';
-import { SessionShort } from '@/types/sesssion_types';
-import UserRequestService, { sendRoomInvitation } from '@/services/UserRequestService';
+import { SessionShort, Pawn } from '@/types/sesssion_types';
+import UserRequestService from '@/services/UserRequestService';
+import { SelectCharacter } from '@/components/RoomViewComponent/AddCharacterButton';
 import LoginService from '@/services/LoginService';
 
 const RoomView: React.FC = () => {
     const { id } = useParams<{id: string}>();
     const [room, setRoom] = useState<SessionShort | null>(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isModalCharacterOpen, setIsModalCharacterOpen] = useState(false);
-    const [playerName, setPlayerName] = useState("");
-    const [characterName, setCharacterName] = useState("");
-    const [isGm, setIsGm] = useState(false);
-    const [GmId, setGmId] = useState("");
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [isModalCharacterOpen, setIsModalCharacterOpen] = useState<boolean>(false);
+    const [playerName, setPlayerName] = useState<string>("");
+    const [characterName, setCharacterName] = useState<string>("");
+    const [isGm, setIsGm] = useState<boolean>(false);
+    const [GmId, setGmId] = useState<string>("");
+    const [pawns, setPawns] = useState<Pawn[]>([]);
 
     useEffect(() => {
         const loadRoom = async () => {
@@ -26,22 +28,23 @@ const RoomView: React.FC = () => {
                 const fetchedRoom = await sessionService.getRoom(id);
                 setRoom(fetchedRoom);
                 console.log("Room loaded:", fetchedRoom);
+                const fetchedPawns = room?.pawns as Pawn[];
+                setPawns(fetchedPawns);
             } catch (error) {
                 console.error("Error fetching room:", error);
             }
         };
-
+        
         loadRoom();
     }, [id]);
-
+    
     useEffect(() => {
         if (!room) return;
-
+        
         const checkGm = async () => {
             try {
                 const userId = await LoginService.whoami();
-                console.log(userId + " vs " + room.gm_id);
-
+                
                 if (userId) {
                     setGmId(userId);
                     setIsGm(Number(userId) === room.gm_id);
@@ -50,7 +53,7 @@ const RoomView: React.FC = () => {
                 console.error("Error fetching user ID:", error);
             }
         };
-
+        
         checkGm();
     }, [room]); 
 
@@ -90,9 +93,7 @@ const RoomView: React.FC = () => {
             <div className="relative z-20 mt-14 text-white px-96 flex flex-col gap-20">
                 <div className="flex justify-between items-center">
                     {!isGm && (
-                        <button onClick={openModalCharacter} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-10">
-                            add a character
-                        </button>
+                        <SelectCharacter />
                     )}
                     {isGm && (
                         <button onClick={openModal} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-10">
@@ -153,7 +154,7 @@ const RoomView: React.FC = () => {
                 </div>
             )}
 
-            <style jsx>{`
+            <style>{`
                 .stroke-white {
                     -webkit-text-stroke: 0.5px black;
                 }

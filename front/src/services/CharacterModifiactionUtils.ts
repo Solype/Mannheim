@@ -1,3 +1,4 @@
+import { CharacterBasicInfo } from "@/types/character_types";
 
 
 class CharacterModificationUtilsService {
@@ -40,7 +41,7 @@ class CharacterModificationUtilsService {
         });
     }
 
-    async getCharacters(): Promise<any> {
+    async getCharacters(): Promise<CharacterBasicInfo[]> {
         return await this.request('/api/my/characters', {
             method: 'GET',
             headers: {

@@ -21,7 +21,7 @@ class UserRequestService extends AService {
     }
 
     async getCharactersRequest(): Promise<string[]> {
-        return await this.request<string[]>('/api/my/requests/characters', {
+        return await this.request<string[]>('/api/my/session/pawn/requests', {
                 method: 'GET',
                 headers: this.getHeaders(),
             }
