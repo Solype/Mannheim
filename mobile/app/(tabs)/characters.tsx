@@ -1,12 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, ImageBackground } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import CharacterModifiactionUtils from '@/services/CharacterModificationUtils';
 import { CharacterBasicInfo } from '@/types/character_types';
 
 const CharactersPage = () => {
     const [characters, setCharacters] = useState<CharacterBasicInfo[]>([]);
     const navigation = useNavigation();
+
+    useFocusEffect(
+        useCallback(() => {
+            CharacterModifiactionUtils.getCharacters().then((characters) => {
+                setCharacters(characters);
+                console.log(characters);
+            });
+        }, [])
+    );
 
     useEffect(() => {
         CharacterModifiactionUtils.getCharacters().then((characters) => {

@@ -12,7 +12,7 @@ class AService {
 
     constructor() {
         // this.baseURL = __DOCKER_HOST_IP__ ? `http://${__DOCKER_HOST_IP__}:8080` : `http://${__MY_LOCAL_IP__}:8080`;
-        this.baseURL = `http://192.168.178.93:8080`;
+        this.baseURL = `http://10.116.120.100:8080`;
     }
 
     protected async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {

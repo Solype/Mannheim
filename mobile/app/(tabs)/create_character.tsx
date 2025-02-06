@@ -126,7 +126,7 @@ const CreateCharacterPage = () => {
         };
         console.log(data);
         CharacterModificationUtils.createCharacter(data);
-        navigation.navigate('characters');
+        navigation.navigate('characters', { refresh: true });
     }
 
     const reinitializeAsyncStorage = () => {
