@@ -9,6 +9,15 @@ class UtilsService extends AService {
             }
         );
     }
+
+    async getCharacterIdByName(characterName: string): Promise<number> {
+        console.log("++++++++++++++++++++++++++++++++++++++++++" + characterName);
+        return await this.request<number>(`/api/characters/${characterName}`, {
+                method: 'GET',
+                headers: this.getHeaders(),
+            }
+        );
+    }
 }
 
 export default new UtilsService();

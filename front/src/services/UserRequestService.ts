@@ -103,6 +103,16 @@ class UserRequestService extends AService {
         );
     }
 
+    async sendCharacterInvitation(sessionId: number, characterName: string): Promise<void> {
+        const characterId = await UtilsService.getCharacterIdByName(characterName);
+        return await this.request<void>(`/api/my/session/pawn/request`, {
+                method: 'POST',
+                headers: this.getHeaders(),
+                body: JSON.stringify({"session_id": sessionId, "character_id": characterId})
+            }
+        );
+    }
+
 }
 
 export default new UserRequestService();

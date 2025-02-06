@@ -78,6 +78,22 @@ def post_new_pawn(data: UserPawnRequestCreate, credentials: HTTPAuthorizationCre
         raise HTTPException(status_code=500, detail="Failed to send character request")
     return
 
+@app.get("/api/characters/{character_name}")
+async def get_character(character_name: str, credentials: HTTPAuthorizationCredentials = Depends(security)) -> int:
+
+    
+    token = credentials.credentials
+
+    if not token or not access_manager.isTokenValid(token):
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    
+    user_id = access_manager.getTokenData(token).id
+
+    character = getone_db("SELECT id FROM `characters` WHERE name = %s AND user_id = %s", (character_name, user_id))
+    if not character:
+        raise HTTPException(status_code=404, detail="Character not found")
+
+    return character
 
 @app.post("/api/my/session/pawn/request/{request_id}/accept")
 def accept_pawn_request(request_id: int, credentials: HTTPAuthorizationCredentials = Depends(security)) -> None:
