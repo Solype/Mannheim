@@ -45,16 +45,16 @@ class UserRequestService extends AService {
         );
     }
 
-    async acceptRoomRequest(roomId: number): Promise<void> {
-        return await this.request<void>(`/api/my/requests/sessions/${roomId}/accept`, {
+    async acceptRoomRequest(room_id: number): Promise<void> {
+        return await this.request<void>(`/api/my/requests/sessions/${room_id}/accept`, {
                 method: 'POST',
                 headers: this.getHeaders(),
             }
         );
     }
 
-    async acceptCharacterRequest(characterId: number): Promise<void> {
-        return await this.request<void>(`/api/my/requests/characters/${characterId}/accept`, {
+    async acceptCharacterRequest(character_id: number): Promise<void> {
+        return await this.request<void>(`/api/my/requests/characters/${character_id}/accept`, {
                 method: 'POST',
                 headers: this.getHeaders(),
             }
@@ -69,45 +69,44 @@ class UserRequestService extends AService {
     ///////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////
 
-    async rejectFriendRequest(friendId: number): Promise<void> {
-        return await this.request<void>(`/api/my/friends/requests/${friendId}/decline`, {
+    async rejectFriendRequest(friend_id: number): Promise<void> {
+        return await this.request<void>(`/api/my/friends/requests/${friend_id}/decline`, {
                 method: 'POST',
                 headers: this.getHeaders(),
             }
         );
     }
 
-    async rejectRoomRequest(roomId: number): Promise<void> {
-        return await this.request<void>(`/api/my/requests/sessions/${roomId}/decline`, {
+    async rejectRoomRequest(room_id: number): Promise<void> {
+        return await this.request<void>(`/api/my/requests/sessions/${room_id}/decline`, {
                 method: 'POST',
                 headers: this.getHeaders(),
             }
         );
     }
 
-    async rejectCharacterRequest(characterId: number): Promise<void> {
-        return await this.request<void>(`/api/my/requests/characters/${characterId}/decline`, {
+    async rejectCharacterRequest(character_id: number): Promise<void> {
+        return await this.request<void>(`/api/my/requests/characters/${character_id}/decline`, {
                 method: 'POST',
                 headers: this.getHeaders(),
             }
         );
     }
 
-    async sendRoomInvitation(roomId: number, userId: number): Promise<void> {
+    async sendRoomInvitation(roomId: number, user_id: number): Promise<void> {
         return await this.request<void>(`/api/my/requests/sessions`, {
                 method: 'POST',
                 headers: this.getHeaders(),
-                body: JSON.stringify({"session_id": roomId, "receiver_id": userId})
+                body: JSON.stringify({"session_id": roomId, "receiver_id": user_id})
             }
         );
     }
 
-    async sendCharacterInvitation(sessionId: number, characterName: string): Promise<void> {
-        const characterId = await UtilsService.getCharacterIdByName(characterName);
+    async sendCharacterInvitation(sessionId: number, character_id: number): Promise<void> {
         return await this.request<void>(`/api/my/session/pawn/request`, {
                 method: 'POST',
                 headers: this.getHeaders(),
-                body: JSON.stringify({"session_id": sessionId, "character_id": characterId})
+                body: JSON.stringify({"session_id": sessionId, "character_id": character_id})
             }
         );
     }

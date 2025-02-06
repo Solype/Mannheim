@@ -30,7 +30,7 @@ export function SelectCharacter({room_id}: {room_id: number}) {
     const [ characters, setCharacters ] = useState<CharacterBasicInfo[]>([])
     const [ modalOpen, setModalOpen ] = useState<boolean>(false)
     const hasLoaded = useRef<boolean>(false)
-    const [ friendSelected, setFriendSelected ] = useState<number | null>(null)
+    const [ characterSelected, setCharacterSelected ] = useState<number | null>(null)
 
     const openModal = () => {
         if (!hasLoaded.current) {
@@ -44,18 +44,18 @@ export function SelectCharacter({room_id}: {room_id: number}) {
     }
 
     const confirm = () => {
-        if (friendSelected === null) {
+        if (characterSelected === null) {
             alert("Veuillez sélectionner un ami");
             return;
         }
-        UserRequestService.sendRoomInvitation(room_id, friendSelected).then(() => {
+        UserRequestService.sendCharacterInvitation(room_id, characterSelected).then(() => {
             setModalOpen(false);
         })
     }
 
     const handleFriendSelect = (value : string) => {
         const friendId = Number(value);
-        setFriendSelected(friendId);
+        setCharacterSelected(friendId);
     }
     
 

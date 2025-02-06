@@ -34,7 +34,7 @@ def get_my_session(credentials: HTTPAuthorizationCredentials = Depends(security)
         raise HTTPException(status_code=500, detail="Failed to get sessions")
     session_i_am_in = get_db("SELECT session_id FROM `session_participants` WHERE user_id = %s", (user_id,))
     print(session_i_am_in, flush=True)
-    if not session_i_am_in:
+    if session_i_am_in == None:
         raise HTTPException(status_code=500, detail="Failed to get sessions")
     lst = [compose_session_short(session_id[0]) for session_id in session_i_am_in]
     print("lst", flush=True)

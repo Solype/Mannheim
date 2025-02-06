@@ -102,6 +102,7 @@ async def send_session_request(data: UserSessionRequestCreate, credentials: HTTP
         raise HTTPException(status_code=404, detail="Session not found")
 
     if owner[0] != user_id:
+        print("not owner: ", user_id, owner, flush=True)
         raise HTTPException(status_code=403)
 
     already_sent = getone_db("SELECT id FROM `sessions_requests` WHERE session_id = %s AND receiver_id = %s", (data.session_id, data.receiver_id))
@@ -164,7 +165,7 @@ async def accept_session_request(request_id: int, credentials: HTTPAuthorization
     if session[1] != user_id:
         raise HTTPException(status_code=403)
 
-    success = modify_db("UPDATE `session_participants` SET user_id = %s WHERE session_id = %s", (user_id, session[0]))
+    success = modify_db("INSERT INTO `session_participants` (user_id, session_id) VALUES (%s, %s)", (user_id, session[0]))
     if not success:
         raise HTTPException(status_code=500, detail="Failed to accept session request")
     

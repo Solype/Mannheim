@@ -7,20 +7,26 @@ from typing import Optional, Literal
 import json
 
 def compose_character_request(request_id: int, session_id: int, character_id: int, sender_id: int, receiver_id: int, status: str = "pending") -> UserPawnRequest:
-    sender_name = getone_db("SELECT name FROM `users` WHERE id = %s", (sender_id,))[0]
-    receiver_name = getone_db("SELECT name FROM `users` WHERE id = %s", (receiver_id,))[0]
-    session_name = getone_db("SELECT name FROM `sessions` WHERE id = %s", (session_id,))[0]
-    character_name = getone_db("SELECT name FROM `characters` WHERE id = %s", (character_id,))[0]
+    sender_name = getone_db("SELECT username FROM `users` WHERE id = %s", (sender_id,))
+    receiver_name = getone_db("SELECT username FROM `users` WHERE id = %s", (receiver_id,))
+    session_name = getone_db("SELECT name FROM `sessions` WHERE id = %s", (session_id,))
+    character_name = getone_db(
+        "SELECT JSON_UNQUOTE(character_data->'$.infos.name') FROM `characters` WHERE id = %s", 
+        (character_id,)
+    )
+
+    if not sender_name or not receiver_name or not session_name or not character_name:
+        raise HTTPException(status_code=404, detail="Sender or receiver or session or character not found")
     return UserPawnRequest(
         request_id=request_id,
         sender_id=sender_id,
-        sender_name=sender_name,
+        sender_name=sender_name[0],
         session_id=session_id,
-        session_name=session_name,
+        session_name=session_name[0],
         character_id=character_id,
-        character_name=character_name,
+        character_name=character_name[0],
         receiver_id=receiver_id,
-        receiver_name=receiver_name,
+        receiver_name=receiver_name[0],
         status=status
     )
 
@@ -55,7 +61,7 @@ def post_new_pawn(data: UserPawnRequestCreate, credentials: HTTPAuthorizationCre
 
     # to do : check if the invitation is not already sent
 
-    chara_owner = getone_db("SELECT user_id FROM `characters` WHERE id = %s", (data.character_id))
+    chara_owner = getone_db("SELECT user_id FROM `characters` WHERE id = %s", (data.character_id,))
     if (not chara_owner) :
         raise HTTPException(status_code=404, detail="chara not found")
     if (chara_owner[0] != user_id) :
@@ -69,11 +75,11 @@ def post_new_pawn(data: UserPawnRequestCreate, credentials: HTTPAuthorizationCre
     if receiver_id == user_id:
         raise HTTPException(status_code=500, detail="You cannot invite yourself")
 
-    already_sent = getone_db("SELECT id FROM `characters_requests` WHERE session_id = %s AND character_id = %s", (data.session_id, data.character_id))
+    already_sent = getone_db("SELECT id FROM `characters_requests` WHERE session_id = %s AND character_id = %s", (data.session_id, data.character_id,))
     if already_sent:
         raise HTTPException(status_code=400, detail="Already sent")
 
-    success = modify_db("INSERT INTO `characters_requests` (sender_id, receiver_id, session_id, character_id, status) VALUES (%s, %s, %s, %s, 'pending')", (user_id, receiver_id, data.character_id, data.session_id))
+    success = modify_db("INSERT INTO `characters_requests` (sender_id, receiver_id, session_id, character_id, status) VALUES (%s, %s, %s, %s, 'pending')", (user_id, receiver_id, data.character_id, data.session_id,))
     if not success:
         raise HTTPException(status_code=500, detail="Failed to send character request")
     return
