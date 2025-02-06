@@ -152,5 +152,5 @@ async def delete_friend_request(request_id: int, credentials: HTTPAuthorizationC
 
     success = modify_db("DELETE FROM `friend_requests` WHERE id = %s AND sender_id = %s", (request_id, user_id))
     if not success:
-        raise HTTPException(status_code=500, detail="Failed to delete friend request")
+        raise HTTPException(status_code=404, detail="Friend request not found or not sent by user")
     return
