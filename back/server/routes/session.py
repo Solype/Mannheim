@@ -84,7 +84,7 @@ async def modify_session(id: int, session: SessionShort, credentials: HTTPAuthor
         raise HTTPException(status_code=404, detail="Session not found")
 
     if owner[0] != user_id:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+        raise HTTPException(status_code=403)
 
     success = modify_db("UPDATE `sessions` SET name = %s, description = %s WHERE id = %s AND gamemaster_id = %s", (session.name, session.description, id, user_id))
     if not success:
@@ -105,7 +105,7 @@ async def delete_session(id: int, credentials: HTTPAuthorizationCredentials = De
         raise HTTPException(status_code=404, detail="Session not found")
 
     if owner[0] != user_id:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+        raise HTTPException(status_code=403)
 
     success = modify_db("DELETE FROM `sessions` WHERE id = %s AND gamemaster_id = %s", (id, user_id))
     if not success:

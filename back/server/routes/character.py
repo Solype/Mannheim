@@ -42,7 +42,7 @@ async def get_one_character(id: int, credentials: HTTPAuthorizationCredentials =
         fst_request = getone_db("SELECT id FROM `characters_access` WHERE character_id = %s AND player_id = %s", (id, data))
         snd_request = getone_db("SELECT id FROM `characters_requests` WHERE character_id = %s AND receiver_id = %s AND status != 'refused'", (id, data))
         if (not fst_request) and (not snd_request):
-            raise HTTPException(status_code=401, detail="Unauthorized")
+            raise HTTPException(status_code=403, detail="You don't have access to this character")
 
     character = json.loads(character[0])
 

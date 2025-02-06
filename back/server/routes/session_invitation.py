@@ -98,7 +98,7 @@ async def send_session_request(data: UserSessionRequestCreate, credentials: HTTP
         raise HTTPException(status_code=404, detail="Session not found")
 
     if owner[0] != user_id:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+        raise HTTPException(status_code=403)
 
     already_sent = getone_db("SELECT id FROM `sessions_requests` WHERE session_id = %s AND receiver_id = %s", (data.session_id, data.receiver_id))
     if already_sent:
@@ -114,20 +114,14 @@ async def send_session_request(data: UserSessionRequestCreate, credentials: HTTP
 
 @app.get("/api/users/{user_name}", tags=["Requests"])
 async def get_user(user_name: str, credentials: HTTPAuthorizationCredentials = Depends(security)) -> int:
-
-    
-    token = credentials.credentials
-
-    if not token or not access_manager.isTokenValid(token):
+    if not access_manager.isTokenValid(credentials.credentials):
         raise HTTPException(status_code=401, detail="Unauthorized")
     user_id = getone_db("SELECT id FROM `users` WHERE username = %s", (user_name,))
-
-    user_id = json.loads(str(user_id[0]))
 
     if not user_id:
         raise HTTPException(status_code=404, detail="User not found")
 
-    return user_id
+    return user_id[0]
 
 @app.delete("/api/my/requests/sessions/{request_id}", tags=["Requests"])
 async def delete_session_request(request_id: int, credentials: HTTPAuthorizationCredentials = Depends(security)) -> None:
@@ -145,7 +139,7 @@ async def delete_session_request(request_id: int, credentials: HTTPAuthorization
         raise HTTPException(status_code=404, detail="Session not found")
 
     if owner[0] != user_id:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+        raise HTTPException(status_code=403)
 
     success = modify_db("DELETE FROM `sessions_requests` WHERE id = %s", (request_id,))
     if not success:
@@ -164,7 +158,7 @@ async def accept_session_request(request_id: int, credentials: HTTPAuthorization
         raise HTTPException(status_code=404, detail="Session request not found")
 
     if session[1] != user_id:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+        raise HTTPException(status_code=403)
 
     success = modify_db("UPDATE `session_participants` SET user_id = %s WHERE session_id = %s", (user_id, session[0]))
     if not success:
@@ -178,17 +172,16 @@ async def accept_session_request(request_id: int, credentials: HTTPAuthorization
 
 @app.post("/api/my/requests/sessions/{request_id}/decline", tags=["Requests"])
 async def decline_session_request(request_id: int, credentials: HTTPAuthorizationCredentials = Depends(security)) -> None:
-    token = credentials.credentials
-    if not token or not access_manager.isTokenValid(token):
+    if not access_manager.isTokenValid(credentials.credentials):
         raise HTTPException(status_code=401, detail="Unauthorized")
-    user_id = access_manager.getTokenData(token).id
+    user_id = access_manager.getTokenData(credentials.credentials).id
 
     receiver = getone_db("SELECT receiver_id FROM `sessions_requests` WHERE id = %s AND status = 'pending'", (request_id,))
     if not receiver:
         raise HTTPException(status_code=404, detail="Session request not found")
 
     if receiver[0] != user_id:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+        raise HTTPException(status_code=403)
 
     success = modify_db("UPDATE `sessions_requests` SET status = 'refused' WHERE id = %s AND status = 'pending'", (request_id,))
     if not success:

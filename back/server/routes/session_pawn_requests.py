@@ -59,7 +59,7 @@ def post_new_pawn(data: UserPawnRequestCreate, credentials: HTTPAuthorizationCre
     if (not chara_owner) :
         raise HTTPException(status_code=404, detail="chara not found")
     if (chara_owner[0] != user_id) :
-        raise HTTPException(status_code=401, detail="Unauthorized")
+        raise HTTPException(status_code=403)
 
     receiver_id = getone_db("SELECT gamemaster_id FROM `sessions` WHERE id = %s", (data.session_id,))
     if not receiver_id:
@@ -90,7 +90,7 @@ def accept_pawn_request(request_id: int, credentials: HTTPAuthorizationCredentia
         raise HTTPException(status_code=404, detail="Character request not found")
 
     if request[0] != user_id:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+        raise HTTPException(status_code=403)
 
     success = modify_db("UPDATE `characters_requests` SET status = 'accepted' WHERE id = %s", (request_id,))
     if not success:
@@ -120,7 +120,7 @@ def reject_pawn_request(request_id: int, credentials: HTTPAuthorizationCredentia
         raise HTTPException(status_code=404, detail="Character request not found")
 
     if request[0] != user_id:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+        raise HTTPException(status_code=403)
 
     success = modify_db("UPDATE `characters_requests` SET status = 'refused' WHERE id = %s AND status = 'pending'", (request_id,))
     if not success:
@@ -139,7 +139,7 @@ def delete_pawn_request(request_id: int, credentials: HTTPAuthorizationCredentia
         raise HTTPException(status_code=404, detail="Character request not found")
 
     if request[0] != user_id:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+        raise HTTPException(status_code=403)
 
     success = modify_db("DELETE FROM `characters_requests` WHERE id = %s", (request_id,))
     if not success:
