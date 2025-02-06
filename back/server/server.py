@@ -4,11 +4,14 @@ from fastapi.security import OAuth2PasswordBearer
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from fastapi.middleware.cors import CORSMiddleware
-from server.mysql_db import cursor, mydb
+from server.mysql_db import get_connection, wait_for_db
 from server.socket import socketio_mount
 
 async def lifespan(app: FastAPI):
     print("Le serveur s'initialise !", flush=True)
+    wait_for_db()
+    mydb = get_connection()
+    cursor = mydb.cursor()
     cursor.execute("USE mannheim")
     cursor.execute("SET NAMES utf8mb4;")
     cursor.execute("SET CHARACTER SET utf8mb4;")

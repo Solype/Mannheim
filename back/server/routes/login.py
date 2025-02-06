@@ -5,15 +5,14 @@ from hashlib import sha256
 from server.server import app, HTTPAuthorizationCredentials, security, Depends
 from server.access_manager import access_manager
 from server.routes.server_datatype import UserLogin
-from server.mysql_db import cursor, mydb
+from server.mysql_db import getone_db, modify_db
 
 
 @app.post("/login", tags=["Login"])
 async def login(user: UserLogin) -> str:
     user.password = sha256(user.password.encode()).hexdigest()
 
-    cursor.execute("SELECT id FROM `users` WHERE username = %s AND password = %s", (user.username, user.password))
-    id = cursor.fetchone()
+    id = getone_db("SELECT id FROM `users` WHERE username = %s AND password = %s", (user.username, user.password))
     if not id:
         print("Invalid user:", user.username, user.password)
         raise HTTPException(status_code=401, detail="Invalid credentials")
@@ -34,23 +33,20 @@ async def login(user: UserLogin) -> str:
 @app.post("/register", tags=["Login"])
 async def register(user: UserLogin) -> str:
     user.password = sha256(user.password.encode()).hexdigest()
-    cursor.execute("SELECT id FROM `users` WHERE username = %s", (user.username,))
-    username = cursor.fetchone()
+    username = getone_db("SELECT id FROM `users` WHERE username = %s", (user.username,))
 
     if username:
         raise HTTPException(status_code=409, detail="Username already taken")
 
     try : 
-        cursor.execute("INSERT INTO `users` (username, password) VALUES (%s, %s)", (user.username, user.password))
+        modify_db("INSERT INTO `users` (username, password) VALUES (%s, %s)", (user.username, user.password))
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail="Internal server error")
 
-    cursor.execute("SELECT id FROM `users` WHERE username = %s", (user.username,))
-    id = cursor.fetchone()
+    id = getone_db("SELECT id FROM `users` WHERE username = %s", (user.username,))
     if not id:
         raise HTTPException(status_code=500, detail="Internal server error")
-    mydb.commit()
 
     token = access_manager.addToken(id[0])
     print(token, flush=True)

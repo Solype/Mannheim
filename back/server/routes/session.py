@@ -27,11 +27,17 @@ def get_my_session(credentials: HTTPAuthorizationCredentials = Depends(security)
     token = credentials.credentials
     if not token or not access_manager.isTokenValid(token):
         raise HTTPException(status_code=401, detail="Unauthorized")
-    
+    print(token, flush=True)
     user_id = access_manager.getTokenData(token).id
-
+    print(user_id, flush=True)
+    if not user_id:
+        raise HTTPException(status_code=500, detail="Failed to get sessions")
     session_i_am_in = get_db("SELECT session_id FROM `session_participants` WHERE user_id = %s", (user_id,))
+    print(session_i_am_in, flush=True)
+    if not session_i_am_in:
+        raise HTTPException(status_code=500, detail="Failed to get sessions")
     lst = [compose_session_short(session_id[0]) for session_id in session_i_am_in]
+    print("lst", flush=True)
     print(lst, flush=True)
     return lst
 
@@ -53,22 +59,33 @@ def get_my_owned_session(credentials: HTTPAuthorizationCredentials = Depends(sec
 @app.post("/api/my/session", tags=["Session"])
 async def create_session(session : CreateSessionRequest, credentials: HTTPAuthorizationCredentials = Depends(security)) -> SessionShort:
     token = credentials.credentials
-    if not token or not access_manager.isTokenValid(token):
+    if not token:
         raise HTTPException(status_code=401, detail="Unauthorized")
-    
-    user_id = access_manager.getTokenData(token).id
 
-    success = modify_db("INSERT INTO `sessions` (gamemaster_id, name, description) VALUES (%s, %s, %s)", (user_id, session.name, session.description))
+    token_data = access_manager.getTokenData(token)
+    if not token_data or not access_manager.isTokenValid(token):
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    user_id = token_data.id
+
+    success = modify_db(
+        "INSERT INTO `sessions` (gamemaster_id, name, description) VALUES (%s, %s, %s)", 
+        (user_id, session.name, session.description)
+    )
     if not success:
         raise HTTPException(status_code=500, detail="Failed to create session")
-    new_session_id = getone_db("SELECT id FROM `sessions` WHERE gamemaster_id = %s AND name = %s AND description = %s ORDER BY id DESC LIMIT 1",
-                                (user_id, session.name, session.description))[0]
 
-    success = modify_db("INSERT INTO `session_participants` (user_id, session_id) VALUES (%s, %s)", (user_id, new_session_id))
+    new_session_id = getone_db("SELECT LAST_INSERT_ID()", ())[0]
+    
+    success = modify_db(
+        "INSERT INTO `session_participants` (user_id, session_id) VALUES (%s, %s)", 
+        (user_id, new_session_id)
+    )
     if not success:
         raise HTTPException(status_code=500, detail="Failed to create link between user and session")
 
     return compose_session_short(new_session_id)
+
 
 
 @app.put("/api/my/session/{id}", tags=["Session"])

@@ -60,7 +60,11 @@ def get_sessions_requests(credentials: HTTPAuthorizationCredentials = Depends(se
         raise HTTPException(status_code=401, detail="Unauthorized")
 
     user_id = access_manager.getTokenData(token).id
-    my_name = getone_db("SELECT username FROM `users` WHERE id = %s", (user_id,))[0]
+    my_name = getone_db("SELECT username FROM `users` WHERE id = %s", (user_id,))
+    if not my_name:
+        raise HTTPException(status_code=404, detail="User not found")
+    else :
+        my_name = my_name[0]
     requests = get_db("SELECT id, session_id, status FROM `sessions_requests` WHERE receiver_id = %s AND status = 'pending'", (user_id,))
     return [compose_session_request(request[0], request[1], user_id, my_name, request[2]) for request in requests]
 
