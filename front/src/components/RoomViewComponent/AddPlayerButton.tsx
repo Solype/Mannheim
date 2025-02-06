@@ -21,23 +21,20 @@ import {
 } from "@/components/ui/button"
 
 import { useRef, useState } from "react";
-import { CharacterBasicInfo } from "@/types/character_types";
-import CharacterModificationUtilsService from "@/services/CharacterModifiactionUtils";
+import friendService from "@/services/FriendService";
+import { Friend } from "@/types/friend_types";
 import UserRequestService from "@/services/UserRequestService";
 
-
-export function SelectCharacter({room_id}: {room_id: number}) {
-    const [ characters, setCharacters ] = useState<CharacterBasicInfo[]>([])
+export function SelectFriend({room_id}: {room_id: number}) {
+    const [ friend, setFriend ] = useState<Friend[]>([])
     const [ modalOpen, setModalOpen ] = useState<boolean>(false)
     const hasLoaded = useRef<boolean>(false)
     const [ friendSelected, setFriendSelected ] = useState<number | null>(null)
 
     const openModal = () => {
         if (!hasLoaded.current) {
-            CharacterModificationUtilsService.getCharacters().then((characters) => {
-                console.log(characters);
-                setCharacters(characters);
-                hasLoaded.current = true
+            friendService.getMyFriends().then((friends: Friend[]) => {
+                setFriend(friends);
             })
         }
         setModalOpen(true);
@@ -57,28 +54,27 @@ export function SelectCharacter({room_id}: {room_id: number}) {
         const friendId = Number(value);
         setFriendSelected(friendId);
     }
-    
 
     return (
         <>
-            <Button onClick={openModal}>Ajouter un personnage</Button>
+            <Button onClick={openModal}>Ajouter un Ami</Button>
             <Dialog open={modalOpen} onOpenChange={setModalOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Ajouter un personnage</DialogTitle>
+                        <DialogTitle>Ajouter un Ami</DialogTitle>
                         <DialogDescription>
-                            Sélectionnez un personnage à ajouter à la partie
+                            Sélectionnez un Ami à ajouter à la partie
                         </DialogDescription>
                     </DialogHeader>
                     <Select onValueChange={handleFriendSelect}>
                         <SelectTrigger>
-                            <SelectValue placeholder="Sélectionnez un personnage" />
+                            <SelectValue placeholder="Sélectionnez un Ami" />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectGroup>
-                                {characters.map((character) => (
-                                    <SelectItem key={character.id} value={`${character.id}`}>
-                                        {character.infos.name}
+                                {friend.map((friend) => (
+                                    <SelectItem key={friend.id} value={`${friend.id}`}>
+                                        {friend.name}
                                     </SelectItem>
                                 ))}
                             </SelectGroup>

@@ -6,17 +6,17 @@ import sessionService from '@/services/SessionService';
 // import { Trash2 } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import { SessionShort, Pawn } from '@/types/sesssion_types';
-import UserRequestService from '@/services/UserRequestService';
-import { SelectCharacter } from '@/components/RoomViewComponent/AddCharacterButton';
 import LoginService from '@/services/LoginService';
+
+
+
+import { SelectCharacter } from '@/components/RoomViewComponent/AddCharacterButton';
+import { SelectFriend } from '@/components/RoomViewComponent/AddPlayerButton';
+
 
 const RoomView: React.FC = () => {
     const { id } = useParams<{id: string}>();
     const [room, setRoom] = useState<SessionShort | null>(null);
-    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-    const [isModalCharacterOpen, setIsModalCharacterOpen] = useState<boolean>(false);
-    const [playerName, setPlayerName] = useState<string>("");
-    const [characterName, setCharacterName] = useState<string>("");
     const [isGm, setIsGm] = useState<boolean>(false);
     const [GmId, setGmId] = useState<string>("");
     const [pawns, setPawns] = useState<Pawn[]>([]);
@@ -57,49 +57,14 @@ const RoomView: React.FC = () => {
         checkGm();
     }, [room]); 
 
-    const openModal = () => setIsModalOpen(true);
-    const closeModal = () => {
-        setIsModalOpen(false);
-        setPlayerName("");
-    };
 
-    const openModalCharacter = () => setIsModalCharacterOpen(true);
-    const closeModalCharacter = () => {
-        setIsModalCharacterOpen(false);
-        setCharacterName("");
-    };
-
-    const handleSessionInvite = async () => {
-        if (playerName.trim() !== "") {
-            await UserRequestService.sendRoomInvitation(room?.id as number, playerName as string);
-            closeModal();
-        } else {
-            alert("Veuillez entrer un nom de joueur !");
-        }
-    };
-
-    const handleCharacterInvite = async () => {
-        if (characterName.trim() !== "") {
-            await UserRequestService.sendCharacterInvitation(room?.id as number, characterName as string);
-            closeModalCharacter();
-        } else {
-            alert("Veuillez entrer un nom de personnage !");
-        }
-    };
     return (
         <div className="relative overflow-auto h-full" style={{ backgroundImage: 'url(/bg-rooms.jpg)', backgroundSize: 'cover', backgroundAttachment: 'fixed' }}>
             <div className="fixed inset-0 bg-black opacity-50 z-10" />
 
             <div className="relative z-20 mt-14 text-white px-96 flex flex-col gap-20">
                 <div className="flex justify-between items-center">
-                    {!isGm && (
-                        <SelectCharacter />
-                    )}
-                    {isGm && (
-                        <button onClick={openModal} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-10">
-                            Invite a player
-                        </button>
-                    )}
+                    {isGm ? (<SelectFriend room_id={room?.id as number} />) : (<SelectCharacter room_id={room?.id as number} />)}
                     <h1 className="text-5xl font-bold text-or stroke-white text-center flex-1 mx-10">
                         Room: {room?.name}
                     </h1>
@@ -107,52 +72,6 @@ const RoomView: React.FC = () => {
                 </div>
                 <p>{room?.description}</p>
             </div>
-
-            {isModalOpen && (
-                <div className="fixed inset-0 flex items-center justify-center z-50">
-                    <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-96">
-                        <h2 className="text-xl font-bold text-white mb-4">Invite a Player</h2>
-                        <input 
-                            type="text"
-                            value={playerName} 
-                            onChange={(e) => setPlayerName(e.target.value)} 
-                            placeholder="Enter player name" 
-                            className="w-full p-2 rounded border-gray-300 mb-4 text-black"
-                        />
-                        <div className="flex justify-end space-x-4">
-                            <button onClick={closeModal} className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                                Close
-                            </button>
-                            <button onClick={handleSessionInvite} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                                Send
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {isModalCharacterOpen && (
-                <div className="fixed inset-0 flex items-center justify-center z-50">
-                    <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-96">
-                        <h2 className="text-xl font-bold text-white mb-4">Add a Character</h2>
-                        <input 
-                            type="text"
-                            value={characterName} 
-                            onChange={(e) => setCharacterName(e.target.value)} 
-                            placeholder="Enter character name" 
-                            className="w-full p-2 rounded border-gray-300 mb-4 text-black"
-                        />
-                        <div className="flex justify-end space-x-4">
-                            <button onClick={closeModalCharacter} className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                                Close
-                            </button>
-                            <button onClick={handleCharacterInvite} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                                Send
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
 
             <style>{`
                 .stroke-white {

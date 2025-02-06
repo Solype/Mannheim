@@ -93,8 +93,7 @@ class UserRequestService extends AService {
         );
     }
 
-    async sendRoomInvitation(roomId: number, userName: string): Promise<void> {
-        const userId = await UtilsService.getUserIdByName(userName);
+    async sendRoomInvitation(roomId: number, userId: number): Promise<void> {
         return await this.request<void>(`/api/my/requests/sessions`, {
                 method: 'POST',
                 headers: this.getHeaders(),
