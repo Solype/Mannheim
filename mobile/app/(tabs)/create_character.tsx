@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, Button, ScrollView, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ReligionForm from '@/components/ReligionForm';
-import SkillForm from '@/components/SkillForm';
+import SkillForm, { extractSkills, listSkills }  from '@/components/SkillForm';
 import AttributesForm from '@/components/AttributesForm';
 import BasicForm from '@/components/BasicInfoForm';
 import PriorityForm from '@/components/PriorityForm';
@@ -81,6 +81,18 @@ const CreateCharacterPage = () => {
     
                 const priorityData = await AsyncStorage.getItem('priority');
                 setPriority(priorityData ? JSON.parse(priorityData) : { role: '', attribute: '', skills: '', money: '' });
+
+                const skillsData = await AsyncStorage.getItem('skills');
+                if (skillsData) {
+                    console.log('la');
+                    setSkills(JSON.parse(skillsData));
+                } else {
+                    console.log('ici');
+                    extractSkills(listSkills, null).then((skills) => {
+                        setSkills(skills);
+                    });
+                }
+
             } catch (error) {
                 console.error('Error reading AsyncStorage:', error);
             }
@@ -89,15 +101,15 @@ const CreateCharacterPage = () => {
         fetchData();
     }, []);
 
-    useEffect(() => {
-        const loadSkills = async () => {
-          const storedSkills = await AsyncStorage.getItem('skills');
-          if (storedSkills) {
-            setSkills(JSON.parse(storedSkills));
-          }
-        };
-        loadSkills();
-      }, []);
+    // useEffect(() => {
+    //     const loadSkills = async () => {
+    //       const storedSkills = await AsyncStorage.getItem('skills');
+    //       if (storedSkills && storedSkills.length > 0) {
+    //         setSkills(JSON.parse(storedSkills));
+    //       }
+    //     };
+    //     loadSkills();
+    //   }, []);
 
     const handleSkillChange = (skillName: string, category: string, pureValue: number, roleValue: number) => {
         setSkills(prevSkills => {
@@ -112,8 +124,8 @@ const CreateCharacterPage = () => {
           return updatedSkills;
         });
       };
-      
-    
+
+    console.log(skills);
     const handleSubmit = () => {
         const data = {
             skills,

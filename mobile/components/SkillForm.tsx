@@ -18,8 +18,8 @@ export const listSkills = {
   magic: ["alchemy", "enhancement", "annihilation", "conjuration", "elementarism", "envoutement", "enchantment", "illusionism", "summoning", "necromancy", "perception", "sealing", "witchcraft", "absorption"]
 };
 
-export function extractSkills(listSkills: Record<string, string[]>, skillsData: Skill[] | null): Skill[] {
-  const storedSkills = skillsData ?? JSON.parse(AsyncStorage.getItem('skills') || '[]');
+export async function extractSkills(listSkills: Record<string, string[]>, skillsData: Skill[] | null): Promise<Skill[]> {
+  const storedSkills = skillsData ?? JSON.parse(await AsyncStorage.getItem('skills') || '[]');
   const skills: Skill[] = [];
 
   for (const category in listSkills) {
@@ -55,12 +55,12 @@ const SingleSkillForm = ({ skillName, pureValue, roleValue, skillValueSetter, di
     console.log(value);
     const newPureValue = Number(value);
     console.log(newPureValue);
-    skillValueSetter(newPureValue, roleValue);
+      skillValueSetter(newPureValue, roleValue);
   };
 
   const onRoleValueChange = (value: string) => {
     const newRoleValue = Number(value);
-    skillValueSetter(pureValue, newRoleValue);
+      skillValueSetter(pureValue, newRoleValue);
   };
 
   return (
@@ -110,7 +110,7 @@ const SkillForm = ({ skillSetter, skills, disabled }: SkillFormProps) => {
           <Text style={styles.categoryTitle}>{dico[category] ?? category}</Text>
           <View style={styles.skillsContainer}>
             {skillNames.map((skillName: string) => {
-              const currentSkill = skills.find(
+              const currentSkill = skills?.find(
                 skill => skill.name === skillName && skill.category === category
               );
               return (
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     color: '#555',
   },
   input: {
-    width: 60,
+    width: 120,
     padding: 5,
     borderColor: '#ccc',
     borderWidth: 1,
