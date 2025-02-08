@@ -22,49 +22,12 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
         headerShown: useClientOnlyValue(false, true),
       }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Login',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="register"
-        options={{
-          title: 'Register',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
       <Tabs.Screen
         name="characters"
         options={{
           title: 'Personnages',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="character_detail"
-        options={{
-          title: 'Character Detail',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
       />
@@ -79,13 +42,6 @@ export default function TabLayout() {
         name="rooms"
         options={{
           title: 'Rooms',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="room_details"
-        options={{
-          title: 'Room Details',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
       />

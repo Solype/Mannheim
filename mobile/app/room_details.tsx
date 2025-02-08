@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ImageBackground, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import sessionService from '@/services/SessionService';
 import { SessionShort } from '@/types/sesssion_types';
+import { useRouter } from 'expo-router';
+
 
 const RoomDetails = () => {
     const route = useRoute();
     const { roomId } = route.params;
     const [room, setRoom] = useState<SessionShort | null>(null);
+    const router = useRouter();
 
     useEffect(() => {
         loadRoom();
@@ -31,11 +34,14 @@ const RoomDetails = () => {
             style={{flex: 1, justifyContent: 'center'}}
         >
             <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 20 }}>
-                <View style={styles.container}>
-                    <Text style={styles.title}>Room Details</Text>
-                    <Text style={styles.roomId}>Room ID: {roomId}</Text>
-                    <Text style={styles.roomId}>Room Name: {room?.name}</Text>
-                </View>
+                <TouchableOpacity onPress={() => router.push("/rooms")} >
+                    <Text>Back</Text>
+                </TouchableOpacity>
+                    <View style={styles.container}>
+                        <Text style={styles.title}>Room Details</Text>
+                        <Text style={styles.roomId}>Room ID: {roomId}</Text>
+                        <Text style={styles.roomId}>Room Name: {room?.name}</Text>
+                    </View>
             </ScrollView>
         </ImageBackground>
     );

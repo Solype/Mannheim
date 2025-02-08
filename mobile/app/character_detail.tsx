@@ -10,10 +10,12 @@ import PriorityForm from '@/components/PriorityForm';
 import ListStringForm from '@/components/ListStringForm';
 import CharacterModificationUtils from '@/services/CharacterModificationUtils';
 import { useRoute } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 
 const CharacterViewPage = () => {
     const { params } = useRoute();
     const { id } = params || { id: "" };
+    const router = useRouter();
     
     const [skills, setSkills] = useState<Skill[]>([]);
     const [religion, setReligion] = useState<Religion[]>([]);
@@ -89,6 +91,9 @@ const CharacterViewPage = () => {
             nestedScrollEnabled={true}
           >
             <Text style={styles.header}>{infos.name}</Text>
+            <TouchableOpacity onPress={() => router.push("/characters")}>
+              <Text>Retour</Text>
+            </TouchableOpacity>
             
             <View style={styles.buttonContainer}>
               {isDisabled ? (

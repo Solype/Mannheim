@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'reac
 import { useNavigation } from '@react-navigation/native';
 import LoginService from '@/services/LoginService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRouter } from 'expo-router';
 
 
 const initialFormState = {
@@ -15,6 +16,7 @@ export default function LoginPage() {
   const [formData, setFormData] = useState(initialFormState);
   const [error, setError] = useState<null | string>(null);
   const navigation = useNavigation();
+  const router = useRouter();
 
   const handleChange = (name, value) => {
     setFormData(prevState => ({
@@ -33,7 +35,8 @@ export default function LoginPage() {
 
     try {
       await LoginService.login(formData.username, formData.password);
-      navigation.navigate('characters');
+      router.push('/characters');
+      // navigation.navigate('characters');
     } catch (error) {
       setError('Error logging in. Please try again.');
       console.error('Error logging in:', error);

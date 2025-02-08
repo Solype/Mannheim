@@ -29,9 +29,9 @@ const CharactersPage = () => {
             style={styles.card}
             onPress={() => navigation.navigate('character_detail', { id: item.id })}
         >
-            <View style={styles.cardImage}>
+            {/* <View style={styles.cardImage}>
                 <Text style={styles.imageText}>Photo</Text>
-            </View>
+            </View> */}
             <Text style={styles.cardTitle}>{item.infos.name}</Text>
             <Text style={styles.cardInfo}>Âge : {item.infos.age}</Text>
             <Text style={styles.cardInfo}>Espèce : {item.infos.race}</Text>

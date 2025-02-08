@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'reac
 import LoginService from '@/services/LoginService';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRouter } from 'expo-router';
 
 const RegisterPage = () => {
     const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ const RegisterPage = () => {
         ip: '',
     });
     const [error, setError] = useState<string | null>(null);
+    const router = useRouter();
     const navigation = useNavigation();
 
     const handleChange = (name: string, value: string) => {
@@ -36,7 +38,8 @@ const RegisterPage = () => {
 
         try {
             await LoginService.register(formData.username, formData.password);
-            navigation.navigate('characters');
+            router.push('/characters');
+            // navigation.navigate('characters');
         } catch (error) {
             setError('Error registering. Please try again.');
             console.error('Error registering:', error);
