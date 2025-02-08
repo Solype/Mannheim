@@ -5,7 +5,7 @@ export type SessionShort = {
     name:           string
     description:    string
     players:        Player[]
-    entities:       Pawn[]
+    pawns:       Pawn[]
 }
 
 export type Player = {
@@ -15,7 +15,8 @@ export type Player = {
 
 export type Pawn = {
     id:             number
-    chara_id:       number
+    name:           string
+    chara_id:       number | null
     mana:           object | null
     physical:       object | null
     mental:         object | null
@@ -29,3 +30,4 @@ export type PawnSeed = {
     side:           number
     hidden:         string
 }
+

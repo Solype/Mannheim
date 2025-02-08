@@ -112,7 +112,7 @@ const RoomsPage: React.FC = () => {
                     )}
                 </div>
             </div>
-            <style jsx>{`
+            <style>{`
                 .stroke-white {
                     -webkit-text-stroke: 1px black;
                 }

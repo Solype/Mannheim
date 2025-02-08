@@ -13,13 +13,13 @@ const NavbarTop: React.FC = () => {
     useEffect(() => {
         UserRequestService.getCharactersRequest().then((res) => {
             setHasInvitations(prev => prev || res.length > 0);
-        })
+        }).catch(() => { console.log("RIP") });
         UserRequestService.getFriendsRequest().then((res) => {
             setHasInvitations(prev => prev || res.length > 0);
-        })
+        }).catch(() => { console.log("RIP") });
         UserRequestService.getRoomsRequest().then((res) => {
             setHasInvitations(prev => prev || res.length > 0);
-        })
+        }).catch(() => { console.log("RIP") });
     }, []);
 
 

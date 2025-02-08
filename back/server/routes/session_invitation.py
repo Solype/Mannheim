@@ -4,6 +4,8 @@ from server.access_manager import access_manager
 from server.routes.server_datatype.user_request_type import UserSessionRequest, UserSessionRequestCreate
 
 
+import json
+
 def compose_session_request_with_session(session_id: int, session_name: str, gm_id: int, gm_name: str) -> UserSessionRequest:
     requests = get_db("SELECT id, receiver_id, status FROM `sessions_requests` WHERE session_id = %s", (session_id,))
     if not requests:
@@ -58,7 +60,11 @@ def get_sessions_requests(credentials: HTTPAuthorizationCredentials = Depends(se
         raise HTTPException(status_code=401, detail="Unauthorized")
 
     user_id = access_manager.getTokenData(token).id
-    my_name = getone_db("SELECT username FROM `users` WHERE id = %s", (user_id,))[0]
+    my_name = getone_db("SELECT username FROM `users` WHERE id = %s", (user_id,))
+    if not my_name:
+        raise HTTPException(status_code=404, detail="User not found")
+    else :
+        my_name = my_name[0]
     requests = get_db("SELECT id, session_id, status FROM `sessions_requests` WHERE receiver_id = %s AND status = 'pending'", (user_id,))
     return [compose_session_request(request[0], request[1], user_id, my_name, request[2]) for request in requests]
 
@@ -96,7 +102,8 @@ async def send_session_request(data: UserSessionRequestCreate, credentials: HTTP
         raise HTTPException(status_code=404, detail="Session not found")
 
     if owner[0] != user_id:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+        print("not owner: ", user_id, owner, flush=True)
+        raise HTTPException(status_code=403)
 
     already_sent = getone_db("SELECT id FROM `sessions_requests` WHERE session_id = %s AND receiver_id = %s", (data.session_id, data.receiver_id))
     if already_sent:
@@ -109,6 +116,17 @@ async def send_session_request(data: UserSessionRequestCreate, credentials: HTTP
     if not success:
         raise HTTPException(status_code=500, detail="Failed to send session request")
     return
+
+@app.get("/api/users/{user_name}", tags=["Requests"])
+async def get_user(user_name: str, credentials: HTTPAuthorizationCredentials = Depends(security)) -> int:
+    if not access_manager.isTokenValid(credentials.credentials):
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    user_id = getone_db("SELECT id FROM `users` WHERE username = %s", (user_name,))
+
+    if not user_id:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    return user_id[0]
 
 @app.delete("/api/my/requests/sessions/{request_id}", tags=["Requests"])
 async def delete_session_request(request_id: int, credentials: HTTPAuthorizationCredentials = Depends(security)) -> None:
@@ -126,7 +144,7 @@ async def delete_session_request(request_id: int, credentials: HTTPAuthorization
         raise HTTPException(status_code=404, detail="Session not found")
 
     if owner[0] != user_id:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+        raise HTTPException(status_code=403)
 
     success = modify_db("DELETE FROM `sessions_requests` WHERE id = %s", (request_id,))
     if not success:
@@ -145,9 +163,9 @@ async def accept_session_request(request_id: int, credentials: HTTPAuthorization
         raise HTTPException(status_code=404, detail="Session request not found")
 
     if session[1] != user_id:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+        raise HTTPException(status_code=403)
 
-    success = modify_db("UPDATE `session_participants` SET user_id = %s WHERE session_id = %s", (user_id, session[0]))
+    success = modify_db("INSERT INTO `session_participants` (user_id, session_id) VALUES (%s, %s)", (user_id, session[0]))
     if not success:
         raise HTTPException(status_code=500, detail="Failed to accept session request")
     
@@ -159,17 +177,16 @@ async def accept_session_request(request_id: int, credentials: HTTPAuthorization
 
 @app.post("/api/my/requests/sessions/{request_id}/decline", tags=["Requests"])
 async def decline_session_request(request_id: int, credentials: HTTPAuthorizationCredentials = Depends(security)) -> None:
-    token = credentials.credentials
-    if not token or not access_manager.isTokenValid(token):
+    if not access_manager.isTokenValid(credentials.credentials):
         raise HTTPException(status_code=401, detail="Unauthorized")
-    user_id = access_manager.getTokenData(token).id
+    user_id = access_manager.getTokenData(credentials.credentials).id
 
     receiver = getone_db("SELECT receiver_id FROM `sessions_requests` WHERE id = %s AND status = 'pending'", (request_id,))
     if not receiver:
         raise HTTPException(status_code=404, detail="Session request not found")
 
     if receiver[0] != user_id:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+        raise HTTPException(status_code=403)
 
     success = modify_db("UPDATE `sessions_requests` SET status = 'refused' WHERE id = %s AND status = 'pending'", (request_id,))
     if not success:

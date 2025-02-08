@@ -32,7 +32,7 @@ async def get_one_character(id: int, credentials: HTTPAuthorizationCredentials =
         raise HTTPException(status_code=401, detail="Unauthorized")
     data = access_manager.getTokenData(token).id
 
-    character = getone_db("SELECT character_data, user_id FROM `characters` WHERE id = %s", (id))
+    character = getone_db("SELECT character_data, user_id FROM `characters` WHERE id = %s", (id,))
     if not character:
         raise HTTPException(status_code=404, detail="Character not found")
 
@@ -42,7 +42,7 @@ async def get_one_character(id: int, credentials: HTTPAuthorizationCredentials =
         fst_request = getone_db("SELECT id FROM `characters_access` WHERE character_id = %s AND player_id = %s", (id, data))
         snd_request = getone_db("SELECT id FROM `characters_requests` WHERE character_id = %s AND receiver_id = %s AND status != 'refused'", (id, data))
         if (not fst_request) and (not snd_request):
-            raise HTTPException(status_code=401, detail="Unauthorized")
+            raise HTTPException(status_code=403, detail="You don't have access to this character")
 
     character = json.loads(character[0])
 
@@ -76,6 +76,7 @@ async def modify_character(id: int, character: CharaAllData, credentials: HTTPAu
     success = modify_db("UPDATE `characters` SET character_data = %s WHERE id = %s AND user_id = %s", (json_data, id, user_id, ))
 
     if not success:
-        raise HTTPException(status_code=404, detail="Character not found")
+        raise HTTPException(status_code=404, detail="Character not found or you don't have access to it")
 
     return
+

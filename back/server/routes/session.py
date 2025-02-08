@@ -27,11 +27,17 @@ def get_my_session(credentials: HTTPAuthorizationCredentials = Depends(security)
     token = credentials.credentials
     if not token or not access_manager.isTokenValid(token):
         raise HTTPException(status_code=401, detail="Unauthorized")
-    
+    print(token, flush=True)
     user_id = access_manager.getTokenData(token).id
-
+    print(user_id, flush=True)
+    if not user_id:
+        raise HTTPException(status_code=500, detail="Failed to get sessions")
     session_i_am_in = get_db("SELECT session_id FROM `session_participants` WHERE user_id = %s", (user_id,))
+    print(session_i_am_in, flush=True)
+    if session_i_am_in == None:
+        raise HTTPException(status_code=500, detail="Failed to get sessions")
     lst = [compose_session_short(session_id[0]) for session_id in session_i_am_in]
+    print("lst", flush=True)
     print(lst, flush=True)
     return lst
 
@@ -47,28 +53,42 @@ def get_my_owned_session(credentials: HTTPAuthorizationCredentials = Depends(sec
     lst = [compose_session_short(session_id[0]) for session_id in session_i_own]
     print(lst, flush=True)
     return lst
+    lst = [compose_session_short(session_id[0]) for session_id in session_i_own]
+    print(lst, flush=True)
+    return lst
 
 
 
 @app.post("/api/my/session", tags=["Session"])
 async def create_session(session : CreateSessionRequest, credentials: HTTPAuthorizationCredentials = Depends(security)) -> SessionShort:
     token = credentials.credentials
-    if not token or not access_manager.isTokenValid(token):
+    if not token:
         raise HTTPException(status_code=401, detail="Unauthorized")
-    
-    user_id = access_manager.getTokenData(token).id
 
-    success = modify_db("INSERT INTO `sessions` (gamemaster_id, name, description) VALUES (%s, %s, %s)", (user_id, session.name, session.description))
+    token_data = access_manager.getTokenData(token)
+    if not token_data or not access_manager.isTokenValid(token):
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    user_id = token_data.id
+
+    success = modify_db(
+        "INSERT INTO `sessions` (gamemaster_id, name, description) VALUES (%s, %s, %s)", 
+        (user_id, session.name, session.description)
+    )
     if not success:
         raise HTTPException(status_code=500, detail="Failed to create session")
-    new_session_id = getone_db("SELECT id FROM `sessions` WHERE gamemaster_id = %s AND name = %s AND description = %s ORDER BY id DESC LIMIT 1",
-                                (user_id, session.name, session.description))[0]
 
-    success = modify_db("INSERT INTO `session_participants` (user_id, session_id) VALUES (%s, %s)", (user_id, new_session_id))
+    new_session_id = getone_db("SELECT id FROM `sessions` ORDER BY id DESC LIMIT 1", ())[0]
+
+    success = modify_db(
+        "INSERT INTO `session_participants` (user_id, session_id) VALUES (%s, %s)", 
+        (user_id, new_session_id)
+    )
     if not success:
         raise HTTPException(status_code=500, detail="Failed to create link between user and session")
 
     return compose_session_short(new_session_id)
+
 
 
 @app.put("/api/my/session/{id}", tags=["Session"])
@@ -84,7 +104,7 @@ async def modify_session(id: int, session: SessionShort, credentials: HTTPAuthor
         raise HTTPException(status_code=404, detail="Session not found")
 
     if owner[0] != user_id:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+        raise HTTPException(status_code=403)
 
     success = modify_db("UPDATE `sessions` SET name = %s, description = %s WHERE id = %s AND gamemaster_id = %s", (session.name, session.description, id, user_id))
     if not success:
@@ -105,7 +125,7 @@ async def delete_session(id: int, credentials: HTTPAuthorizationCredentials = De
         raise HTTPException(status_code=404, detail="Session not found")
 
     if owner[0] != user_id:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+        raise HTTPException(status_code=403)
 
     success = modify_db("DELETE FROM `sessions` WHERE id = %s AND gamemaster_id = %s", (id, user_id))
     if not success:
@@ -126,12 +146,11 @@ def compose_pawn(pawn : tuple, is_gm : bool) -> Optional[Pawn] :
                         side=pawn[13])
 
     if (pawn[14] == "partially") :
-        return Pawn(id=pawn[0], name=pawn[1], chara_id=pawn[2], physical= None, mental= None, pathological= None, endurance= None, mana= None, side=pawn[13])
+        return Pawn(id=pawn[0], name=pawn[1], chara_id=None, physical= None, mental= None, pathological= None, endurance= None, mana= None, side=pawn[13])
 
     if (pawn[14] == "totally") :
         return None
 
-@app.get("/api/test/get_pawns_of_session/{session_id}/{is_gm}", tags=["Session"])
 def get_pawns_of_session(session_id: int, is_gm : bool) -> list[Pawn]:
     print(is_gm)
     pawns = get_db("""SELECT id, name, character_id,
@@ -169,14 +188,18 @@ async def get_session(id: int, credentials: HTTPAuthorizationCredentials = Depen
         raise HTTPException(status_code=404, detail="Session not found")
 
     print("processing players", flush=True)
+    print("processing players", flush=True)
     player_ids = [player[0] for player in players]
+    if user_id not in player_ids and user_id != gm_id:
     if user_id not in player_ids and user_id != gm_id:
         raise HTTPException(status_code=401, detail="Unauthorized")
 
     print("User in session", flush=True)
+    print("User in session", flush=True)
     names = [getone_db("SELECT username FROM `users` WHERE id = %s", (player_id,))[0] for player_id in player_ids]
     players = [Player(id=player_id, name=name) for player_id, name in zip(player_ids, names)]
 
+    print("gm_id", gm_id, "user_id", user_id, flush=True)
     print("gm_id", gm_id, "user_id", user_id, flush=True)
     pawns = get_pawns_of_session(id, user_id == gm_id)
 
@@ -187,7 +210,7 @@ async def get_session(id: int, credentials: HTTPAuthorizationCredentials = Depen
         name=session.name,
         description=session.description,
         players=players,
-        entities=pawns
+        pawns=pawns
     )
 
 
@@ -202,6 +225,7 @@ def insert_pawn_in_db(pawn : Pawn, hidden : Literal["totally", "partially", None
             %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
         )
         """
+    print("inserted pawn", pawn, flush=True)
     print("inserted pawn", pawn, flush=True)
     params = ( pawn.name, owner_id, session_id,
         pawn.physical.current, pawn.pathological.current, pawn.mental.current, pawn.endurance.current, pawn.mana.current,

@@ -214,8 +214,9 @@ export type CharacterForm = {
 };
 
 export type CharacterBasicInfo = {
-    info : BasicCharaInfo;
+    infos : BasicCharaInfo;
     roles: CharaRoles;
+    id: number;
     [key: string]: any;
 };
 

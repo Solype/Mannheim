@@ -40,7 +40,6 @@ class AccessManager:
         if token in self.tokens.keys():
             if time.time() - self.tokens[token].time < 3600:
                 self.tokens[token].time = time.time()
-                print("token valid")
                 return True
             else:
                 print("token expired")
