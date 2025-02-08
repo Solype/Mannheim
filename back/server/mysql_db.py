@@ -7,6 +7,7 @@ for i in range(10):
     try :
         mydb = mysql.connector.connect(
             host="db",
+            # host="localhost",
             user="user",
             password="root",
             database="mannheim",
