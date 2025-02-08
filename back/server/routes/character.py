@@ -32,7 +32,7 @@ async def get_one_character(id: int, credentials: HTTPAuthorizationCredentials =
         raise HTTPException(status_code=401, detail="Unauthorized")
     data = access_manager.getTokenData(token).id
 
-    character = getone_db("SELECT character_data, user_id FROM `characters` WHERE id = %s", (id))
+    character = getone_db("SELECT character_data, user_id FROM `characters` WHERE id = %s", (id,))
     if not character:
         raise HTTPException(status_code=404, detail="Character not found")
 
