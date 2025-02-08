@@ -226,7 +226,6 @@ def insert_pawn_in_db(pawn : Pawn, hidden : Literal["totally", "partially", None
     success = modify_db(sql, params)
     if (success != True) :
         raise HTTPException(status_code=500, detail="Failed to insert")
-    print("inserted pawn success", flush=True)
     return
 
 
