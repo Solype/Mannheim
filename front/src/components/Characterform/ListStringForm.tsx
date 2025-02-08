@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 interface ListStringFormProps {
-    title: string; // Nouveau paramètre pour le titre
+    title: string;
     listString: string[];
     setter: (roles: string[]) => void;
     disabled: boolean;
@@ -13,13 +13,11 @@ const ListStringForm = ({ title, listString, setter, disabled }: ListStringFormP
     const addRole = () => {
         if (inputValue.trim() === "") return;
 
-        // Ajoute le rôle saisi à la liste existante
         setter([...listString, inputValue]);
-        setInputValue(""); // Réinitialise l'input
+        setInputValue("");
     };
 
     const removeRole = (index: number) => {
-        // Supprime le rôle par son index
         const updatedRoles = listString.filter((_, i) => i !== index);
         setter(updatedRoles);
     };
