@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, Alert, Button, Modal, TouchableOpacity } from 'react-native';
 import friendService from '@/services/FriendService';
 import UserRequestService from '@/services/UserRequestService';
-import { Picker } from '@react-native-picker/picker'; // Use Picker for select dropdown
+import { Picker } from '@react-native-picker/picker';
 import { Friend } from '@/types/friend_types';
 
 interface SelectFriendsProps {
@@ -13,12 +13,13 @@ const SelectFriend = ({ room_id }: SelectFriendsProps) => {
     const [friend, setFriend] = useState<Friend[]>([]);
     const [modalVisible, setModalVisible] = useState(false);
     const hasLoaded = useRef(false);
-    const [friendSelected, setFriendSelected] = useState(null);
+    const [friendSelected, setFriendSelected] = useState<number | null>(null);
   
     const openModal = () => {
       if (!hasLoaded.current) {
         friendService.getMyFriends().then((friends) => {
           setFriend(friends);
+          setFriendSelected(friends[0].id);
         });
         hasLoaded.current = true;
       }

@@ -92,9 +92,9 @@ const CharacterViewPage = () => {
           >
             <Text style={styles.header}>{infos.name}</Text>
             <TouchableOpacity onPress={() => router.push("/characters")}>
-              <Text>Retour</Text>
+              <Text style={{ color: "white", fontSize: 20}}> Retour</Text>
             </TouchableOpacity>
-            
+
             <View style={styles.buttonContainer}>
               {isDisabled ? (
                 <Button title="Modifier" onPress={() => setIsDisabled(false)} color="#FF6F61" />
@@ -154,6 +154,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         marginBottom: 20,
+        color: 'white',
     },
     buttonContainer: {
         flexDirection: 'row',
