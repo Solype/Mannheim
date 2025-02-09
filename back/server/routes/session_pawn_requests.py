@@ -2,8 +2,9 @@ from server.server import app, HTTPAuthorizationCredentials, security, Depends, 
 from server.mysql_db import getone_db, modify_db, get_db
 from server.access_manager import access_manager
 from server.routes.server_datatype.user_request_type import UserPawnRequest, UserPawnRequestCreate
-from server.routes.server_datatype.chara_type import CharaAllData
-from typing import Optional, Literal
+from server.routes.server_datatype.chara_type import *
+from server.routes.server_datatype.session_type import Pawn, PawnSeed
+from server.routes.pawn_utils import insert_pawn_in_db, transform_chara_into_pawn
 import json
 
 def compose_character_request(request_id: int, session_id: int, character_id: int, sender_id: int, receiver_id: int, status: str = "pending") -> UserPawnRequest:
@@ -129,6 +130,21 @@ def accept_pawn_request(request_id: int, credentials: HTTPAuthorizationCredentia
         success = modify_db("INSERT INTO `characters_access` (character_id, player_id) VALUES (%s, %s)", (request[2], player[0]))
         if not success:
             raise HTTPException(status_code=500, detail="Failed to grant access to character")
+    
+    character_data, id_user = getone_db("SELECT character_data, user_id FROM `characters` WHERE id = %s", (request[2],))
+    if not character_data:
+        raise HTTPException(status_code=500, detail="Failed to get character data")
+    character_data = json.loads(character_data)
+    chara = CharaAllData(**character_data)
+
+    print(chara.infos.name, id_user, request[1])
+    to_insert : Pawn = transform_chara_into_pawn(chara, PawnSeed(linked_id=request[2], side=1, hidden=None))
+
+    if not insert_pawn_in_db(to_insert, None, id_user, request[1]):
+        raise HTTPException(status_code=500, detail="Failed to insert pawn")
+    success = modify_db("DELETE FROM `characters_requests` WHERE id = %s", (request_id,))
+    if not success:
+        raise HTTPException(status_code=500, detail="Failed to delete character request")
     return
 
 @app.post("/api/my/session/pawn/request/{request_id}/decline")

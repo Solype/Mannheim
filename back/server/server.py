@@ -1,4 +1,4 @@
-from fastapi import Request, HTTPException, FastAPI, Query, Response, Header, Depends
+from fastapi import Request, HTTPException, FastAPI, Query, Response, Header, Depends, WebSocket
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials

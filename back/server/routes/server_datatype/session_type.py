@@ -23,18 +23,34 @@ class Player(BaseModel):
 class Monitor(BaseModel):
     current:        int
     max:            int
-
+    def to_dict(self):
+        return {
+            "max": self.max,
+            "current": self.current
+        }
 
 class Pawn(BaseModel):
     id:             int
     name:           str
-    chara_id:       Optional[int]
-    mana :          Optional[Monitor]
-    physical:       Optional[Monitor]
-    mental:         Optional[Monitor]
-    pathological:   Optional[Monitor]
-    endurance:      Optional[Monitor]
+    chara_id:       Optional[int] = None
+    mana :          Optional[Monitor] = None
+    physical:       Optional[Monitor] = None
+    mental:         Optional[Monitor] = None
+    pathological:   Optional[Monitor] = None
+    endurance:      Optional[Monitor] = None
     side:           int
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "chara_id": self.chara_id,
+            "mana": self.mana.to_dict() if self.mana else None,
+            "physical": self.physical.to_dict() if self.physical else None,
+            "mental": self.mental.to_dict() if self.mental else None,
+            "pathological": self.pathological.to_dict() if self.pathological else None,
+            "endurance": self.endurance.to_dict() if self.endurance else None,
+            "side": self.side
+        }
 
 class PawnSeed(BaseModel):
     linked_id:      int
