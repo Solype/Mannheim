@@ -8,18 +8,65 @@ import LoginService from '@/services/LoginService';
 
 import { SelectCharacter } from '@/components/RoomViewComponent/AddCharacterButton';
 import { SelectFriend } from '@/components/RoomViewComponent/AddPlayerButton';
+import EntityCard from '@/components/RoomViewComponent/EntityCard';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from '@/components/ui/button';
+
+
+interface MonitorAction {
+    damage_phys: number;
+    damage_path: number;
+    damage_ment: number;
+    damage_endu: number;
+    damage_mana: number;
+    receiver?: number;
+    dealer?: number;
+    method?: string;
+}
 
 
 const RoomView: React.FC = () => {
     const { id } = useParams<{id: string}>();
     const [room, setRoom] = useState<SessionShort | null>(null);
     const [isGm, setIsGm] = useState<boolean>(false);
-    const [GmId, setGmId] = useState<string>("");
-    const [selectedPawn, setSelectedPawn] = useState<Pawn | null>(null);
+    const [_, setGmId] = useState<string>("");
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [modalAction, setModalAction] = useState<'heal' | 'attack' | null>(null);
+    
+    
+    const [ monitorAction, setMonitorAction ] = useState<MonitorAction | null>(null);
 
+    const setSelectedPawn = (pawn: Pawn) => {
+        setMonitorAction((prev) => {
+            if (prev === null) return {
+                damage_phys: 0,
+                damage_path: 0,
+                damage_ment: 0,
+                damage_endu: 0,
+                damage_mana: 0,
+                receiver: undefined,
+                dealer: pawn.id,
+                method: undefined
+            }
+            return {...prev, dealer: pawn.id}
+        });
+    }
+
+    const setTargetPawn = (pawn: Pawn) => {
+        setMonitorAction((prev) => {
+            if (prev === null) return {
+                damage_phys: 0,
+                damage_path: 0,
+                damage_ment: 0,
+                damage_endu: 0,
+                damage_mana: 0,
+                receiver: pawn.id,
+                dealer: undefined,
+                method: undefined
+            }
+            return {...prev, receiver: pawn.id}
+        });
+    }
 
     useEffect(() => {
         const loadRoom = async () => {
@@ -63,19 +110,23 @@ const RoomView: React.FC = () => {
         }
     };
 
-    const handleAction = async (pawn: Pawn) => {
+    const handleSelectTarget = async (pawn: Pawn) => {
         try {
-            if (modalAction === 'heal') {
-                console.log(selectedPawn, " Heal ", pawn);
-            } else if (modalAction === 'attack') {
-                console.log(selectedPawn, " Attack ", pawn);
-            }
-            setIsModalOpen(false);
+            setTargetPawn(pawn);
         } catch (error) {
             console.error("Error handling action:", error);
         }
     };
 
+    const handleAction = async () => {
+        try {
+            console.log("Action:", modalAction, monitorAction);
+        } catch (error) {
+            console.error("Error handling action:", error);
+        }
+        setIsModalOpen(false);
+        setMonitorAction(null);
+    };
 
     return (
         <div className="relative overflow-auto h-full" style={{ backgroundImage: 'url(/bg-rooms.jpg)', backgroundSize: 'cover', backgroundAttachment: 'fixed' }}>
@@ -92,59 +143,40 @@ const RoomView: React.FC = () => {
                 <p>{room?.description}</p>
                 <div className="grid grid-cols-5 gap-4">
                     {room?.pawns && room?.pawns.map((pawn) => (
-                        <div key={pawn.id} className="flex flex-col bg-white bg-opacity-50 p-4 rounded-lg">
-                            <p className='text-black truncate max-width-[100px]'>{pawn.name}</p>
-                            <p className='text-black'>Mana: {pawn.mana?.current ?? "?"}  / {pawn?.mana?.max ?? "?"}</p>  
-                            <p className='text-black'>Physical: {pawn.physical?.current ?? "?"}  / {pawn.physical?.max ?? "?"}</p>
-                            <p className='text-black'>Mental: {pawn.mental?.current ?? "?"}  / {pawn.mental?.max ?? "?"}</p>
-                            <p className='text-black'>Pathological: {pawn.pathological?.current ?? "?"}  / {pawn.pathological?.max ?? "?"}</p>
-                            <p className='text-black'>Endurance: {pawn.endurance?.current ?? "?"}  / {pawn.endurance?.max ?? "?"}</p>
-                            <p className='text-black'>Side: {pawn.side}</p>
-                            <div className='flex flex-col gap-4 mt-5'>
-                                <Button className="bg-blue-600" onClick={() => reajuste(pawn.id)}>Reajuster</Button>
-                                <Button className="bg-green-600" onClick={() => {
-                                        setSelectedPawn(pawn);
-                                        setModalAction('heal');
-                                        setIsModalOpen(true);
-                                    }}>Soigner</Button>
-                                <Button className="bg-red-600" onClick={() => {
-                                        setSelectedPawn(pawn);
-                                        setModalAction('attack');
-                                        setIsModalOpen(true);
-                                    }}>Attaquer</Button>
-                            </div>
-                        </div>
+                        <EntityCard key={pawn.id} pawn={pawn} setModalAction={setModalAction} setSelectedPawn={setSelectedPawn} setIsModalOpen={setIsModalOpen} reajuste={reajuste} />
                     ))}
                 </div>
             </div>
 
-            {isModalOpen && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-30">
-                    <div className="bg-white p-8 rounded-lg shadow-lg">
-                        <h2 className="text-xl font-bold mb-4">
-                            {modalAction === 'heal' ? 'Sélectionnez un pawn à soigner' : 'Sélectionnez un pawn à attaquer'}
-                        </h2>
-                        <div className="grid grid-cols-2 gap-4">
-                            {room?.pawns.map((pawn) => (
-                                <button
-                                    key={pawn.id}
-                                    className="p-4 bg-blue-500 text-white rounded-lg"
-                                    onClick={() => handleAction(pawn)}
-                                >
-                                    {pawn.name}
-                                </button>
-                            ))}
-                        </div>
-                        <button
-                            className="mt-4 px-4 py-2 bg-gray-500 text-white rounded-lg"
-                            onClick={() => setIsModalOpen(false)}
-                        >
-                            Annuler
-                        </button>
+            <Dialog open={isModalOpen} onOpenChange={(param) => {setIsModalOpen(param); setMonitorAction(null);}}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>{modalAction === 'heal' ? 'Sélectionnez un pion à soigner' : 'Sélectionnez un pion à attaquer'}</DialogTitle>
+                    </DialogHeader>
+                    <div className="grid grid-cols-2 gap-4">
+                        {room?.pawns.map((pawn) => (
+                            <Button
+                                key={pawn.id}
+                                className="p-4 bg-blue-500 text-white rounded-lg"
+                                onClick={() => handleSelectTarget(pawn)}
+                            >
+                                {pawn.name}
+                            </Button>
+                        ))}
                     </div>
-                </div>
-            )}
-
+                    <div>
+                        {monitorAction?.receiver && (
+                            <>
+                                <EntityCard key={monitorAction.receiver} pawn={room?.pawns.find((pawn) => pawn.id === monitorAction.receiver)!}/>
+                                <Button onClick={handleAction}>Confirmer</Button>
+                            </>
+                        )}
+                    </div>
+                    <DialogFooter>
+                        <Button onClick={() => {setIsModalOpen(false); setMonitorAction(null);}}>Annuler</Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
             <style>{`
                 .stroke-white {
                     -webkit-text-stroke: 0.5px black;

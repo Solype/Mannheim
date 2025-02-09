@@ -112,6 +112,7 @@ class MonitorAction(BaseModel):
     damage_path:    int
     damage_ment:    int
     damage_endu:    int
+    damage_mana:    int
     receiver:       int
     dealer:         int
     method:         Optional[str]
