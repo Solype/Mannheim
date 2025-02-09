@@ -98,8 +98,8 @@ async def join_room(sid, data: dict):
     from time import sleep
     sleep(1)
     await emit_new_pawn(data.session_id, Pawn(id=1, name="test1", chara_id=1, mana=Monitor(max=10, current=5), side=1), "totally")
-    await emit_new_pawn(data.session_id, Pawn(id=1, name="test2", chara_id=1, mana=Monitor(max=10, current=5), side=1), "partially")
-    await emit_new_pawn(data.session_id, Pawn(id=1, name="test3", chara_id=1, mana=Monitor(max=10, current=5), side=1), None)
+    await emit_new_pawn(data.session_id, Pawn(id=2, name="test2", chara_id=1, mana=Monitor(max=10, current=5), side=1), "partially")
+    await emit_new_pawn(data.session_id, Pawn(id=3, name="test3", chara_id=1, mana=Monitor(max=10, current=5), side=1), None)
 
 
 @sio.on("disconnect")
