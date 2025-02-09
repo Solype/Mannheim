@@ -150,11 +150,12 @@ def compose_pawn(pawn : tuple, is_gm : bool) -> Optional[Pawn] :
 
 def get_pawns_of_session(session_id: int, is_gm : bool) -> list[Pawn]:
     print(is_gm)
-    pawns = get_db("""SELECT id, name, character_id,
-                   current_physical_health, current_mental_health, current_path_health, current_endurance, current_mana,
-                   max_physical_health, max_mental_health, max_path_health, max_endurance, max_mana, side_camp, hidden
+    pawns = get_db("""SELECT id, name, character_id, current_mana,
+                   current_physical_health, current_mental_health, current_path_health, current_endurance, side_camp
                    FROM `entities`
-                   WHERE session_id = %s""", (session_id,))
+                   WHERE session_id = %s""", (session_id, ))
+    print("-----------------------------------", flush=True)
+    print(pawns, flush=True)
 
     return [
         result for pawn in pawns

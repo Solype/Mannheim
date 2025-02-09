@@ -129,6 +129,13 @@ def accept_pawn_request(request_id: int, credentials: HTTPAuthorizationCredentia
         success = modify_db("INSERT INTO `characters_access` (character_id, player_id) VALUES (%s, %s)", (request[2], player[0]))
         if not success:
             raise HTTPException(status_code=500, detail="Failed to grant access to character")
+    
+    character_data = getone_db("SELECT character_data FROM `characters` WHERE id = %s", (request[2],))
+    if not character_data:
+        raise HTTPException(status_code=500, detail="Failed to get character data")
+    success = modify_db("""INSERT INTO `entities` (name, owner_id, session_id, current_physical_health, current_path_health, current_mental_health, current_endurance, current_mana, max_physical_health, max_mental_health, max_path_health, max_endurance, max_mana, character_id, side_camp, hidden) 
+                                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s""",
+                                        (character_data["info"]["name"], )
     return
 
 @app.post("/api/my/session/pawn/request/{request_id}/decline")
