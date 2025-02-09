@@ -93,7 +93,9 @@ async def join_room(sid, data: dict):
     room_manager.joinRoom(data.session_id, sid, result != None)
     from time import sleep
     sleep(1)
-    await emit_new_pawn(data.session_id, Pawn(id=1, name="test", chara_id=1, side=1), "totally")
+    await emit_new_pawn(data.session_id, Pawn(id=1, name="test1", chara_id=1, mana=Monitor(max=10, current=5), side=1), "totally")
+    await emit_new_pawn(data.session_id, Pawn(id=1, name="test2", chara_id=1, mana=Monitor(max=10, current=5), side=1), "partially")
+    await emit_new_pawn(data.session_id, Pawn(id=1, name="test3", chara_id=1, mana=Monitor(max=10, current=5), side=1), None)
 
 
 @sio.on("disconnect")
@@ -174,19 +176,19 @@ async def emit_new_pawn(roomid : int, pawn : Pawn, hidden : Literal["totally", "
         gm_id = room_manager.getGm(roomid)
         if gm_id == None :
             return
-        await sio.emit("new_pawn", {"pawn": dict(pawn)}, to=gm_id)
+        await sio.emit("new_pawn", {"pawn": pawn.to_dict()}, to=gm_id)
         return
     
     if hidden == None :
-        await sio.emit("new_pawn", {"pawn": dict(pawn)}, room=roomid)
+        await sio.emit("new_pawn", {"pawn": pawn.to_dict()}, room=roomid)
         return
 
-    pawn_copy = pawn
-    pawn_copy.pathological = None
-    pawn_copy.mental = None
-    pawn_copy.physical = None
-    pawn_copy.endurance = None
-    pawn_copy.mana = None
-    await sio.emit("new_pawn", {"pawn": dict(pawn_copy)}, room=roomid)
+    pawn_copy = pawn.to_dict()
+    pawn_copy["pathological"] = None
+    pawn_copy["mental"] = None
+    pawn_copy["physical"] = None
+    pawn_copy["endurance"] = None
+    pawn_copy["mana"] = None
+    await sio.emit("new_pawn", {"pawn": pawn_copy}, room=roomid)
     gm_id = room_manager.getGm(roomid)
-    await sio.emit("new_pawn", {"pawn": dict(pawn)}, to=gm_id)
+    await sio.emit("new_pawn", {"pawn": pawn.to_dict()}, to=gm_id)

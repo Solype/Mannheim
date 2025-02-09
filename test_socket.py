@@ -1,5 +1,6 @@
 from requests import post
 import socketio
+import json
 
 base_url = "http://localhost:8080"
 
@@ -20,14 +21,23 @@ def connect():
 def disconnect():
     print("Déconnecté du serveur")
 
+user_a = {
+    "username": "a",
+    "password": "a"
+}
+
+user_z = {
+    "username": "z",
+    "password": "z"
+}
 
 headers = {'Content-Type': 'application/json'}
-token = post(f"{base_url}/login", headers=headers, json={"username":"a", "password":"a"})
+token = post(f"{base_url}/login", headers=headers, json=user_z)
 headers["Authorization"] = f"Bearer {token.json()}"
 
 @sio.on("new_pawn")
 def on_new_pawn(data):
-    print("Nouveau pawn:", data)
+    print("Nouveau pawn:", json.dumps(data, indent=4))
 
 sio.emit("join_room", {"session_id": 2, "token": token.json()})
 
