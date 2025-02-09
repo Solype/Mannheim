@@ -38,17 +38,14 @@ const RoomView: React.FC = () => {
         console.log("Room ID:", room.id);
         const socket = new SocketService();
         socket.on("new_pawn", (data: Pawn) => {
-            const pawn_id = data.id;
-            console.log(data);
-            console.log("New pawn:", pawn_id);
-            const existingPawn = pawnList.find((pawn) => {console.log(pawn.id, pawn_id); return pawn.id === pawn_id});
-
-            if (existingPawn) {
-                pawnList[pawnList.indexOf(existingPawn)] = data;
-                setPawnList([...pawnList]);
-            } else {
-                setPawnList([...pawnList, data]);
-            }
+            setPawnList((prev) => {
+                const existingPawn = prev.find((pawn) => pawn.id === data.id);
+                if (existingPawn) {
+                    return prev.map((pawn) => (pawn.id === data.id ? data : pawn));
+                } else {
+                    return [...prev, data];
+                }
+            })
         });
 
         setSocket(socket);

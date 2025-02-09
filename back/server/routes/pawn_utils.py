@@ -36,7 +36,7 @@ def get_pawns_of_session(session_id: int, is_gm : bool) -> list[Pawn]:
 
 
 
-def insert_pawn_in_db(pawn : Pawn, hidden : Literal["totally", "partially", None], owner_id : int, session_id) :
+async def insert_pawn_in_db(pawn : Pawn, hidden : Literal["totally", "partially", None], owner_id : int, session_id) :
     sql = """
         INSERT INTO `entities` (
             name, owner_id, session_id,
@@ -54,7 +54,7 @@ def insert_pawn_in_db(pawn : Pawn, hidden : Literal["totally", "partially", None
         pawn.chara_id, pawn.side, hidden)
     success = modify_db(sql, params)
     if success :
-        asyncio.run(emit_new_pawn(session_id, pawn, hidden))
+        await emit_new_pawn(session_id, pawn, hidden)
     return success
 
 
