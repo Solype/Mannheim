@@ -34,7 +34,7 @@ const NavbarTop: React.FC = () => {
             <div 
                 className="absolute inset-0 bg-repeat" 
                 style={{
-                    backgroundImage: "url(./bg_leaf_bis.png)",
+                    backgroundImage: "url(/bg_leaf_bis.png)",
                     backgroundSize: "130px 130px",
                     backgroundRepeat: "repeat",
                     opacity: 0.1,
@@ -46,7 +46,7 @@ const NavbarTop: React.FC = () => {
                 <DropdownMenu>
                     <DropdownMenuTrigger>
                         <div className="bg-light_foret border-2 border-or p-1 rounded-full cursor-pointer">
-                            <img src="./witch.png" alt="Profile" className="w-10 h-10 rounded-full" />
+                            <img src="/witch.png" alt="Profile" className="w-10 h-10 rounded-full" />
                             { hasInvitations && (
                                 <span className="absolute top-0 right-2 w-2 h-4 w-4 bg-red-600 rounded-full"></span>
                             )}

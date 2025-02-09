@@ -10,7 +10,7 @@ const NavbarLeft: React.FC = () => {
             <div 
                 className="absolute inset-0 bg-repeat" 
                 style={{
-                    backgroundImage: "url(./bg_leaf_bis.png)",
+                    backgroundImage: "url(/bg_leaf_bis.png)",
                     backgroundSize: "130px 130px",
                     backgroundRepeat: "repeat",
                     opacity: 0.1,
