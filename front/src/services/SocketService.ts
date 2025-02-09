@@ -24,17 +24,10 @@ class SocketService {
         this.socket.onAny((message, args: any) => {
             console.log(message, args);
         });
-        this.socket.on('new_pawn', (data) => {
-            console.log(data);
-        });
     }
 
     getCurrentRoom() {
         return this.currentRoom;
-    }
-
-    sendMessage(message: string) {
-        this.socket.emit("message", message);
     }
 
     joinRoom(roomid: number) {
@@ -46,8 +39,8 @@ class SocketService {
         this.currentRoom = roomid;
     }
 
-    onMessage(callback: (message: string) => void) {
-        this.socket.on("message", callback);
+    on(event: string, callback: (data : any) => void) {
+        this.socket.on(event, callback);
     }
 
 

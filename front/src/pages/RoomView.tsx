@@ -30,70 +30,54 @@ interface MonitorAction {
 
 const RoomView: React.FC = () => {
     const { id } = useParams<{id: string}>();
-    const [room, setRoom] = useState<SessionShort | null>(null);
-    const [isGm, setIsGm] = useState<boolean>(false);
+    const [ room, setRoom ] = useState<SessionShort | null>(null);
+    const [ isGm, setIsGm ] = useState<boolean>(false);
     const [_, setGmId] = useState<string>("");
-    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-    const [modalAction, setModalAction] = useState<'heal' | 'attack' | null>(null);
+    const [ isModalOpen, setIsModalOpen ] = useState<boolean>(false);
+    const [ modalAction, setModalAction ] = useState<'heal' | 'attack' | null>(null);
     const [ monitorAction, setMonitorAction ] = useState<MonitorAction | null>(null);
 
+    const [ pawnList, setPawnList ] = useState<Pawn[]>([]);
     const [ socket, setSocket ] = useState<SocketService | null>(null);
 
     useEffect(() => {
-        console.log("Room ID:", id);
+        if (!room) return;
+        console.log("Room ID:", room.id);
         const socket = new SocketService();
+        socket.on("new_pawn", (data: Pawn) => {
+            const pawn_id = data.id;
+            const existingPawn = pawnList.find((pawn) => pawn.id === pawn_id);
+
+            if (existingPawn) {
+                pawnList[pawnList.indexOf(existingPawn)] = data;
+                setPawnList([...pawnList]);
+            } else {
+                setPawnList([...pawnList, data]);
+            }
+        });
+
         setSocket(socket);
         return () => {
             socket.disconnect();
         };
-    }, []);
+    }, [room]);
 
     useEffect(() => {
         if (!socket || !room) return;
-        console.log("Joining room, 1st test:", room.id);
         if (room.id != socket.getCurrentRoom()) {
             console.log("Joining room:", room.id);
             socket.joinRoom(room.id);
         }
     }, [socket, room]);
 
-    const setSelectedPawn = (pawn: Pawn) => {
-        setMonitorAction((prev) => {
-            if (prev === null) return {
-                damage_phys: 0,
-                damage_path: 0,
-                damage_ment: 0,
-                damage_endu: 0,
-                damage_mana: 0,
-                receiver: undefined,
-                dealer: pawn.id,
-                method: undefined
-            }
-            return {...prev, dealer: pawn.id}
-        });
-    }
-
-    const setTargetPawn = (pawn: Pawn) => {
-        setMonitorAction((prev) => {
-            if (prev === null) return {
-                damage_phys: 0,
-                damage_path: 0,
-                damage_ment: 0,
-                damage_endu: 0,
-                damage_mana: 0,
-                receiver: pawn.id,
-                dealer: undefined,
-                method: undefined
-            }
-            return {...prev, receiver: pawn.id}
-        });
-    }
 
     useEffect(() => {
+
         const loadRoom = async () => {
             if (!id) return;
             try {
                 const fetchedRoom = await sessionService.getRoom(id);
+                setPawnList(fetchedRoom.pawns);
                 setRoom(fetchedRoom);
                 console.log("Room loaded:", fetchedRoom);
             } catch (error) {
@@ -104,6 +88,20 @@ const RoomView: React.FC = () => {
         loadRoom();
     }, [id]);
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     useEffect(() => {
         if (!room) return;
         
@@ -149,6 +147,38 @@ const RoomView: React.FC = () => {
         setMonitorAction(null);
     };
 
+    const setSelectedPawn = (pawn: Pawn) => {
+        setMonitorAction((prev) => {
+            if (prev === null) return {
+                damage_phys: 0,
+                damage_path: 0,
+                damage_ment: 0,
+                damage_endu: 0,
+                damage_mana: 0,
+                receiver: undefined,
+                dealer: pawn.id,
+                method: undefined
+            }
+            return {...prev, dealer: pawn.id}
+        });
+    }
+
+    const setTargetPawn = (pawn: Pawn) => {
+        setMonitorAction((prev) => {
+            if (prev === null) return {
+                damage_phys: 0,
+                damage_path: 0,
+                damage_ment: 0,
+                damage_endu: 0,
+                damage_mana: 0,
+                receiver: pawn.id,
+                dealer: undefined,
+                method: undefined
+            }
+            return {...prev, receiver: pawn.id}
+        });
+    }
+
     return (
         <div className="relative overflow-auto h-full" style={{ backgroundImage: 'url(/bg-rooms.jpg)', backgroundSize: 'cover', backgroundAttachment: 'fixed' }}>
             <div className="fixed inset-0 bg-black opacity-50 z-10" />
@@ -163,7 +193,7 @@ const RoomView: React.FC = () => {
                 </div>
                 <p>{room?.description}</p>
                 <div className="grid grid-cols-5 gap-4">
-                    {room?.pawns && room?.pawns.map((pawn) => (
+                    {pawnList && pawnList.map((pawn) => (
                         <EntityCard key={pawn.id} pawn={pawn} setModalAction={setModalAction} setSelectedPawn={setSelectedPawn} setIsModalOpen={setIsModalOpen} reajuste={reajuste} />
                     ))}
                 </div>
@@ -175,7 +205,7 @@ const RoomView: React.FC = () => {
                         <DialogTitle>{modalAction === 'heal' ? 'Sélectionnez un pion à soigner' : 'Sélectionnez un pion à attaquer'}</DialogTitle>
                     </DialogHeader>
                     <div className="grid grid-cols-2 gap-4">
-                        {room?.pawns.map((pawn) => (
+                        {pawnList.map((pawn) => (
                             <Button
                                 key={pawn.id}
                                 className="p-4 bg-blue-500 text-white rounded-lg"
@@ -188,7 +218,7 @@ const RoomView: React.FC = () => {
                     <div>
                         {monitorAction?.receiver && (
                             <>
-                                <EntityCard key={monitorAction.receiver} pawn={room?.pawns.find((pawn) => pawn.id === monitorAction.receiver)!}/>
+                                <EntityCard key={monitorAction.receiver} pawn={pawnList.find((pawn) => pawn.id === monitorAction.receiver)!}/>
                                 <div className="space-y-2 mt-4">
                                     <Label>Physical Damage</Label>
                                     <Input type="number" value={monitorAction.damage_phys} onChange={(e) => setMonitorAction({...monitorAction, damage_phys: Number(e.target.value)})} />
