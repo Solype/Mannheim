@@ -35,13 +35,13 @@ const RoomDetails = () => {
         >
             <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 20 }}>
                 <TouchableOpacity onPress={() => router.push("/rooms")} >
-                    <Text>Back</Text>
+                    <Text style={styles.roomId}>Back</Text>
                 </TouchableOpacity>
-                    <View style={styles.container}>
-                        <Text style={styles.title}>Room Details</Text>
-                        <Text style={styles.roomId}>Room ID: {roomId}</Text>
-                        <Text style={styles.roomId}>Room Name: {room?.name}</Text>
-                    </View>
+                <View style={styles.container}>
+                    <Text style={styles.title}>Room Details</Text>
+                    <Text style={styles.roomId}>Room ID: {roomId}</Text>
+                    <Text style={styles.roomId}>Room Name: {room?.name}</Text>
+                </View>
             </ScrollView>
         </ImageBackground>
     );

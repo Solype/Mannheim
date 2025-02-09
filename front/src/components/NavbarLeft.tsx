@@ -18,10 +18,10 @@ const NavbarLeft: React.FC = () => {
                 }}
             ></div>
             <ul className="flex flex-col p-4 space-y-3 mt-20">
-                <Link to={"/dashboard"} className="hover:bg-light_foret/50 p-2 rounded flex items-center">
+                {/* <Link to={"/dashboard"} className="hover:bg-light_foret/50 p-2 rounded flex items-center">
                     <GiMagicGate className="w-6 h-6 flex-shrink-0" />
                     <span className="ml-4 hidden group-hover:inline-block transition-opacity duration-300 whitespace-nowrap">Dashboard</span>
-                </Link>
+                </Link> */}
                 <Link to={"/characters"} className="hover:bg-light_foret/50 p-2 rounded flex items-center">
                     <GiBowman className="w-6 h-6 flex-shrink-0" />
                     <span className="ml-4 hidden group-hover:inline-block transition-opacity duration-300 whitespace-nowrap">Personnages</span>
@@ -38,10 +38,10 @@ const NavbarLeft: React.FC = () => {
                     <MdMeetingRoom className="w-6 h-6 flex-shrink-0" />
                     <span className="ml-4 hidden group-hover:inline-block transition-opacity duration-300 whitespace-nowrap">Rooms</span>
                 </Link>
-                <Link to={"/rules"} className="hover:bg-light_foret/50 p-2 rounded flex items-center">
+                {/* <Link to={"/rules"} className="hover:bg-light_foret/50 p-2 rounded flex items-center">
                     <FaBookQuran className="w-6 h-6 flex-shrink-0" />
                     <span className="ml-4 hidden group-hover:inline-block transition-opacity duration-300 whitespace-nowrap">Règles</span>
-                </Link>
+                </Link> */}
             </ul>
         </div>
     );
