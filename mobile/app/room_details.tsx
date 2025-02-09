@@ -48,6 +48,38 @@ const RoomView: React.FC = () => {
             })
         });
 
+        socket.on("heal", (data: MonitorAction) => {
+            setPawnList((prev: Pawn[]) => {
+                const existingPawn = prev.find((pawn) => pawn.id === data.receiver);
+                if (!existingPawn) return prev;
+                const index = prev.indexOf(existingPawn);
+                if (index === -1) return prev;
+                if (existingPawn?.physical) {existingPawn.physical.current += data.damage_phys};
+                if (existingPawn?.mental) {existingPawn.mental.current += data.damage_ment};
+                if (existingPawn?.endurance) {existingPawn.endurance.current += data.damage_endu};
+                if (existingPawn?.pathological) {existingPawn.pathological.current += data.damage_path};
+                if (existingPawn?.mana) {existingPawn.mana.current += data.damage_mana};
+                prev[index] = existingPawn;
+                return [...prev];
+            })
+        });
+
+        socket.on("attack", (data: MonitorAction) => {
+            setPawnList((prev: Pawn[]) => {
+                const existingPawn = prev.find((pawn) => pawn.id === data.receiver);
+                if (!existingPawn) return prev;
+                const index = prev.indexOf(existingPawn);
+                if (index === -1) return prev;
+                if (existingPawn?.physical) {existingPawn.physical.current -= data.damage_phys};
+                if (existingPawn?.mental) {existingPawn.mental.current -= data.damage_ment};
+                if (existingPawn?.endurance) {existingPawn.endurance.current -= data.damage_endu};
+                if (existingPawn?.pathological) {existingPawn.pathological.current -= data.damage_path};
+                if (existingPawn?.mana) {existingPawn.mana.current -= data.damage_mana};
+                prev[index] = existingPawn;
+                return [...prev];
+            })
+        });
+
         setSocket(socket);
         return () => {
             socket.disconnect();
