@@ -78,8 +78,8 @@ def post_new_pawn(data: UserPawnRequestCreate, credentials: HTTPAuthorizationCre
     already_sent = getone_db("SELECT id FROM `characters_requests` WHERE session_id = %s AND character_id = %s", (data.session_id, data.character_id,))
     if already_sent:
         raise HTTPException(status_code=400, detail="Already sent")
-
-    success = modify_db("INSERT INTO `characters_requests` (sender_id, receiver_id, session_id, character_id, status) VALUES (%s, %s, %s, %s, 'pending')", (user_id, receiver_id, data.character_id, data.session_id,))
+    print(user_id, receiver_id, data.character_id, data.session_id)
+    success = modify_db("INSERT INTO `characters_requests` (sender_id, receiver_id, session_id, character_id, status) VALUES (%s, %s, %s, %s, 'pending')", (user_id, receiver_id, data.session_id, data.character_id))
     if not success:
         raise HTTPException(status_code=500, detail="Failed to send character request")
     return

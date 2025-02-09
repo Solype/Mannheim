@@ -15,6 +15,9 @@ const InvitationsPage: React.FC = () => {
         UserRequestService.getRoomsRequest().then((res) => {
             setSessions(res);
         })
+        UserRequestService.getCharactersRequest().then((res) => {
+            setCharacters(res);
+        })
     }, []);
 
     const acceptFriendRequest = async (request_id: number) => {

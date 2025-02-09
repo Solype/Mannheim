@@ -1,5 +1,5 @@
 import AService from "@/services/AService";
-import { FriendRequest, RoomRequest } from "@/types/requests_types";
+import { FriendRequest, RoomRequest, CharacterRequest } from "@/types/requests_types";
 import UtilsService from "@/services/UtilsService";
 
 class UserRequestService extends AService {
@@ -20,8 +20,8 @@ class UserRequestService extends AService {
         );
     }
 
-    async getCharactersRequest(): Promise<string[]> {
-        return await this.request<string[]>('/api/my/session/pawn/requests', {
+    async getCharactersRequest(): Promise<CharacterRequest[]> {
+        return await this.request<CharacterRequest[]>('/api/my/session/pawn/requests', {
                 method: 'GET',
                 headers: this.getHeaders(),
             }
@@ -45,16 +45,16 @@ class UserRequestService extends AService {
         );
     }
 
-    async acceptRoomRequest(room_id: number): Promise<void> {
-        return await this.request<void>(`/api/my/requests/sessions/${room_id}/accept`, {
+    async acceptRoomRequest(request_id: number): Promise<void> {
+        return await this.request<void>(`/api/my/requests/sessions/${request_id}/accept`, {
                 method: 'POST',
                 headers: this.getHeaders(),
             }
         );
     }
 
-    async acceptCharacterRequest(character_id: number): Promise<void> {
-        return await this.request<void>(`/api/my/requests/characters/${character_id}/accept`, {
+    async acceptCharacterRequest(request_id: number): Promise<void> {
+        return await this.request<void>(`/api/my/session/pawn/request/${request_id}/accept`, {
                 method: 'POST',
                 headers: this.getHeaders(),
             }
@@ -69,24 +69,24 @@ class UserRequestService extends AService {
     ///////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////
 
-    async rejectFriendRequest(friend_id: number): Promise<void> {
-        return await this.request<void>(`/api/my/friends/requests/${friend_id}/decline`, {
+    async rejectFriendRequest(request_id: number): Promise<void> {
+        return await this.request<void>(`/api/my/friends/requests/${request_id}/decline`, {
                 method: 'POST',
                 headers: this.getHeaders(),
             }
         );
     }
 
-    async rejectRoomRequest(room_id: number): Promise<void> {
-        return await this.request<void>(`/api/my/requests/sessions/${room_id}/decline`, {
+    async rejectRoomRequest(request_id: number): Promise<void> {
+        return await this.request<void>(`/api/my/requests/sessions/${request_id}/decline`, {
                 method: 'POST',
                 headers: this.getHeaders(),
             }
         );
     }
 
-    async rejectCharacterRequest(character_id: number): Promise<void> {
-        return await this.request<void>(`/api/my/requests/characters/${character_id}/decline`, {
+    async rejectCharacterRequest(request_id: number): Promise<void> {
+        return await this.request<void>(`/api/my/session/pawn/request/${request_id}/decline`, {
                 method: 'POST',
                 headers: this.getHeaders(),
             }
