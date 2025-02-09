@@ -76,6 +76,11 @@ class SocketService {
         });
     }
 
+
+    emit(event: string, data: any) {
+        this.socket?.emit(event, data);
+    }
+
     disconnect() {
         this.socket?.disconnect();
     }

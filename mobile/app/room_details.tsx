@@ -143,6 +143,13 @@ const RoomView: React.FC = () => {
     };
 
     const handleAction = () => {
+        try {
+            if (!socket || !modalAction || !monitorAction) return;
+            console.log("Action:", modalAction, monitorAction);
+            socket?.emit(modalAction, monitorAction);
+        } catch (error) {
+            console.error("Error handling action:", error);
+        }
         setIsModalOpen(false);
         setMonitorAction(null);
     };
