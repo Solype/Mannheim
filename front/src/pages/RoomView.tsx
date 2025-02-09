@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import sessionService from '@/services/SessionService';
 import { useParams } from 'react-router-dom';
 import { SessionShort, Pawn } from '@/types/sesssion_types';
@@ -13,6 +13,7 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import SocketService from '@/services/SocketService';
 
 
 interface MonitorAction {
@@ -34,9 +35,27 @@ const RoomView: React.FC = () => {
     const [_, setGmId] = useState<string>("");
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [modalAction, setModalAction] = useState<'heal' | 'attack' | null>(null);
-    
-    
     const [ monitorAction, setMonitorAction ] = useState<MonitorAction | null>(null);
+
+    const [ socket, setSocket ] = useState<SocketService | null>(null);
+
+    useEffect(() => {
+        console.log("Room ID:", id);
+        const socket = new SocketService();
+        setSocket(socket);
+        return () => {
+            socket.disconnect();
+        };
+    }, []);
+
+    useEffect(() => {
+        if (!socket || !room) return;
+        console.log("Joining room, 1st test:", room.id);
+        if (room.id != socket.getCurrentRoom()) {
+            console.log("Joining room:", room.id);
+            socket.joinRoom(room.id);
+        }
+    }, [socket, room]);
 
     const setSelectedPawn = (pawn: Pawn) => {
         setMonitorAction((prev) => {

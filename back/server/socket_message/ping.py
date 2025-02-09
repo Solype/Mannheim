@@ -81,12 +81,14 @@ async def join_room(sid, data: dict):
         print("User not found", flush=True)
         return
 
+    print("User found", flush=True)
+
     result = getone_db("SELECT id FROM session_participants WHERE session_id = %s AND user_id = %s", (data.session_id, user.id))
     if not result:
         await sio.disconnect(sid)
         print("User not in session", flush=True)
         return
-
+    print("User in session", flush=True)
 
     result = getone_db("SELECT id FROM sessions WHERE id = %s AND gamemaster_id = %s", (data.session_id, user.id,))
     if result:
