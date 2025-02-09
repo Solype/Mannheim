@@ -187,11 +187,11 @@ async def emit_new_pawn(roomid : int, pawn : Pawn, hidden : Literal["totally", "
         gm_id = room_manager.getGm(roomid)
         if gm_id == None :
             return
-        await sio.emit("new_pawn", {"pawn": pawn.to_dict()}, to=gm_id)
+        await sio.emit("new_pawn", pawn.to_dict(), to=gm_id)
         return
     
     if hidden == None :
-        await sio.emit("new_pawn", {"pawn": pawn.to_dict()}, room=roomid)
+        await sio.emit("new_pawn", pawn.to_dict(), room=roomid)
         return
 
     pawn_copy = pawn.to_dict()
@@ -200,6 +200,6 @@ async def emit_new_pawn(roomid : int, pawn : Pawn, hidden : Literal["totally", "
     pawn_copy["physical"] = None
     pawn_copy["endurance"] = None
     pawn_copy["mana"] = None
-    await sio.emit("new_pawn", {"pawn": pawn_copy}, room=roomid)
+    await sio.emit("new_pawn", pawn_copy, room=roomid)
     gm_id = room_manager.getGm(roomid)
-    await sio.emit("new_pawn", {"pawn": pawn.to_dict()}, to=gm_id)
+    await sio.emit("new_pawn", pawn.to_dict(), to=gm_id)

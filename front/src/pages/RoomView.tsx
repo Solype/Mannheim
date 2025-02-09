@@ -46,7 +46,9 @@ const RoomView: React.FC = () => {
         const socket = new SocketService();
         socket.on("new_pawn", (data: Pawn) => {
             const pawn_id = data.id;
-            const existingPawn = pawnList.find((pawn) => pawn.id === pawn_id);
+            console.log(data);
+            console.log("New pawn:", pawn_id);
+            const existingPawn = pawnList.find((pawn) => {console.log(pawn.id, pawn_id); return pawn.id === pawn_id});
 
             if (existingPawn) {
                 pawnList[pawnList.indexOf(existingPawn)] = data;
