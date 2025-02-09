@@ -55,6 +55,64 @@ const RoomView: React.FC = () => {
             })
         });
 
+        socket.on("heal", (data : MonitorAction) => {
+            setPawnList((prev) => {
+                const existingPawn = prev.find((pawn) => pawn.id === data.receiver);
+                if (!existingPawn) {
+                    return prev;
+                }
+                const index = prev.indexOf(existingPawn);
+                const updatedPawn = { ...existingPawn };
+                if (data.damage_endu > 0 && updatedPawn.endurance !== null) {
+                    updatedPawn.endurance.current += data.damage_endu;
+                }
+                if (data.damage_ment > 0 && updatedPawn.mental !== null) {
+                    updatedPawn.mental.current += data.damage_ment;
+                }
+                if (data.damage_path > 0 && updatedPawn.pathological !== null) {
+                    updatedPawn.pathological.current += data.damage_path;
+                }
+                if (data.damage_phys > 0 && updatedPawn.physical !== null) {
+                    updatedPawn.physical.current += data.damage_phys;
+                }
+                if (data.damage_mana > 0 && updatedPawn.mana !== null) {
+                    updatedPawn.mana.current += data.damage_mana;
+                }
+                const updatedPawns = [...prev];
+                updatedPawns[index] = updatedPawn;
+                return updatedPawns;
+            })
+        })
+
+        socket.on("damage", (data : MonitorAction) => {
+            setPawnList((prev) => {
+                const existingPawn = prev.find((pawn) => pawn.id === data.receiver);
+                if (!existingPawn) {
+                    return prev;
+                }
+                const index = prev.indexOf(existingPawn);
+                const updatedPawn = { ...existingPawn };
+                if (data.damage_endu > 0 && updatedPawn.endurance !== null) {
+                    updatedPawn.endurance.current -= data.damage_endu;
+                }
+                if (data.damage_ment > 0 && updatedPawn.mental !== null) {
+                    updatedPawn.mental.current -= data.damage_ment;
+                }
+                if (data.damage_path > 0 && updatedPawn.pathological !== null) {
+                    updatedPawn.pathological.current -= data.damage_path;
+                }
+                if (data.damage_phys > 0 && updatedPawn.physical !== null) {
+                    updatedPawn.physical.current -= data.damage_phys;
+                }
+                if (data.damage_mana > 0 && updatedPawn.mana !== null) {
+                    updatedPawn.mana.current -= data.damage_mana;
+                }
+                const updatedPawns = [...prev];
+                updatedPawns[index] = updatedPawn;
+                return updatedPawns;
+            })
+        })
+
         setSocket(socket);
         return () => {
             socket.disconnect();
