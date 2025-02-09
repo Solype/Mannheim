@@ -6,6 +6,7 @@ class SocketService {
     private ip: string | null = null;
     private baseURL: string = '';
     private currentRoom?: number;
+    private callbacks: { [event: string]: ((data: any) => void)[] } = {};
 
     constructor() {
         this.init();
@@ -41,6 +42,7 @@ class SocketService {
 
         this.socket.onAny((message, args: any) => {
             console.log(message, args);
+            this.callbacks[message]?.forEach((callback) => callback(args));
         });
     }
 
@@ -65,7 +67,13 @@ class SocketService {
     }
 
     on(event: string, callback: (data: any) => void) {
-        this.socket?.on(event, callback);
+        if (!this.callbacks[event]) {
+            this.callbacks[event] = [];
+        }
+        this.callbacks[event].push(callback);
+        this.socket?.on(event, (data: any) => {
+            this.callbacks[event].forEach((callback) => callback(data));
+        });
     }
 
     disconnect() {

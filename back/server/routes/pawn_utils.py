@@ -2,6 +2,8 @@ from typing import Optional, Literal
 from server.routes.server_datatype.session_type import Pawn, Monitor, PawnSeed
 from server.routes.server_datatype.chara_type import CharaAllData
 from server.mysql_db import get_db, modify_db
+from server.socket_message.ping import emit_new_pawn
+import asyncio
 
 def compose_pawn(pawn : tuple, is_gm : bool) -> Optional[Pawn] :
     if (is_gm or pawn[14] == None) :
@@ -51,6 +53,8 @@ def insert_pawn_in_db(pawn : Pawn, hidden : Literal["totally", "partially", None
         pawn.physical.max, pawn.mental.max, pawn.pathological.max, pawn.endurance.max, pawn.mana.max,
         pawn.chara_id, pawn.side, hidden)
     success = modify_db(sql, params)
+    if success :
+        asyncio.run(emit_new_pawn(session_id, pawn, hidden))
     return success
 
 

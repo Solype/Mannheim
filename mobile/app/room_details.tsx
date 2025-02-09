@@ -28,17 +28,18 @@ const RoomView: React.FC = () => {
   const [modalAction, setModalAction] = useState<'heal' | 'attack' | null>(null);
   const [monitorAction, setMonitorAction] = useState<MonitorAction | null>(null);
   const [pawnList, setPawnList] = useState<Pawn[]>([]);
-  const [socket, setSocket] = useState<SocketService | null>(null);
   const router = useRouter();
+  const [socket, setSocket] = useState<SocketService | null>(null);
   
 
   useEffect(() => {
-    if (!room) return;
+    if (!room) return console.error("Room is not loaded yet");
+    console.log("Room ID:", room.id);
     const socket = new SocketService();
     socket.on("new_pawn", (data: Pawn) => {
       const pawn_id = data.id;
       const existingPawn = pawnList.find((pawn) => pawn.id === pawn_id);
-
+      console.error("New pawn:", pawn_id);
       if (existingPawn) {
         pawnList[pawnList.indexOf(existingPawn)] = data;
         setPawnList([...pawnList]);

@@ -183,6 +183,7 @@ async def focus(sid, data):
         sio.emit("focus", data, room=room)
 
 async def emit_new_pawn(roomid : int, pawn : Pawn, hidden : Literal["totally", "partially", None]) :
+    print("emit_new_pawn", roomid, hidden, flush=True)
     if hidden == "totally" :
         gm_id = room_manager.getGm(roomid)
         if gm_id == None :
