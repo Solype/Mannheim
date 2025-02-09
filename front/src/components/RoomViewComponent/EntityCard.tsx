@@ -7,10 +7,9 @@ interface EntityCardProps {
     setModalAction?: ((value: React.SetStateAction<"heal" | "attack" | null>) => void) | null;
     setSelectedPawn?: ((value: Pawn) => void) | null;
     setIsModalOpen?: ((value: React.SetStateAction<boolean>) => void) | null;
-    reajuste?: ((id: number) => void) | null;
 }
 
-function EntityCard({ pawn, setModalAction = null, setSelectedPawn = null, setIsModalOpen = null, reajuste = null }: EntityCardProps) {
+function EntityCard({ pawn, setModalAction = null, setSelectedPawn = null, setIsModalOpen = null }: EntityCardProps) {
     return (
         <Card className="w-full max-w-sm bg-white bg-opacity-50 shadow-md rounded-xl">
             <CardHeader>
@@ -23,11 +22,8 @@ function EntityCard({ pawn, setModalAction = null, setSelectedPawn = null, setIs
                 <p className="text-sm text-gray-700">Pathological: {pawn.pathological?.current ?? "?"} / {pawn.pathological?.max ?? "?"}</p>
                 <p className="text-sm text-gray-700">Endurance: {pawn.endurance?.current ?? "?"} / {pawn.endurance?.max ?? "?"}</p>
                 <p className="text-sm font-medium text-gray-900">Side: {pawn.side}</p>
-                { setModalAction && setSelectedPawn && setIsModalOpen && reajuste &&
+                { setModalAction && setSelectedPawn && setIsModalOpen &&
                     <div className="flex flex-col gap-3 mt-4">
-                        <Button onClick={() => {reajuste && reajuste(pawn.id)}}>
-                            Réajuster
-                        </Button>
                         <Button className="bg-green-500" onClick={() => {
                             setSelectedPawn && setSelectedPawn(pawn);
                             setModalAction && setModalAction("heal");

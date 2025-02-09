@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import sessionService from '@/services/SessionService';
 import { useParams } from 'react-router-dom';
 import { SessionShort, Pawn } from '@/types/sesssion_types';
@@ -89,11 +89,6 @@ const RoomView: React.FC = () => {
         
         loadRoom();
     }, [id]);
-    
-
-
-
-
 
 
 
@@ -122,14 +117,6 @@ const RoomView: React.FC = () => {
         
         checkGm();
     }, [room]);
-
-    const reajuste = async (id: number) => {
-        try {
-            console.log("Reajuste:", id);
-        } catch (error) {
-            console.error("Error reajuste:", error);
-        }
-    };
 
     const handleSelectTarget = async (pawn: Pawn) => {
         try {
@@ -196,10 +183,11 @@ const RoomView: React.FC = () => {
                 <p>{room?.description}</p>
                 <div className="grid grid-cols-5 gap-4">
                     {pawnList && pawnList.map((pawn) => (
-                        <EntityCard key={pawn.id} pawn={pawn} setModalAction={setModalAction} setSelectedPawn={setSelectedPawn} setIsModalOpen={setIsModalOpen} reajuste={reajuste} />
+                        <EntityCard key={pawn.id} pawn={pawn} setModalAction={setModalAction} setSelectedPawn={setSelectedPawn} setIsModalOpen={setIsModalOpen}/>
                     ))}
                 </div>
             </div>
+
 
             <Dialog open={isModalOpen} onOpenChange={(param) => {setIsModalOpen(param); setMonitorAction(null);}}>
                 <DialogContent>
