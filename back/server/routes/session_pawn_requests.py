@@ -3,8 +3,8 @@ from server.mysql_db import getone_db, modify_db, get_db
 from server.access_manager import access_manager
 from server.routes.server_datatype.user_request_type import UserPawnRequest, UserPawnRequestCreate
 from server.routes.server_datatype.chara_type import *
-from server.routes.server_datatype.session_type import Pawn, Monitor
-from typing import Optional, Literal
+from server.routes.server_datatype.session_type import Pawn, PawnSeed
+from server.routes.pawn_utils import insert_pawn_in_db, transform_chara_into_pawn
 import json
 
 def compose_character_request(request_id: int, session_id: int, character_id: int, sender_id: int, receiver_id: int, status: str = "pending") -> UserPawnRequest:
@@ -102,30 +102,6 @@ async def get_character(character_name: str, credentials: HTTPAuthorizationCrede
 
     return character
 
-
-
-def insert_pawn_in_db(pawn : Pawn, hidden : Literal["totally", "partially", None], owner_id : int, session_id) :
-    sql = """
-        INSERT INTO `entities` (
-            name, owner_id, session_id,
-            current_physical_health, current_path_health, current_mental_health, current_endurance, current_mana,
-            max_physical_health, max_mental_health, max_path_health, max_endurance, max_mana,
-            character_id, side_camp, hidden
-        ) VALUES (
-            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
-        )
-        """
-    print("inserted pawn", pawn, flush=True)
-    params = ( pawn.name, owner_id, session_id,
-        pawn.physical.current, pawn.pathological.current, pawn.mental.current, pawn.endurance.current, pawn.mana.current,
-        pawn.physical.max, pawn.mental.max, pawn.pathological.max, pawn.endurance.max, pawn.mana.max,
-        pawn.chara_id, pawn.side, hidden)
-    success = modify_db(sql, params)
-    if (success != True) :
-        raise HTTPException(status_code=500, detail="Failed to insert")
-    return
-
-
 @app.post("/api/my/session/pawn/request/{request_id}/accept")
 def accept_pawn_request(request_id: int, credentials: HTTPAuthorizationCredentials = Depends(security)) -> None:
     if (not access_manager.isTokenValid(credentials.credentials)):
@@ -162,32 +138,10 @@ def accept_pawn_request(request_id: int, credentials: HTTPAuthorizationCredentia
     chara = CharaAllData(**character_data)
 
     print(chara.infos.name, id_user, request[1])
+    to_insert : Pawn = transform_chara_into_pawn(chara, PawnSeed(linked_id=request[2], side=1, hidden=None))
 
-    dictio = {}
-    for skill in chara.skills :
-        if skill.category == "resistance" :
-            print(skill, flush=True)
-            dictio[skill.name] = chara.attributes.resistance + skill.pureValue + skill.roleValue
-
-    mana_monitor = Monitor(max=chara.other.mana, current=chara.other.mana) if chara.other != None else None
-    physical_monitor = Monitor(max=dictio["physical"], current=dictio["physical"]) if "physical" in dictio.keys() else None
-    mental_monitor = Monitor(max=dictio["mental"], current=dictio["mental"]) if "mental" in dictio.keys() else None
-    pathological_monitor = Monitor(max=dictio["pathological"], current=dictio["pathological"]) if "pathological" in dictio.keys() else None
-    endurance_monitor = Monitor(max=dictio["endurance"], current=dictio["endurance"]) if "endurance" in dictio.keys() else None
-
-    to_insert : Pawn = Pawn(
-        id = 0,
-        chara_id = request[2],
-        name = chara.infos.name,
-        mana = mana_monitor,
-        physical = physical_monitor,
-        mental = mental_monitor,
-        pathological = pathological_monitor,
-        endurance = endurance_monitor,
-        side = 1
-    )
-
-    insert_pawn_in_db(to_insert, None, id_user, request[1])
+    if not insert_pawn_in_db(to_insert, None, id_user, request[1]):
+        raise HTTPException(status_code=500, detail="Failed to insert pawn")
     success = modify_db("DELETE FROM `characters_requests` WHERE id = %s", (request_id,))
     if not success:
         raise HTTPException(status_code=500, detail="Failed to delete character request")
