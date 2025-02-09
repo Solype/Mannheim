@@ -213,7 +213,7 @@ const RoomView: React.FC = () => {
                                 className="p-4 bg-blue-500 text-white rounded-lg"
                                 onClick={() => handleSelectTarget(pawn)}
                             >
-                                {pawn.name}
+                                <p className=' truncate max-w-[150px]'>{pawn.name}</p>
                             </Button>
                         ))}
                     </div>
