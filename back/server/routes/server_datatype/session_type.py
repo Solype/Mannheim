@@ -28,12 +28,12 @@ class Monitor(BaseModel):
 class Pawn(BaseModel):
     id:             int
     name:           str
-    chara_id:       Optional[int]
-    mana :          Optional[Monitor]
-    physical:       Optional[Monitor]
-    mental:         Optional[Monitor]
-    pathological:   Optional[Monitor]
-    endurance:      Optional[Monitor]
+    chara_id:       Optional[int] = None
+    mana :          Optional[Monitor] = None
+    physical:       Optional[Monitor] = None
+    mental:         Optional[Monitor] = None
+    pathological:   Optional[Monitor] = None
+    endurance:      Optional[Monitor] = None
     side:           int
 
 class PawnSeed(BaseModel):
