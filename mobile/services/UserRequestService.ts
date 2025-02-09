@@ -109,6 +109,28 @@ class UserRequestService extends AService {
             }
         );
     }
+
+    async sendRoomInvitation(roomId: number, user_id: number): Promise<void> {
+        const headers = await this.getHeaders();
+
+        return await this.request<void>(`/api/my/requests/sessions`, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify({"session_id": roomId, "receiver_id": user_id})
+            }
+        );
+    }
+
+    async sendCharacterInvitation(sessionId: number, character_id: number): Promise<void> {
+        const headers = await this.getHeaders();
+
+        return await this.request<void>(`/api/my/session/pawn/request`, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify({"session_id": sessionId, "character_id": character_id})
+            }
+        );
+    }
 }
 
 export default new UserRequestService();

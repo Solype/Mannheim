@@ -5,7 +5,7 @@ export type SessionShort = {
     name:           string
     description:    string
     players:        Player[]
-    entities:       Pawn[]
+    pawns:       Pawn[]
 }
 
 export type Player = {

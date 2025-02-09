@@ -38,7 +38,7 @@ const CharacterViewPage = () => {
     const loadCharacter = () => {
         if (!id) return;
         CharacterModificationUtils.getCharacter(id).then(character => {
-            setSkills(extractSkills(listSkills, character.skills));
+            extractSkills(listSkills, character.skills).then((skills) => setSkills(skills));
             setReligion(character.religion);
             setAttributes(character.attributes);
             setMainRoles(character.roles.main);
