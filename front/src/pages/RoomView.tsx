@@ -11,6 +11,8 @@ import { SelectFriend } from '@/components/RoomViewComponent/AddPlayerButton';
 import EntityCard from '@/components/RoomViewComponent/EntityCard';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 
 
 interface MonitorAction {
@@ -168,11 +170,21 @@ const RoomView: React.FC = () => {
                         {monitorAction?.receiver && (
                             <>
                                 <EntityCard key={monitorAction.receiver} pawn={room?.pawns.find((pawn) => pawn.id === monitorAction.receiver)!}/>
-                                <Button onClick={handleAction}>Confirmer</Button>
+                                <div className="space-y-2 mt-4">
+                                    <Label>Physical Damage</Label>
+                                    <Input type="number" value={monitorAction.damage_phys} onChange={(e) => setMonitorAction({...monitorAction, damage_phys: Number(e.target.value)})} />
+                                    <Label>Pathological Damage</Label>
+                                    <Input type="number" value={monitorAction.damage_path} onChange={(e) => setMonitorAction({...monitorAction, damage_path: Number(e.target.value)})} />
+                                    <Label>Mental Damage</Label>
+                                    <Input type="number" value={monitorAction.damage_ment} onChange={(e) => setMonitorAction({...monitorAction, damage_ment: Number(e.target.value)})} />
+                                    <Label>Endurance Damage</Label>
+                                    <Input type="number" value={monitorAction.damage_endu} onChange={(e) => setMonitorAction({...monitorAction, damage_endu: Number(e.target.value)})} />
+                                </div>
                             </>
                         )}
                     </div>
                     <DialogFooter>
+                        { monitorAction && monitorAction.receiver && <Button onClick={handleAction}>Confirmer</Button>}
                         <Button onClick={() => {setIsModalOpen(false); setMonitorAction(null);}}>Annuler</Button>
                     </DialogFooter>
                 </DialogContent>
