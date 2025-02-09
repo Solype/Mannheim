@@ -36,7 +36,7 @@ export default function LoginPage() {
 
         try {
             await LoginService.login(formData.username, formData.password);
-            navigate('/');
+            navigate('/characters');
         } catch (error) {
             setError("Error logging in. Please try again.");
             console.error('Error logging in:', error);

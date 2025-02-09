@@ -1,28 +1,34 @@
 import AService from "@/services/AService";
-import { FriendRequest } from "@/types/requests_types";
+import { FriendRequest, RoomRequest, CharacterRequest } from "@/types/requests_types";
 
 class UserRequestService extends AService {
 
     async getFriendsRequest(): Promise<FriendRequest[]> {
+        const headers = await this.getHeaders();
+
         return await this.request<FriendRequest[]>('/api/my/requests/friends', {
                 method: 'GET',
-                headers: this.getHeaders(),
+                headers,
             }
         );
     }
 
-    async getRoomsRequest(): Promise<string[]> {
-        return await this.request<string[]>('/api/my/requests/sessions', {
+    async getRoomsRequest(): Promise<RoomRequest[]> {
+        const headers = await this.getHeaders();
+
+        return await this.request<RoomRequest[]>('/api/my/requests/sessions', {
                 method: 'GET',
-                headers: this.getHeaders(),
+                headers,
             }
         );
     }
 
-    async getCharactersRequest(): Promise<string[]> {
-        return await this.request<string[]>('/api/my/requests/characters', {
+    async getCharactersRequest(): Promise<CharacterRequest[]> {
+        const headers = await this.getHeaders();
+
+        return await this.request<CharacterRequest[]>('/api/my/session/pawn/requests', {
                 method: 'GET',
-                headers: this.getHeaders(),
+                headers,
             }
         );
     }
@@ -37,25 +43,31 @@ class UserRequestService extends AService {
     ///////////////////////////////////////////////////////
 
     async acceptFriendRequest(request_id: number): Promise<void> {
+        const headers = await this.getHeaders();
+
         return await this.request<void>(`/api/my/requests/friends/${request_id}/accept`, {
                 method: 'POST',
-                headers: this.getHeaders(),
+                headers,
             }
         );
     }
 
     async acceptRoomRequest(roomId: number): Promise<void> {
+        const headers = await this.getHeaders();
+
         return await this.request<void>(`/api/my/rooms/requests/${roomId}/accept`, {
                 method: 'POST',
-                headers: this.getHeaders(),
+                headers,
             }
         );
     }
 
     async acceptCharacterRequest(characterId: number): Promise<void> {
+        const headers = await this.getHeaders();
+
         return await this.request<void>(`/api/my/characters/requests/${characterId}/accept`, {
                 method: 'POST',
-                headers: this.getHeaders(),
+                headers,
             }
         );
     }
@@ -69,25 +81,53 @@ class UserRequestService extends AService {
     ///////////////////////////////////////////////////////
 
     async rejectFriendRequest(friendId: number): Promise<void> {
+        const headers = await this.getHeaders();
+
         return await this.request<void>(`/api/my/friends/requests/${friendId}/decline`, {
                 method: 'POST',
-                headers: this.getHeaders(),
+                headers,
             }
         );
     }
 
     async rejectRoomRequest(roomId: number): Promise<void> {
+        const headers = await this.getHeaders();
+
         return await this.request<void>(`/api/my/rooms/requests/${roomId}/decline`, {
                 method: 'POST',
-                headers: this.getHeaders(),
+                headers,
             }
         );
     }
 
     async rejectCharacterRequest(characterId: number): Promise<void> {
+        const headers = await this.getHeaders();
+
         return await this.request<void>(`/api/my/characters/requests/${characterId}/decline`, {
                 method: 'POST',
-                headers: this.getHeaders(),
+                headers,
+            }
+        );
+    }
+
+    async sendRoomInvitation(roomId: number, user_id: number): Promise<void> {
+        const headers = await this.getHeaders();
+
+        return await this.request<void>(`/api/my/requests/sessions`, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify({"session_id": roomId, "receiver_id": user_id})
+            }
+        );
+    }
+
+    async sendCharacterInvitation(sessionId: number, character_id: number): Promise<void> {
+        const headers = await this.getHeaders();
+
+        return await this.request<void>(`/api/my/session/pawn/request`, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify({"session_id": sessionId, "character_id": character_id})
             }
         );
     }

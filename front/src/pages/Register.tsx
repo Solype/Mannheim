@@ -42,7 +42,7 @@ export default function RegisterPage() {
 
         try {
             await LoginService.register(formData.username, formData.password);
-            navigate("/");
+            navigate("/characters");
         } catch (error) {
             setError("Error registering. Please try again.");
             console.error('Error registering:', error);

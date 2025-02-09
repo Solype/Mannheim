@@ -127,7 +127,7 @@ async def delete_session(id: int, credentials: HTTPAuthorizationCredentials = De
     if owner[0] != user_id:
         raise HTTPException(status_code=403)
 
-    success = modify_db("DELETE FROM `sessions` WHERE id = %s AND gamemaster_id = %s", (id, user_id))
+    success = modify_db("DELETE FROM `sessions` WHEbRE id = %s AND gamemaster_id = %s", (id, user_id))
     if not success:
         raise HTTPException(status_code=500, detail="Failed to delete session")
     return
@@ -191,8 +191,8 @@ async def get_session(id: int, credentials: HTTPAuthorizationCredentials = Depen
     print("processing players", flush=True)
     player_ids = [player[0] for player in players]
     if user_id not in player_ids and user_id != gm_id:
-    if user_id not in player_ids and user_id != gm_id:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+        if user_id not in player_ids and user_id != gm_id:
+            raise HTTPException(status_code=401, detail="Unauthorized")
 
     print("User in session", flush=True)
     print("User in session", flush=True)
