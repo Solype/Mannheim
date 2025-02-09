@@ -2,7 +2,8 @@ from server.server import app, HTTPAuthorizationCredentials, security, Depends, 
 from server.mysql_db import getone_db, modify_db, get_db
 from server.access_manager import access_manager
 from server.routes.server_datatype.user_request_type import UserPawnRequest, UserPawnRequestCreate
-from server.routes.server_datatype.chara_type import CharaAllData
+from server.routes.server_datatype.chara_type import *
+from server.routes.server_datatype.session_type import Pawn, Monitor
 from typing import Optional, Literal
 import json
 
@@ -101,6 +102,30 @@ async def get_character(character_name: str, credentials: HTTPAuthorizationCrede
 
     return character
 
+
+
+def insert_pawn_in_db(pawn : Pawn, hidden : Literal["totally", "partially", None], owner_id : int, session_id) :
+    sql = """
+        INSERT INTO `entities` (
+            name, owner_id, session_id,
+            current_physical_health, current_path_health, current_mental_health, current_endurance, current_mana,
+            max_physical_health, max_mental_health, max_path_health, max_endurance, max_mana,
+            character_id, side_camp, hidden
+        ) VALUES (
+            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+        )
+        """
+    print("inserted pawn", pawn, flush=True)
+    params = ( pawn.name, owner_id, session_id,
+        pawn.physical.current, pawn.pathological.current, pawn.mental.current, pawn.endurance.current, pawn.mana.current,
+        pawn.physical.max, pawn.mental.max, pawn.pathological.max, pawn.endurance.max, pawn.mana.max,
+        pawn.chara_id, pawn.side, hidden)
+    success = modify_db(sql, params)
+    if (success != True) :
+        raise HTTPException(status_code=500, detail="Failed to insert")
+    return
+
+
 @app.post("/api/my/session/pawn/request/{request_id}/accept")
 def accept_pawn_request(request_id: int, credentials: HTTPAuthorizationCredentials = Depends(security)) -> None:
     if (not access_manager.isTokenValid(credentials.credentials)):
@@ -134,35 +159,38 @@ def accept_pawn_request(request_id: int, credentials: HTTPAuthorizationCredentia
     if not character_data:
         raise HTTPException(status_code=500, detail="Failed to get character data")
     character_data = json.loads(character_data)
-    print(character_data["infos"]["name"], id_user, request[1])
+    chara = CharaAllData(**character_data)
 
-    resistance = character_data["attributes"]["resistance"]
-    physical_skill = next((skill for skill in character_data["skills"] if skill["name"] == "physical"), None)
-    if physical_skill:
-        current_physical_skill = (physical_skill["roleValue"] + physical_skill["pureValue"] + resistance)
-    else:
-        current_physical_skill = 100
-    path_skill = next((skill for skill in character_data["skills"] if skill["name"] == "pathological"), None)
-    if path_skill:
-        current_path_skill = (path_skill["roleValue"] + path_skill["pureValue"] + resistance)
-    else:
-        current_path_skill = 100
-    mental_skill = next((skill for skill in character_data["skills"] if skill["name"] == "mental"), None)
-    if mental_skill:
-        current_mental_skill = (mental_skill["roleValue"] + mental_skill["pureValue"] + resistance)
-    else:
-        current_mental_skill = 100
-    endurance_skill = next((skill for skill in character_data["skills"] if skill["name"] == "endurance"), None)
-    if endurance_skill:
-        current_endurance_skill = (endurance_skill["roleValue"] + endurance_skill["pureValue"] + resistance)
-    else:
-        current_endurance_skill = 100
+    print(chara.infos.name, id_user, request[1])
 
-    success2 = modify_db("""INSERT INTO `entities` (name, owner_id, session_id, current_physical_health, current_path_health, current_mental_health, current_endurance, current_mana, max_physical_health, max_mental_health, max_path_health, max_endurance, max_mana, character_id, side_camp, hidden) 
-                                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
-                                        (character_data["infos"]["name"],  id_user, request[1], current_physical_skill, current_path_skill, current_mental_skill, current_endurance_skill, character_data["other"]["mana"], current_physical_skill, current_mental_skill, current_path_skill, current_endurance_skill, character_data["other"]["mana"], request[2], 1))
-    if not success2:
-        raise HTTPException(status_code=500, detail="Failed to create entity")
+    dictio = {}
+    for skill in chara.skills :
+        if skill.category == "resistance" :
+            print(skill, flush=True)
+            dictio[skill.name] = chara.attributes.resistance + skill.pureValue + skill.roleValue
+
+    mana_monitor = Monitor(max=chara.other.mana, current=chara.other.mana) if chara.other != None else None
+    physical_monitor = Monitor(max=dictio["physical"], current=dictio["physical"]) if "physical" in dictio.keys() else None
+    mental_monitor = Monitor(max=dictio["mental"], current=dictio["mental"]) if "mental" in dictio.keys() else None
+    pathological_monitor = Monitor(max=dictio["pathological"], current=dictio["pathological"]) if "pathological" in dictio.keys() else None
+    endurance_monitor = Monitor(max=dictio["endurance"], current=dictio["endurance"]) if "endurance" in dictio.keys() else None
+
+    to_insert : Pawn = Pawn(
+        id = 0,
+        chara_id = request[2],
+        name = chara.infos.name,
+        mana = mana_monitor,
+        physical = physical_monitor,
+        mental = mental_monitor,
+        pathological = pathological_monitor,
+        endurance = endurance_monitor,
+        side = 1
+    )
+
+    insert_pawn_in_db(to_insert, None, id_user, request[1])
+    success = modify_db("DELETE FROM `characters_requests` WHERE id = %s", (request_id,))
+    if not success:
+        raise HTTPException(status_code=500, detail="Failed to delete character request")
     return
 
 @app.post("/api/my/session/pawn/request/{request_id}/decline")
