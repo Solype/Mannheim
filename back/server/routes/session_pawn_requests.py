@@ -130,12 +130,39 @@ def accept_pawn_request(request_id: int, credentials: HTTPAuthorizationCredentia
         if not success:
             raise HTTPException(status_code=500, detail="Failed to grant access to character")
     
-    character_data = getone_db("SELECT character_data FROM `characters` WHERE id = %s", (request[2],))
+    character_data, id_user = getone_db("SELECT character_data, user_id FROM `characters` WHERE id = %s", (request[2],))
     if not character_data:
         raise HTTPException(status_code=500, detail="Failed to get character data")
-    success = modify_db("""INSERT INTO `entities` (name, owner_id, session_id, current_physical_health, current_path_health, current_mental_health, current_endurance, current_mana, max_physical_health, max_mental_health, max_path_health, max_endurance, max_mana, character_id, side_camp, hidden) 
-                                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s""",
-                                        (character_data["info"]["name"], )
+    character_data = json.loads(character_data)
+    print(character_data["infos"]["name"], id_user, request[1])
+
+    resistance = character_data["attributes"]["resistance"]
+    physical_skill = next((skill for skill in character_data["skills"] if skill["name"] == "physical"), None)
+    if physical_skill:
+        current_physical_skill = (physical_skill["roleValue"] + physical_skill["pureValue"] + resistance)
+    else:
+        current_physical_skill = 100
+    path_skill = next((skill for skill in character_data["skills"] if skill["name"] == "pathological"), None)
+    if path_skill:
+        current_path_skill = (path_skill["roleValue"] + path_skill["pureValue"] + resistance)
+    else:
+        current_path_skill = 100
+    mental_skill = next((skill for skill in character_data["skills"] if skill["name"] == "mental"), None)
+    if mental_skill:
+        current_mental_skill = (mental_skill["roleValue"] + mental_skill["pureValue"] + resistance)
+    else:
+        current_mental_skill = 100
+    endurance_skill = next((skill for skill in character_data["skills"] if skill["name"] == "endurance"), None)
+    if endurance_skill:
+        current_endurance_skill = (endurance_skill["roleValue"] + endurance_skill["pureValue"] + resistance)
+    else:
+        current_endurance_skill = 100
+
+    success2 = modify_db("""INSERT INTO `entities` (name, owner_id, session_id, current_physical_health, current_path_health, current_mental_health, current_endurance, current_mana, max_physical_health, max_mental_health, max_path_health, max_endurance, max_mana, character_id, side_camp, hidden) 
+                                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
+                                        (character_data["infos"]["name"],  id_user, request[1], current_physical_skill, current_path_skill, current_mental_skill, current_endurance_skill, character_data["other"]["mana"], current_physical_skill, current_mental_skill, current_path_skill, current_endurance_skill, character_data["other"]["mana"], request[2], 1))
+    if not success2:
+        raise HTTPException(status_code=500, detail="Failed to create entity")
     return
 
 @app.post("/api/my/session/pawn/request/{request_id}/decline")
