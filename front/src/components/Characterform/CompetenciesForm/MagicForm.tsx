@@ -1,6 +1,6 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Magic } from '@/types/types';
+import { Magic } from '@/types/character_types';
 
 export const MagicForm = ({ magic, setMagic }: { magic: Magic, setMagic: (c: Magic) => void }) => {
     return (

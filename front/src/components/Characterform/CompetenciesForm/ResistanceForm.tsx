@@ -1,6 +1,6 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Resistance } from '@/types/types';
+import { Resistance } from '@/types/character_types';
 
 export const ResistanceForm = ({ resistance, setResistance }: { resistance: Resistance, setResistance: (c: Resistance) => void }) => {
     return (

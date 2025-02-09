@@ -1,6 +1,6 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { RangedWeapons } from '@/types/types';
+import { RangedWeapons } from '@/types/character_types';
 
 export const RangedForm = ({ ranged, setRanged }: { ranged: RangedWeapons, setRanged: (c: RangedWeapons) => void }) => {
     return (

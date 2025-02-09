@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Skill } from "@/types/character_types";
 import { dico } from "@/types/dico";
 
