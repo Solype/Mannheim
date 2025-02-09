@@ -14,7 +14,9 @@ class Room(BaseModel):
 class RoomManager :
     def __init__(self) :
         self.rooms : dict[int, Room] = {}
-        self.players : dict[int, int] = {}
+
+                        # SID -> Room
+        self.players : dict[str, str] = {}
 
     def joinRoom(self, roomid : int, sid : str, is_gm : bool) :
         if roomid not in self.rooms.keys() :
@@ -120,6 +122,9 @@ async def damage(sid, data: MonitorAction):
     print("-- sid:", sid, flush=True)
     print("-- data:", data, flush=True)
 
+    if sid not in room_manager.players.keys():
+        return
+
     pawn = getone_db("SELECT id FROM entities WHERE id = %s", (data.receiver,))
     if not pawn:
         return
@@ -133,7 +138,8 @@ async def damage(sid, data: MonitorAction):
     if (data.damage_phys > 0) :
         modify_db("UPDATE entities SET current_physical = current_physical - %s WHERE id = %s", (data.damage_phys, data.receiver))
 
-    # sio.emit("damage", data, room=room)
+    room = room_manager.players.get(sid)
+    sio.emit("damage", data, room=room)
 
 @sio.on("heal")
 async def heal(sid, data: MonitorAction):
@@ -141,6 +147,8 @@ async def heal(sid, data: MonitorAction):
     print("-- sid:", sid, flush=True)
     print("-- data:", data, flush=True)
 
+    if sid not in room_manager.players.keys():
+        return
 
     pawn = getone_db("SELECT id FROM entities WHERE id = %s", (data.receiver,))
     if not pawn:
@@ -155,8 +163,8 @@ async def heal(sid, data: MonitorAction):
     if (data.damage_phys > 0) :
         modify_db("UPDATE entities SET current_physical = current_physical + %s WHERE id = %s", (data.damage_phys, data.receiver))
 
-    for room in sio.rooms(sid):
-        sio.emit("heal", data, room=room)
+    room = room_manager.players.get(sid)
+    sio.emit("heal", data, room=room)
 
 
 class Focus(BaseModel):
