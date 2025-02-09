@@ -53,6 +53,9 @@ def get_my_owned_session(credentials: HTTPAuthorizationCredentials = Depends(sec
     lst = [compose_session_short(session_id[0]) for session_id in session_i_own]
     print(lst, flush=True)
     return lst
+    lst = [compose_session_short(session_id[0]) for session_id in session_i_own]
+    print(lst, flush=True)
+    return lst
 
 
 
@@ -124,7 +127,7 @@ async def delete_session(id: int, credentials: HTTPAuthorizationCredentials = De
     if owner[0] != user_id:
         raise HTTPException(status_code=403)
 
-    success = modify_db("DELETE FROM `sessions` WHERE id = %s AND gamemaster_id = %s", (id, user_id))
+    success = modify_db("DELETE FROM `sessions` WHEbRE id = %s AND gamemaster_id = %s", (id, user_id))
     if not success:
         raise HTTPException(status_code=500, detail="Failed to delete session")
     return
@@ -157,14 +160,18 @@ async def get_session(id: int, credentials: HTTPAuthorizationCredentials = Depen
         raise HTTPException(status_code=404, detail="Session not found")
 
     print("processing players", flush=True)
+    print("processing players", flush=True)
     player_ids = [player[0] for player in players]
     if user_id not in player_ids and user_id != gm_id:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+        if user_id not in player_ids and user_id != gm_id:
+            raise HTTPException(status_code=401, detail="Unauthorized")
 
+    print("User in session", flush=True)
     print("User in session", flush=True)
     names = [getone_db("SELECT username FROM `users` WHERE id = %s", (player_id,))[0] for player_id in player_ids]
     players = [Player(id=player_id, name=name) for player_id, name in zip(player_ids, names)]
 
+    print("gm_id", gm_id, "user_id", user_id, flush=True)
     print("gm_id", gm_id, "user_id", user_id, flush=True)
     pawns = get_pawns_of_session(id, user_id == gm_id)
 
@@ -177,7 +184,7 @@ async def get_session(id: int, credentials: HTTPAuthorizationCredentials = Depen
         players=players,
         pawns=pawns
     )
-
+ 
 @app.post("/api/my/session/{session_id}/pawn", tags=["Pawn"])
 async def create_pawn(session_id: int, pawn: PawnSeed, credentials: HTTPAuthorizationCredentials = Depends(security)) -> None:
     token = credentials.credentials

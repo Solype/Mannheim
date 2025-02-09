@@ -24,7 +24,7 @@ export default function AttributesForm({ attributes, setter, disabled }: Attribu
                         </label>
                         <input
                             id={attribute}
-                            name={attribute} // Ajout du name correspondant
+                            name={attribute}
                             type="number"
                             value={value}
                             onChange={onRoleValueChange}

@@ -25,19 +25,19 @@ function App() {
       </Routes>
       <Container>
         <Routes>
-          <Route path="/" element={<DashboardPage />} />
-          <Route path="/invitations" element={<InvitationsPage />} />
           <Route path="/dashboard" element={<DashboardPage/>} />
           <Route path="/characters" element={<CharactersPage />} />
           <Route path="/characters/:id" element={<CharacterViewPage />} />
+          <Route path="/lore/story/:id" element={<LoreStoryPage />} />
           <Route path="/create-character" element={<CreateCharacterPage />} />
+          <Route path="/" element={<DashboardPage />} />
+          <Route path="/invitations" element={<InvitationsPage />} />
           <Route path="/creatures" element={<Creatures />} />
           <Route path="/lores" element={<Lores />} />
           <Route path="/rooms" element={<Rooms />} />
           <Route path="/room/:id" element={<RoomView />} />
           <Route path="/rules" element={<Rules />} />
           <Route path="/profile" element={<Profile/>} />
-          <Route path="/lore/story/:id" element={<LoreStoryPage />} />
           <Route path="*" element={<NotFound/>} />
         </Routes>
       </Container>
