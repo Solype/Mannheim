@@ -56,7 +56,7 @@ export function SelectFriend({room_id}: {room_id: number}) {
     }
 
     return (
-        <>
+        <div>
             <Button onClick={openModal}>Ajouter un Ami</Button>
             <Dialog open={modalOpen} onOpenChange={setModalOpen}>
                 <DialogContent>
@@ -86,6 +86,6 @@ export function SelectFriend({room_id}: {room_id: number}) {
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
-        </>
+        </div>
     )
 }

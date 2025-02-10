@@ -238,7 +238,7 @@ const RoomView: React.FC = () => {
                     </div>
                     <div>
                         {monitorAction?.receiver && (
-                            <>
+                            <div>
                                 <EntityCard key={monitorAction.receiver} pawn={pawnList.find((pawn) => pawn.id === monitorAction.receiver)!}/>
                                 <div className="space-y-2 mt-4">
                                     <Label>Physical Damage</Label>
@@ -250,7 +250,7 @@ const RoomView: React.FC = () => {
                                     <Label>Endurance Damage</Label>
                                     <Input type="number" value={monitorAction.damage_endu} onChange={(e) => setMonitorAction({...monitorAction, damage_endu: Number(e.target.value)})} />
                                 </div>
-                            </>
+                            </div>
                         )}
                     </div>
                     <DialogFooter>

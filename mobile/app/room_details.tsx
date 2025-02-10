@@ -170,21 +170,6 @@ const RoomView: React.FC = () => {
         });
     }
 
-    const setTargetPawn = (pawn: Pawn) => {
-        setMonitorAction((prev) => {
-            if (prev === null) return {
-                damage_phys: 0,
-                damage_path: 0,
-                damage_ment: 0,
-                damage_endu: 0,
-                damage_mana: 0,
-                receiver: pawn.id,
-                dealer: undefined,
-                method: undefined
-            }
-            return {...prev, receiver: pawn.id}
-        });
-    }
 
     return (
         <ImageBackground
@@ -231,8 +216,22 @@ const RoomView: React.FC = () => {
                                   value={monitorAction.damage_path.toString()}
                                   onChangeText={(value) => setMonitorAction({...monitorAction, damage_path: Number(value)})}
                               />
-                              <Button title="Confirmer" onPress={handleAction} />
-                              <Button title="Annuler" onPress={() => { setIsModalOpen(false); setMonitorAction(null); }} />
+                                <Text style={styles.title}>Mental Damage</Text>
+                                <TextInput
+                                    style={styles.input}
+                                    keyboardType="numeric"
+                                    value={monitorAction.damage_ment.toString()}
+                                    onChangeText={(value) => setMonitorAction({...monitorAction, damage_ment: Number(value)})}
+                                />
+                                <Text style={styles.title}>Endurance Damage</Text>
+                                <TextInput
+                                    style={styles.input}
+                                    keyboardType="numeric"
+                                    value={monitorAction.damage_endu.toString()}
+                                    onChangeText={(value) => setMonitorAction({...monitorAction, damage_endu: Number(value)})}
+                                />
+                              <Button title="Confirmer" onPress={handleAction} color={"green"}/>
+                              <Button title="Annuler" onPress={() => { setIsModalOpen(false); setMonitorAction(null); }} color={"red"} />
                           </View>
                       )}
                     </View>
