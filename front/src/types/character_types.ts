@@ -87,6 +87,26 @@ export type Survival = {
     [key: string]: number;
 };
 
+export type Knowledge = {
+    anatomy: number;
+    artistic: number;
+    astronomy: number;
+    biology: number;
+    cultural: number;
+    geography: number;
+    warfare: number;
+    history: number;
+    linguistics: number;
+    magic: number;
+    mysticism: number;
+    technology: number;
+    concentration: number;
+    deduction: number;
+    memory: number;
+    observation: number;
+    [key: string]: number;
+}
+
 export type Social = {
     taming: number;
     deceit: number;

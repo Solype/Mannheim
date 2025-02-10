@@ -15,13 +15,19 @@ export type Player = {
 
 export type Pawn = {
     id:             number
-    chara_id:       number
-    mana:           object | null
-    physical:       object | null
-    mental:         object | null
-    pathological:   object | null
-    endurance:      object | null
+    name:           string
+    chara_id:       number | null
+    mana:           Monitor | null
+    physical:       Monitor | null
+    mental:         Monitor | null
+    pathological:   Monitor | null
+    endurance:      Monitor | null
     side:           number
+}
+
+export type Monitor = {
+    current:        number
+    max:            number
 }
 
 export type PawnSeed = {

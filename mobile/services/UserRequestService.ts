@@ -55,7 +55,7 @@ class UserRequestService extends AService {
     async acceptRoomRequest(roomId: number): Promise<void> {
         const headers = await this.getHeaders();
 
-        return await this.request<void>(`/api/my/rooms/requests/${roomId}/accept`, {
+        return await this.request<void>(`/api/my/requests/sessions/${roomId}/accept`, {
                 method: 'POST',
                 headers,
             }
@@ -65,7 +65,7 @@ class UserRequestService extends AService {
     async acceptCharacterRequest(characterId: number): Promise<void> {
         const headers = await this.getHeaders();
 
-        return await this.request<void>(`/api/my/characters/requests/${characterId}/accept`, {
+        return await this.request<void>(`/api/my/session/pawn/request/${characterId}/accept`, {
                 method: 'POST',
                 headers,
             }
@@ -93,7 +93,7 @@ class UserRequestService extends AService {
     async rejectRoomRequest(roomId: number): Promise<void> {
         const headers = await this.getHeaders();
 
-        return await this.request<void>(`/api/my/rooms/requests/${roomId}/decline`, {
+        return await this.request<void>(`/api/my/requests/sessions/${roomId}/decline`, {
                 method: 'POST',
                 headers,
             }
@@ -103,7 +103,7 @@ class UserRequestService extends AService {
     async rejectCharacterRequest(characterId: number): Promise<void> {
         const headers = await this.getHeaders();
 
-        return await this.request<void>(`/api/my/characters/requests/${characterId}/decline`, {
+        return await this.request<void>(`/api/my/session/pawn/request/${characterId}/decline`, {
                 method: 'POST',
                 headers,
             }

@@ -1,6 +1,6 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { MeleeWeapons } from '@/types/types';
+import { MeleeWeapons } from '@/types/character_types';
 
 export const MeleeForm = ({ melee, setMelee }: { melee: MeleeWeapons, setMelee: (c: MeleeWeapons) => void }) => {
     return (

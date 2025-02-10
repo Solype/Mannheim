@@ -1,7 +1,6 @@
 import React from 'react';
-import { GiBowman, GiBrute, GiMagicGate } from "react-icons/gi";
+import { GiBowman, GiBrute } from "react-icons/gi";
 import { MdExplore, MdMeetingRoom } from "react-icons/md";
-import { FaBookQuran } from "react-icons/fa6";
 import { Link } from 'react-router-dom';
 
 const NavbarLeft: React.FC = () => {

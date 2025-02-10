@@ -1,6 +1,5 @@
 import AService from "@/services/AService";
 import { FriendRequest, RoomRequest, CharacterRequest } from "@/types/requests_types";
-import UtilsService from "@/services/UtilsService";
 
 class UserRequestService extends AService {
 

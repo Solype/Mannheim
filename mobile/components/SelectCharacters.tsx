@@ -23,6 +23,7 @@ const SelectCharacter = ({ room_id }: SelectCharacterProps) => {
       if (!hasLoaded.current) {
         CharacterModificationUtilsService.getCharacters().then((characters) => {
           setCharacters(characters);
+          setCharacterSelected(characters[0].id);
           hasLoaded.current = true;
         });
       }
@@ -30,6 +31,7 @@ const SelectCharacter = ({ room_id }: SelectCharacterProps) => {
     };
   
     const confirm = () => {
+      console.log('characterSelected:', characterSelected);
       if (!characterSelected) {
         Alert.alert('Veuillez sélectionner un personnage');
         return;
