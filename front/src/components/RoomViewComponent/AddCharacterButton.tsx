@@ -60,7 +60,7 @@ export function SelectCharacter({room_id}: {room_id: number}) {
     
 
     return (
-        <>
+        <div>
             <Button onClick={openModal}>Ajouter un personnage</Button>
             <Dialog open={modalOpen} onOpenChange={setModalOpen}>
                 <DialogContent>
@@ -90,6 +90,6 @@ export function SelectCharacter({room_id}: {room_id: number}) {
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
-        </>
+        </div>
     )
 }
