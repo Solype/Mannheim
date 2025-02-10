@@ -1,6 +1,6 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Knowledge } from '@/types/types';
+import { Knowledge } from '@/types/character_types';
 
 export const KnowledgeForm = ({ knowledge, setKnowledge }: { knowledge: Knowledge, setKnowledge: (c: Knowledge) => void }) => {
     return (

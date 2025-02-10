@@ -1,6 +1,6 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Movement } from '@/types/types';
+import { Movement } from '@/types/character_types';
 
 export const MovementForm = ({ movement, setMovement }: { movement: Movement, setMovement: (c: Movement) => void }) => {
     return (

@@ -1,6 +1,6 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Artillery } from '@/types/types';
+import { Artillery } from '@/types/character_types';
 
 export const ArtilleryForm = ({ artillery, setArtillery }: { artillery: Artillery, setArtillery: (c: Artillery) => void }) => {
     return (

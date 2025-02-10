@@ -1,6 +1,6 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Social } from '@/types/types';
+import { Social } from '@/types/character_types';
 
 export const SocialForm = ({ social, setSocial }: { social: Social, setSocial: (c: Social) => void }) => {
     return (

@@ -45,17 +45,46 @@ const RoomView: React.FC = () => {
         console.log("Room ID:", room.id);
         const socket = new SocketService();
         socket.on("new_pawn", (data: Pawn) => {
-            const pawn_id = data.id;
-            console.log(data);
-            console.log("New pawn:", pawn_id);
-            const existingPawn = pawnList.find((pawn) => {console.log(pawn.id, pawn_id); return pawn.id === pawn_id});
+            setPawnList((prev) => {
+                const existingPawn = prev.find((pawn) => pawn.id === data.id);
+                if (existingPawn) {
+                    return prev.map((pawn) => (pawn.id === data.id ? data : pawn));
+                } else {
+                    return [...prev, data];
+                }
+            })
+        });
 
-            if (existingPawn) {
-                pawnList[pawnList.indexOf(existingPawn)] = data;
-                setPawnList([...pawnList]);
-            } else {
-                setPawnList([...pawnList, data]);
-            }
+        socket.on("heal", (data: MonitorAction) => {
+            setPawnList((prev: Pawn[]) => {
+                const existingPawn = prev.find((pawn) => pawn.id === data.receiver);
+                if (!existingPawn) return prev;
+                const index = prev.indexOf(existingPawn);
+                if (index === -1) return prev;
+                if (existingPawn?.physical) {existingPawn.physical.current += data.damage_phys};
+                if (existingPawn?.mental) {existingPawn.mental.current += data.damage_ment};
+                if (existingPawn?.endurance) {existingPawn.endurance.current += data.damage_endu};
+                if (existingPawn?.pathological) {existingPawn.pathological.current += data.damage_path};
+                if (existingPawn?.mana) {existingPawn.mana.current += data.damage_mana};
+                prev[index] = existingPawn;
+                return [...prev];
+            })
+        });
+
+        socket.on("attack", (data: MonitorAction) => {
+            setPawnList((prev: Pawn[]) => {
+                const existingPawn = prev.find((pawn) => pawn.id === data.receiver);
+                if (!existingPawn) return prev;
+                const index = prev.indexOf(existingPawn);
+                if (index === -1) return prev;
+                if (existingPawn?.physical) {existingPawn.physical.current -= data.damage_phys};
+                if (existingPawn?.mental) {existingPawn.mental.current -= data.damage_ment};
+                if (existingPawn?.endurance) {existingPawn.endurance.current -= data.damage_endu};
+                if (existingPawn?.pathological) {existingPawn.pathological.current -= data.damage_path};
+                if (existingPawn?.mana) {existingPawn.mana.current -= data.damage_mana};
+                prev[index] = existingPawn;
+                return [...prev];
+            })
         });
 
         setSocket(socket);
@@ -128,7 +157,9 @@ const RoomView: React.FC = () => {
 
     const handleAction = async () => {
         try {
+            if (!socket || !modalAction || !monitorAction) return;
             console.log("Action:", modalAction, monitorAction);
+            socket?.emit(modalAction, monitorAction);
         } catch (error) {
             console.error("Error handling action:", error);
         }

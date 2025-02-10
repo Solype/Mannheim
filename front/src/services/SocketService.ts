@@ -43,6 +43,9 @@ class SocketService {
         this.socket.on(event, callback);
     }
 
+    emit(event: string, data: any) {
+        this.socket.emit(event, data);
+    }
 
     disconnect() {
         this.socket.disconnect();

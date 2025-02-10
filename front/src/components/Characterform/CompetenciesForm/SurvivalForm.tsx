@@ -1,6 +1,6 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Survival } from '@/types/types';
+import { Survival } from '@/types/character_types';
 
 export const SurvivalForm = ({ survival, setSurvival }: { survival: Survival, setSurvival: (c: Survival) => void }) => {
     return (

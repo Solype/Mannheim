@@ -95,11 +95,6 @@ async def join_room(sid, data: dict):
         print("GM", flush=True)
 
     room_manager.joinRoom(data.session_id, sid, result != None)
-    from time import sleep
-    sleep(1)
-    await emit_new_pawn(data.session_id, Pawn(id=1, name="test1", chara_id=1, mana=Monitor(max=10, current=5), side=1), "totally")
-    await emit_new_pawn(data.session_id, Pawn(id=1, name="test2", chara_id=1, mana=Monitor(max=10, current=5), side=1), "partially")
-    await emit_new_pawn(data.session_id, Pawn(id=1, name="test3", chara_id=1, mana=Monitor(max=10, current=5), side=1), None)
 
 
 @sio.on("disconnect")
@@ -117,9 +112,9 @@ class MonitorAction(BaseModel):
     damage_mana:    int
     receiver:       int
     dealer:         int
-    method:         Optional[str]
+    method:         Optional[str] = None
 
-@sio.on("damage")
+@sio.on("attack")
 async def damage(sid, data: MonitorAction):
     print("<< damage", flush=True)
     print("-- sid:", sid, flush=True)
@@ -128,21 +123,32 @@ async def damage(sid, data: MonitorAction):
     if sid not in room_manager.players.keys():
         return
 
-    pawn = getone_db("SELECT id FROM entities WHERE id = %s", (data.receiver,))
+    data_obj = MonitorAction(**data)
+    print(data_obj, flush=True)
+    print(data_obj.damage_phys, data_obj.damage_phys > 0, flush=True)
+    pawn = getone_db("SELECT id, current_physical_health, current_mental_health, current_path_health, current_endurance, current_mana FROM entities WHERE id = %s", (data_obj.receiver,))
     if not pawn:
+        print("pawn not found", flush=True)
         return
 
-    if (data.damage_endu > 0) :
-        modify_db("UPDATE entities SET current_endurance = current_endurance - %s WHERE id = %s", (data.damage_endu, data.receiver))
-    if (data.damage_ment > 0) :
-        modify_db("UPDATE entities SET current_mental = current_mental - %s WHERE id = %s", (data.damage_ment, data.receiver))
-    if (data.damage_path > 0) :
-        modify_db("UPDATE entities SET current_path = current_path - %s WHERE id = %s", (data.damage_path, data.receiver))
-    if (data.damage_phys > 0) :
-        modify_db("UPDATE entities SET current_physical = current_physical - %s WHERE id = %s", (data.damage_phys, data.receiver))
+    pawn = list(pawn)
+    print("pawn : ", pawn, flush=True)
+    if (pawn[1] != None and data_obj.damage_phys > 0) :
+        pawn[1] -= data_obj.damage_phys
+    if (pawn[2] != None and data_obj.damage_ment > 0) :
+        pawn[2] -= data_obj.damage_ment
+    if (pawn[3] != None and data_obj.damage_path > 0) :
+        pawn[3] -= data_obj.damage_path
+    if (pawn[4] != None and data_obj.damage_endu > 0) :
+        pawn[4] -= data_obj.damage_endu
+    if (pawn[5] != None and data_obj.damage_mana > 0) :
+        pawn[5] -= data_obj.damage_mana
+    
+    modify_db("UPDATE entities SET current_physical_health = %s, current_mental_health = %s, current_path_health = %s, current_endurance = %s, current_mana = %s WHERE id = %s", 
+        (pawn[1], pawn[2], pawn[3], pawn[4], pawn[5], pawn[0]))
 
     room = room_manager.players.get(sid)
-    sio.emit("damage", data, room=room)
+    await sio.emit("attack", data, room=room)
 
 @sio.on("heal")
 async def heal(sid, data: MonitorAction):
@@ -153,21 +159,32 @@ async def heal(sid, data: MonitorAction):
     if sid not in room_manager.players.keys():
         return
 
-    pawn = getone_db("SELECT id FROM entities WHERE id = %s", (data.receiver,))
+    data_obj = MonitorAction(**data)
+    print(data_obj, flush=True)
+    print(data_obj.damage_phys, data_obj.damage_phys > 0, flush=True)
+    pawn = getone_db("SELECT id, current_physical_health, current_mental_health, current_path_health, current_endurance, current_mana FROM entities WHERE id = %s", (data_obj.receiver,))
     if not pawn:
+        print("pawn not found", flush=True)
         return
 
-    if (data.damage_endu > 0) :
-        modify_db("UPDATE entities SET current_endurance = current_endurance + %s WHERE id = %s", (data.damage_endu, data.receiver))
-    if (data.damage_ment > 0) :
-        modify_db("UPDATE entities SET current_mental = current_mental + %s WHERE id = %s", (data.damage_ment, data.receiver))
-    if (data.damage_path > 0) :
-        modify_db("UPDATE entities SET current_path = current_path + %s WHERE id = %s", (data.damage_path, data.receiver))
-    if (data.damage_phys > 0) :
-        modify_db("UPDATE entities SET current_physical = current_physical + %s WHERE id = %s", (data.damage_phys, data.receiver))
+    pawn = list(pawn)
+    print("pawn : ", pawn, flush=True)
+    if (pawn[1] != None and data_obj.damage_phys > 0) :
+        pawn[1] += data_obj.damage_phys
+    if (pawn[2] != None and data_obj.damage_ment > 0) :
+        pawn[2] += data_obj.damage_ment
+    if (pawn[3] != None and data_obj.damage_path > 0) :
+        pawn[3] += data_obj.damage_path
+    if (pawn[4] != None and data_obj.damage_endu > 0) :
+        pawn[4] += data_obj.damage_endu
+    if (pawn[5] != None and data_obj.damage_mana > 0) :
+        pawn[5] += data_obj.damage_mana
+    
+    modify_db("UPDATE entities SET current_physical_health = %s, current_mental_health = %s, current_path_health = %s, current_endurance = %s, current_mana = %s WHERE id = %s", 
+        (pawn[1], pawn[2], pawn[3], pawn[4], pawn[5], pawn[0]))
 
     room = room_manager.players.get(sid)
-    sio.emit("heal", data, room=room)
+    await sio.emit("heal", data, room=room)
 
 
 class Focus(BaseModel):
@@ -183,6 +200,7 @@ async def focus(sid, data):
         sio.emit("focus", data, room=room)
 
 async def emit_new_pawn(roomid : int, pawn : Pawn, hidden : Literal["totally", "partially", None]) :
+    print("emit_new_pawn", roomid, hidden, flush=True)
     if hidden == "totally" :
         gm_id = room_manager.getGm(roomid)
         if gm_id == None :

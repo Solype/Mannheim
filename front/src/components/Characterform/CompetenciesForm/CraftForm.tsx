@@ -1,6 +1,6 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Craft } from '@/types/types';
+import { Craft } from '@/types/character_types';
 
 export const CraftForm = ({ craft, setCraft }: { craft: Craft, setCraft: (c: Craft) => void }) => {
     return (

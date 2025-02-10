@@ -1,4 +1,4 @@
-import { Intellect } from '@/types/types';
+import { Intellect } from '@/types/character_types';
 import { KnowledgeForm } from './KnowledgeForm';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
