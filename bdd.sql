@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS `characters` (
     `user_id` BIGINT UNSIGNED NOT NULL,
     `character_data` JSON NOT NULL,
     `image` VARCHAR(255),
+    `type` enum('chara', 'monster') NOT NULL DEFAULT 'chara',
     INDEX `idx_user_id` (`user_id`),
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
 );

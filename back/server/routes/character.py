@@ -13,7 +13,7 @@ async def my_characters(credentials: HTTPAuthorizationCredentials = Depends(secu
     if not token or not access_manager.isTokenValid(token):
         raise HTTPException(status_code=401, detail="Unauthorized")
     user_id = access_manager.getTokenData(token).id
-    characters = get_db("SELECT id, character_data FROM `characters` WHERE user_id = %s", (user_id,))
+    characters = get_db("SELECT id, character_data FROM `characters` WHERE user_id = %s AND type = 'chara'", (user_id,))
 
     result = [
         CharaAllDataWithIdShort(
@@ -22,6 +22,24 @@ async def my_characters(credentials: HTTPAuthorizationCredentials = Depends(secu
         for char_id, char_data in characters
     ]
 
+    return result
+
+@app.get("/api/my/monsters", tags=["Character"])
+async def my_monsters(credentials: HTTPAuthorizationCredentials = Depends(security)) -> list[CharaAllDataWithIdShort]:
+    token = credentials.credentials
+
+    if not token or not access_manager.isTokenValid(token):
+        raise HTTPException(status_code=401) if not token else HTTPException(status_code=403, detail="Unauthorized")
+
+    user_id = access_manager.getTokenData(token).id
+    characters = get_db("SELECT id, character_data FROM `characters` WHERE user_id = %s AND type = 'monster'", (user_id,))
+
+    result = [
+        CharaAllDataWithIdShort(
+            **{**json.loads(char_data), "id": char_id}
+        )
+        for char_id, char_data in characters
+    ]
     return result
 
 @app.get("/api/my/characters/{id}", tags=["Character"])

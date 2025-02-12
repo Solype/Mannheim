@@ -3,9 +3,9 @@ from typing import Optional
 
 class CharaBasicInfos(BaseModel):
     name:   str
-    race:   str
-    age:    int
-    gender: str
+    race:   Optional[str] = None
+    age:    Optional[int] = None
+    gender: Optional[str] = None
 
 class CharaPriority(BaseModel):
     role:       str
@@ -15,17 +15,17 @@ class CharaPriority(BaseModel):
 
 class CharaAttributes(BaseModel):
     resistance:     int
-    strength:       Optional[int]
-    dexterity:      Optional[int]
-    intellect:      Optional[int]
-    agility:        Optional[int]
-    vivacity:       Optional[int]
-    social:         Optional[int]
-    magic:          Optional[int]
+    strength:       int
+    dexterity:      int
+    vivacity:       int
+    intellect:      Optional[int] = None
+    agility:        Optional[int] = None
+    social:         Optional[int] = None
+    magic:          Optional[int] = None
 
 class CharaRoles(BaseModel):
-    main:       list[str]
-    secondary:  list[str]
+    main:       list[str] = []
+    secondary:  list[str] = []
 
 class CharaSkill(BaseModel):
     name:           str
@@ -45,12 +45,12 @@ class CharaOtherData(BaseModel):
 
 class CharaAllData(BaseModel):
     infos:          CharaBasicInfos
-    priority:       Optional[CharaPriority]
     attributes:     CharaAttributes
-    roles:          Optional[CharaRoles]
-    skills:         list[CharaSkill]
-    religion:       Optional[list[CharaReligion]]
-    other:          Optional[CharaOtherData]
+    skills:         list[CharaSkill] = []
+    religion:       list[CharaReligion] = []
+    priority:       Optional[CharaPriority] = None
+    roles:          Optional[CharaRoles] = None
+    other:          Optional[CharaOtherData] = None
 
 class CharaAllDataShort(BaseModel):
     infos:          CharaBasicInfos
