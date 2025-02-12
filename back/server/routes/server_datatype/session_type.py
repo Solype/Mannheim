@@ -61,3 +61,10 @@ class PawnSeed(BaseModel):
 class SessionLong(SessionShort):
     players:    list[Player]
     pawns:      list[Pawn]
+
+class Note(BaseModel):
+    id:             int = 0
+    content:        str
+
+class NoteContent(BaseModel):
+    content:           str

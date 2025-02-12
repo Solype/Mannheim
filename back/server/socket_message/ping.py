@@ -2,8 +2,8 @@ from server.server import sio
 from server.access_manager import access_manager
 from pydantic import BaseModel
 from typing import Literal, Optional
-from server.mysql_db import getone_db, get_db, modify_db
-from server.routes.server_datatype import Pawn, Monitor
+from server.mysql_db import getone_db, modify_db
+from server.routes.server_datatype import Pawn, Note
 
 
 class Room(BaseModel):
@@ -221,3 +221,8 @@ async def emit_new_pawn(roomid : int, pawn : Pawn, hidden : Literal["totally", "
     await sio.emit("new_pawn", pawn_copy, room=roomid)
     gm_id = room_manager.getGm(roomid)
     await sio.emit("new_pawn", pawn.to_dict(), to=gm_id)
+
+async def emit_note(roomid : int, note : Note, public : bool) :
+    print("emit_note", roomid, flush=True)
+    if public :
+        await sio.emit("note", note.__dict__, room=roomid)

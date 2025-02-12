@@ -6,3 +6,4 @@ import server.routes.session
 import server.routes.friends
 import server.routes.session_invitation
 import server.routes.session_pawn_requests
+import server.routes.notes

@@ -78,7 +78,14 @@ CREATE TABLE IF NOT EXISTS `characters_access` (
 
 
 
-
+CREATE TABLE IF NOT EXISTS `session_notes` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `session_id` BIGINT UNSIGNED NOT NULL,
+    `note` TEXT NOT NULL,
+    `public` BOOLEAN NOT NULL DEFAULT FALSE,
+    INDEX `idx_session_id` (`session_id`),
+    FOREIGN KEY (`session_id`) REFERENCES `sessions`(`id`) ON DELETE CASCADE
+);
 
 
 -- Table des entités
