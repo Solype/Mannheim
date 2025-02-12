@@ -83,6 +83,21 @@ async def create_character(character: CharaAllData, credentials: HTTPAuthorizati
     print(id_character, flush=True)
     return id_character[0]
 
+@app.post("/api/my/monsters", tags=["Character"])
+async def create_monster(character: CharaAllData, credentials: HTTPAuthorizationCredentials = Depends(security)) -> int:
+    token = credentials.credentials
+
+    if not token or not access_manager.isTokenValid(token):
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    user_id = access_manager.getTokenData(token).id
+    json_data = json.dumps(character.model_dump())
+    print(json_data, flush=True)
+    modify_db("INSERT INTO `characters` (user_id, character_data, type) VALUES (%s, %s, 'monster')", (user_id, json_data, ))
+
+    id_character = getone_db("SELECT id FROM `characters` WHERE user_id = %s ORDER BY id DESC LIMIT 1", (user_id,))
+    print(id_character, flush=True)
+    return id_character[0]
+
 @app.put("/api/my/characters/{id}", tags=["Character"])
 async def modify_character(id: int, character: CharaAllData, credentials: HTTPAuthorizationCredentials = Depends(security)):
     token = credentials.credentials
