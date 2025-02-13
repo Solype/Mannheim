@@ -36,3 +36,7 @@ export type PawnSeed = {
     hidden:         string
 }
 
+export type Note = {
+    id:         number
+    content:    string
+}

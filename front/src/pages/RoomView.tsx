@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import sessionService from '@/services/SessionService';
 import { useParams } from 'react-router-dom';
-import { SessionShort, Pawn } from '@/types/sesssion_types';
+import { SessionShort, Pawn, Note } from '@/types/sesssion_types';
 import LoginService from '@/services/LoginService';
 
 
@@ -14,7 +14,16 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import SocketService from '@/services/SocketService';
-
+import {
+    Drawer,
+    DrawerClose,
+    DrawerContent,
+    DrawerDescription,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+  } from "@/components/ui/drawer"
+import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface MonitorAction {
     damage_phys: number;
@@ -37,6 +46,9 @@ const RoomView: React.FC = () => {
     const [ modalAction, setModalAction ] = useState<'heal' | 'attack' | null>(null);
     const [ monitorAction, setMonitorAction ] = useState<MonitorAction | null>(null);
 
+
+    const [ noteList, setNoteList ] = useState<Note[]>([]);
+    const [ notesOpen, setNotesOpen ] = useState<boolean>(false);
     const [ pawnList, setPawnList ] = useState<Pawn[]>([]);
     const [ socket, setSocket ] = useState<SocketService | null>(null);
 
@@ -108,6 +120,8 @@ const RoomView: React.FC = () => {
             if (!id) return;
             try {
                 const fetchedRoom = await sessionService.getRoom(id);
+                const fetchedNotes = await sessionService.getNotes(id);
+                setNoteList(fetchedNotes);
                 setPawnList(fetchedRoom.pawns);
                 setRoom(fetchedRoom);
                 console.log("Room loaded:", fetchedRoom);
@@ -118,9 +132,6 @@ const RoomView: React.FC = () => {
         
         loadRoom();
     }, [id]);
-
-
-
 
 
 
@@ -210,6 +221,7 @@ const RoomView: React.FC = () => {
                         Room: {room?.name}
                     </h1>
                     <p className="text-lg text-right mx-10">Game Master: {room?.gm_name}</p>
+                    <Button className="bg-green-500" onClick={() => setNotesOpen(true)}>Voir les notes</Button>
                 </div>
                 <p>{room?.description}</p>
                 <div className="grid grid-cols-5 gap-4">
@@ -219,6 +231,30 @@ const RoomView: React.FC = () => {
                 </div>
             </div>
 
+
+            <Drawer open={notesOpen} onOpenChange={setNotesOpen}>
+                <DrawerContent>
+                    <DrawerHeader>
+                        <DrawerTitle>Notes</DrawerTitle>
+                    </DrawerHeader>
+                    <div className='flex flex-row flex-wrap gap-4'>
+                        {noteList.map((note) => (
+                            <Card key={note.id} className='w-max-sm'>
+                                <CardHeader>
+                                    <CardTitle>{note.content}</CardTitle>
+                                </CardHeader>
+                            </Card>
+                        ))}
+                        {
+                            noteList.length === 0 && (
+                                <p>Aucune note</p>
+                            )
+                        }
+                    </div>
+                    <DrawerFooter>
+                    </DrawerFooter>
+                </DrawerContent>
+            </Drawer>
 
             <Dialog open={isModalOpen} onOpenChange={(param) => {setIsModalOpen(param); setMonitorAction(null);}}>
                 <DialogContent>

@@ -5,7 +5,7 @@ from server.socket_message.ping import emit_note
 from server.routes.server_datatype.session_type import Note, NoteContent
 
 
-@app.get("/api/session/{id}/notes", tags=["Notes"])
+@app.get("/api/my/session/{id}/notes", tags=["Notes"])
 async def get_notes(id: int, credentials: HTTPAuthorizationCredentials = Depends(security)) -> list[Note]:
     token = credentials.credentials
     if not token or not access_manager.isTokenValid(token):
@@ -23,7 +23,7 @@ async def get_notes(id: int, credentials: HTTPAuthorizationCredentials = Depends
     return [Note(id=n[0], content=n[1]) for n in notes] 
 
 
-@app.post("/api/session/{id}/notes", tags=["Notes"])
+@app.post("/api/my/session/{id}/notes", tags=["Notes"])
 async def create_note(id: int, data: NoteContent, credentials: HTTPAuthorizationCredentials = Depends(security)) -> None:
     token = credentials.credentials
     if not token or not access_manager.isTokenValid(token):
