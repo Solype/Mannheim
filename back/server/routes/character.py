@@ -108,7 +108,7 @@ async def modify_character(id: int, character: CharaAllData, credentials: HTTPAu
     json_data = json.dumps(character.model_dump())
     success = modify_db("UPDATE `characters` SET character_data = %s WHERE id = %s AND user_id = %s", (json_data, id, user_id, ))
 
-    if not success:
+    if success == None:
         raise HTTPException(status_code=404, detail="Character not found or you don't have access to it")
 
     return

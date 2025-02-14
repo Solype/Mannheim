@@ -226,3 +226,11 @@ async def emit_note(roomid : int, note : Note, public : bool) :
     print("emit_note", roomid, flush=True)
     if public :
         await sio.emit("note", note.__dict__, room=roomid)
+
+async def emit_delete_pawn(roomid : int, id : int) :
+    print("emit_delete_pawn", roomid, flush=True)
+    await sio.emit("delete_pawn", id, room=roomid)
+
+async def emit_delete_note(roomid : int, id : int) :
+    print("emit_delete_note", roomid, flush=True)
+    await sio.emit("delete_note", id, room=roomid)

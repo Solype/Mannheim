@@ -55,10 +55,40 @@ class SessionService extends AService {
         });
     }
 
+    public async deletePawn(sessionId: string, pawnId: number): Promise<void> {
+        return await this.request<void>(`/api/my/session/${sessionId}/pawn/${pawnId}`, {
+            method: 'DELETE',
+            headers: this.getHeaders(),
+        });
+    }
+
     public async getNotes(sessionId: string): Promise<Note[]> {
         return await this.request<Note[]>(`/api/my/session/${sessionId}/notes`, {
             method: 'GET',
             headers: this.getHeaders(),
+        });
+    }
+
+    public async createNote(sessionId: string, note: string): Promise<void> {
+        return await this.request<void>(`/api/my/session/${sessionId}/notes`, {
+            method: 'POST',
+            headers: this.getHeaders(),
+            body: JSON.stringify({ content : note }),
+        });
+    }
+
+    public async deleteNote(sessionId: string, noteId: number): Promise<void> {
+        return await this.request<void>(`/api/my/session/${sessionId}/notes/${noteId}`, {
+            method: 'DELETE',
+            headers: this.getHeaders(),
+        });
+    }
+
+    public async updateNote(sessionId: string, noteId: number, note: string): Promise<void> {
+        return await this.request<void>(`/api/my/session/${sessionId}/notes/${noteId}`, {
+            method: 'PUT',
+            headers: this.getHeaders(),
+            body: JSON.stringify({ content : note }),
         });
     }
 }

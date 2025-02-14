@@ -113,7 +113,7 @@ async def send_session_request(data: UserSessionRequestCreate, credentials: HTTP
         raise HTTPException(status_code=400, detail="Already in session")
 
     success = modify_db("INSERT INTO `sessions_requests` (session_id, receiver_id, status) VALUES (%s, %s, 'pending')", (data.session_id, data.receiver_id))
-    if not success:
+    if success == None:
         raise HTTPException(status_code=500, detail="Failed to send session request")
     return
 
@@ -147,7 +147,7 @@ async def delete_session_request(request_id: int, credentials: HTTPAuthorization
         raise HTTPException(status_code=403)
 
     success = modify_db("DELETE FROM `sessions_requests` WHERE id = %s", (request_id,))
-    if not success:
+    if success == None:
         raise HTTPException(status_code=500, detail="Failed to delete session request")
     return
 
@@ -166,11 +166,11 @@ async def accept_session_request(request_id: int, credentials: HTTPAuthorization
         raise HTTPException(status_code=403)
 
     success = modify_db("INSERT INTO `session_participants` (user_id, session_id) VALUES (%s, %s)", (user_id, session[0]))
-    if not success:
+    if success == None:
         raise HTTPException(status_code=500, detail="Failed to accept session request")
     
     success = modify_db("UPDATE `sessions_requests` SET status = 'accepted' WHERE id = %s", (request_id,))
-    if not success:
+    if success == None:
         raise HTTPException(status_code=500, detail="Failed to accept session request")
     return
 
@@ -189,6 +189,6 @@ async def decline_session_request(request_id: int, credentials: HTTPAuthorizatio
         raise HTTPException(status_code=403)
 
     success = modify_db("UPDATE `sessions_requests` SET status = 'refused' WHERE id = %s AND status = 'pending'", (request_id,))
-    if not success:
+    if success == None:
         raise HTTPException(status_code=500, detail="Failed to decline session request")
     return

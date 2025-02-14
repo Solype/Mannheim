@@ -31,7 +31,7 @@ export type Monitor = {
 }
 
 export type PawnSeed = {
-    linked_id:       number
+    linked_id:      number
     side:           number
     hidden:         string
 }

@@ -2,6 +2,7 @@ from fastapi import Request, HTTPException, FastAPI, Query, Response, Header, De
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+import logging
 
 from fastapi.middleware.cors import CORSMiddleware
 from server.mysql_db import get_connection, wait_for_db
@@ -34,6 +35,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+logging.basicConfig(level=logging.INFO)
 
 sio = socketio_mount(app)
 

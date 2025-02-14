@@ -53,7 +53,9 @@ async def insert_pawn_in_db(pawn : Pawn, hidden : Literal["totally", "partially"
         pawn.physical.max, pawn.mental.max, pawn.pathological.max, pawn.endurance.max, pawn.mana.max,
         pawn.chara_id, pawn.side, hidden)
     success = modify_db(sql, params)
-    if success :
+
+    if success != None :
+        pawn.id = success
         await emit_new_pawn(session_id, pawn, hidden)
     return success
 

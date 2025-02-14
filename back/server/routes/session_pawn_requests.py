@@ -81,7 +81,7 @@ async def post_new_pawn(data: UserPawnRequestCreate, credentials: HTTPAuthorizat
         raise HTTPException(status_code=400, detail="Already sent")
     print(user_id, receiver_id, data.character_id, data.session_id)
     success = modify_db("INSERT INTO `characters_requests` (sender_id, receiver_id, session_id, character_id, status) VALUES (%s, %s, %s, %s, 'pending')", (user_id, receiver_id, data.session_id, data.character_id))
-    if not success:
+    if success == None:
         raise HTTPException(status_code=500, detail="Failed to send character request")
     return
 
@@ -116,7 +116,7 @@ async def accept_pawn_request(request_id: int, credentials: HTTPAuthorizationCre
         raise HTTPException(status_code=403)
 
     success = modify_db("UPDATE `characters_requests` SET status = 'accepted' WHERE id = %s", (request_id,))
-    if not success:
+    if success == None:
         raise HTTPException(status_code=500, detail="Failed to accept character request")
 
     players_in_sessions = get_db("SELECT user_id FROM `session_participants` WHERE session_id = %s", (request[1],))
@@ -128,7 +128,7 @@ async def accept_pawn_request(request_id: int, credentials: HTTPAuthorizationCre
         if does_the_player_have_access:
             continue
         success = modify_db("INSERT INTO `characters_access` (character_id, player_id) VALUES (%s, %s)", (request[2], player[0]))
-        if not success:
+        if success == None:
             raise HTTPException(status_code=500, detail="Failed to grant access to character")
     
     character_data, id_user = getone_db("SELECT character_data, user_id FROM `characters` WHERE id = %s", (request[2],))
@@ -143,7 +143,7 @@ async def accept_pawn_request(request_id: int, credentials: HTTPAuthorizationCre
     if not await insert_pawn_in_db(to_insert, None, id_user, request[1]):
         raise HTTPException(status_code=500, detail="Failed to insert pawn")
     success = modify_db("DELETE FROM `characters_requests` WHERE id = %s", (request_id,))
-    if not success:
+    if success == None:
         raise HTTPException(status_code=500, detail="Failed to delete character request")
     return
 
@@ -161,7 +161,7 @@ async def reject_pawn_request(request_id: int, credentials: HTTPAuthorizationCre
         raise HTTPException(status_code=403)
 
     success = modify_db("UPDATE `characters_requests` SET status = 'refused' WHERE id = %s AND status = 'pending'", (request_id,))
-    if not success:
+    if success == None:
         raise HTTPException(status_code=500, detail="Failed to reject character request")
     return
 
@@ -180,6 +180,6 @@ async def delete_pawn_request(request_id: int, credentials: HTTPAuthorizationCre
         raise HTTPException(status_code=403)
 
     success = modify_db("DELETE FROM `characters_requests` WHERE id = %s", (request_id,))
-    if not success:
+    if success == None:
         raise HTTPException(status_code=500, detail="Failed to delete character request")
     return

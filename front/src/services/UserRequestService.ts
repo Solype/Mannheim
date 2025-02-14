@@ -102,10 +102,12 @@ class UserRequestService extends AService {
     }
 
     async sendCharacterInvitation(sessionId: number, character_id: number): Promise<void> {
+        const to_send = { "session_id": sessionId, "character_id": character_id };
+        console.log(to_send);
         return await this.request<void>(`/api/my/session/pawn/request`, {
                 method: 'POST',
                 headers: this.getHeaders(),
-                body: JSON.stringify({"session_id": sessionId, "character_id": character_id})
+                body: JSON.stringify(to_send)
             }
         );
     }

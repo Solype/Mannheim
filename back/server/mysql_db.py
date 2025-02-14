@@ -29,10 +29,10 @@ def wait_for_db(timeout: int = 60):
         try:
             connection = get_connection()
             connection.close()
-            print("✅ Database is now available!", flush=True)
+            print(" ✅ Database is now available!", flush=True)
             return
         except mysql.connector.Error as e:
-            print(f"⚠️ Database not available ({e}), retrying in 5 seconds...", flush=True)
+            print(f" ⚠️ Database not available ({e}), retrying in 5 seconds...", flush=True)
             time.sleep(5)
 
             # Arrête si le temps d'attente dépasse le timeout (sauf si timeout=0)
@@ -50,8 +50,11 @@ def execute_query(query: str, params: tuple = (), fetchone: bool = False, commit
         cursor.execute(query, params)
 
         if commit:
+            lastrowid = cursor.lastrowid
+            print("hello", lastrowid, flush=True)
             connection.commit()
-            return True
+            print("hello", lastrowid, flush=True)
+            return True if lastrowid == None else lastrowid
 
         result = cursor.fetchall()
         return result[0] if fetchone and result else (result if not fetchone else None)
@@ -60,7 +63,7 @@ def execute_query(query: str, params: tuple = (), fetchone: bool = False, commit
         print(f"Erreur SQL : {e}")
         if commit:
             connection.rollback()
-        return None if fetchone else [] if not commit else False
+        return None
 
     finally:
         cursor.close()

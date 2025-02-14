@@ -1,19 +1,23 @@
 import { Pawn } from "@/types/sesssion_types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Trash } from "lucide-react";
 
 interface EntityCardProps {
     pawn: Pawn;
     setModalAction?: ((value: React.SetStateAction<"heal" | "attack" | null>) => void) | null;
     setSelectedPawn?: ((value: Pawn) => void) | null;
     setIsModalOpen?: ((value: React.SetStateAction<boolean>) => void) | null;
+    deletePawn?: (() => void) | null;
 }
 
-function EntityCard({ pawn, setModalAction = null, setSelectedPawn = null, setIsModalOpen = null }: EntityCardProps) {
+function EntityCard({ pawn, setModalAction = null, setSelectedPawn = null, setIsModalOpen = null, deletePawn = null}: EntityCardProps) {
+
     return (
         <Card className="w-full max-w-sm bg-white bg-opacity-50 shadow-md rounded-xl">
             <CardHeader>
                 <CardTitle className="text-lg font-semibold truncate">{pawn.name}</CardTitle>
+                {deletePawn && <Button className="bg-red-500" onClick={deletePawn}><Trash/></Button>}
             </CardHeader>
             <CardContent className="space-y-2">
                 <p className="text-sm text-gray-700">Mana: {pawn.mana?.current ?? "?"} / {pawn.mana?.max ?? "?"}</p>

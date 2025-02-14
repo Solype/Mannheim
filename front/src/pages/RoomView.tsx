@@ -16,7 +16,6 @@ import { Input } from '@/components/ui/input';
 import SocketService from '@/services/SocketService';
 import {
     Drawer,
-    DrawerClose,
     DrawerContent,
     DrawerDescription,
     DrawerFooter,
@@ -24,6 +23,7 @@ import {
     DrawerTitle,
   } from "@/components/ui/drawer"
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
+import NoteCard from '@/components/RoomViewComponent/NoteCard';
 
 interface MonitorAction {
     damage_phys: number;
@@ -97,6 +97,11 @@ const RoomView: React.FC = () => {
                 prev[index] = existingPawn;
                 return [...prev];
             })
+        });
+
+        socket.on("delete_pawn", (data: number) => {
+            console.log("Pawn to delete:", data);
+            setPawnList((prev) => prev.filter((pawn) => {console.log("Pawn ID:", pawn.id, "Data ID:", data); return pawn.id !== data}));
         });
 
         setSocket(socket);
@@ -210,6 +215,11 @@ const RoomView: React.FC = () => {
         });
     }
 
+    const handleDeletePawn = (pawn: Pawn) => {
+        if (!pawn || !id) return;
+        sessionService.deletePawn(id, pawn.id).catch((error) => console.log("Error deleting pawn:", error));
+    }
+
     return (
         <div className="relative overflow-auto h-full" style={{ backgroundImage: 'url(/bg-rooms.jpg)', backgroundSize: 'cover', backgroundAttachment: 'fixed' }}>
             <div className="fixed inset-0 bg-black opacity-50 z-10" />
@@ -226,7 +236,7 @@ const RoomView: React.FC = () => {
                 <p>{room?.description}</p>
                 <div className="grid grid-cols-5 gap-4">
                     {pawnList && pawnList.map((pawn) => (
-                        <EntityCard key={pawn.id} pawn={pawn} setModalAction={setModalAction} setSelectedPawn={setSelectedPawn} setIsModalOpen={setIsModalOpen}/>
+                        <EntityCard key={pawn.id} pawn={pawn} setModalAction={setModalAction} setSelectedPawn={setSelectedPawn} setIsModalOpen={setIsModalOpen} deletePawn={() => handleDeletePawn(pawn)}/>
                     ))}
                 </div>
             </div>
@@ -237,20 +247,17 @@ const RoomView: React.FC = () => {
                     <DrawerHeader>
                         <DrawerTitle>Notes</DrawerTitle>
                     </DrawerHeader>
-                    <div className='flex flex-row flex-wrap gap-4'>
-                        {noteList.map((note) => (
-                            <Card key={note.id} className='w-max-sm'>
-                                <CardHeader>
-                                    <CardTitle>{note.content}</CardTitle>
-                                </CardHeader>
-                            </Card>
-                        ))}
-                        {
-                            noteList.length === 0 && (
-                                <p>Aucune note</p>
-                            )
-                        }
-                    </div>
+                    <DrawerDescription>Current annotations</DrawerDescription>
+                        <div className='flex flex-row flex-wrap gap-4'>
+                            {noteList.map((note) => (
+                                <NoteCard key={note.id} note={note} />
+                            ))}
+                            {
+                                noteList.length === 0 && (
+                                    <p>Aucune note</p>
+                                )
+                            }
+                        </div>
                     <DrawerFooter>
                     </DrawerFooter>
                 </DrawerContent>
