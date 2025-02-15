@@ -16,6 +16,7 @@ import { Input } from '@/components/ui/input';
 import SocketService from '@/services/SocketService';
 import NoteCard from '@/components/RoomViewComponent/NoteCard';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { FilePlus } from 'lucide-react';
 
 interface MonitorAction {
     damage_phys: number;
@@ -224,6 +225,11 @@ const RoomView: React.FC = () => {
         });
     }
 
+    const handleAddNote = (content : string) => {
+        if (!content || !id) return;
+        sessionService.createNote(id, content).catch((error) => console.log("Error creating note:", error));
+    }
+
     const handleDeletePawn = (pawn: Pawn) => {
         if (!pawn || !id) return;
         sessionService.deletePawn(id, pawn.id).catch((error) => console.log("Error deleting pawn:", error));
@@ -259,9 +265,14 @@ const RoomView: React.FC = () => {
             <Sheet open={notesOpen} onOpenChange={setNotesOpen}>
                 <SheetContent>
                     <SheetHeader>
-                        <SheetTitle>Notes</SheetTitle>
+                        <SheetTitle>
+                            <div className="flex flex-row items-center justify-between">
+                                <p>Notes</p>
+                                <Button variant={"ghost"} onClick={() => handleAddNote("New note")}><FilePlus/></Button>
+                            </div>
+                        </SheetTitle>
                     </SheetHeader>
-                    <SheetDescription>Current annotations</SheetDescription>
+                    <SheetDescription>Current annotations for this session</SheetDescription>
                         <div className='flex flex-row flex-wrap gap-4'>
                             {
                                 id &&
