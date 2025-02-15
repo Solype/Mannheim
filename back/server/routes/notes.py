@@ -44,7 +44,7 @@ async def create_note(session_id: int, data: NoteContent, credentials: HTTPAutho
 
     public = gm[0] != user_id
 
-    note_id = modify_db("INSERT INTO `session_notes` (note, session_id, public) VALUES (%s, %s, %s)", (data.content, id, public))
+    note_id = modify_db("INSERT INTO `session_notes` (note, session_id, public) VALUES (%s, %s, %s)", (data.content, session_id, public))
     if note_id == None:
         raise HTTPException(status_code=500, detail="Failed to create note")
     note = Note(id=note_id, content=data.content, is_public=public)

@@ -50,6 +50,8 @@ class RoomManager :
         return [player.sid for player in self.rooms[roomid].players.values()]
     
     def getGm(self, roomid : int) :
+        if roomid not in self.rooms.keys() :
+            return None
         return self.rooms[roomid].gm_id
 
 
