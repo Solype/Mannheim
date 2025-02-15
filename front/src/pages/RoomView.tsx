@@ -22,8 +22,8 @@ import {
     DrawerHeader,
     DrawerTitle,
   } from "@/components/ui/drawer"
-import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import NoteCard from '@/components/RoomViewComponent/NoteCard';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 
 interface MonitorAction {
     damage_phys: number;
@@ -236,21 +236,26 @@ const RoomView: React.FC = () => {
                 <p>{room?.description}</p>
                 <div className="grid grid-cols-5 gap-4">
                     {pawnList && pawnList.map((pawn) => (
-                        <EntityCard key={pawn.id} pawn={pawn} setModalAction={setModalAction} setSelectedPawn={setSelectedPawn} setIsModalOpen={setIsModalOpen} deletePawn={() => handleDeletePawn(pawn)}/>
+                        <EntityCard key={pawn.id}
+                            pawn={pawn}
+                            setModalAction={setModalAction}
+                            setSelectedPawn={setSelectedPawn}
+                            setIsModalOpen={setIsModalOpen}
+                            deletePawn={isGm ? () => handleDeletePawn(pawn) : null}
+                        />
                     ))}
                 </div>
             </div>
 
-
-            <Drawer open={notesOpen} onOpenChange={setNotesOpen}>
-                <DrawerContent>
-                    <DrawerHeader>
-                        <DrawerTitle>Notes</DrawerTitle>
-                    </DrawerHeader>
-                    <DrawerDescription>Current annotations</DrawerDescription>
+            <Sheet open={notesOpen} onOpenChange={setNotesOpen}>
+                <SheetContent>
+                    <SheetHeader>
+                        <SheetTitle>Notes</SheetTitle>
+                    </SheetHeader>
+                    <SheetDescription>Current annotations</SheetDescription>
                         <div className='flex flex-row flex-wrap gap-4'>
                             {noteList.map((note) => (
-                                <NoteCard key={note.id} note={note} />
+                                <NoteCard key={note.id} note={note} isGm={isGm} />
                             ))}
                             {
                                 noteList.length === 0 && (
@@ -258,10 +263,9 @@ const RoomView: React.FC = () => {
                                 )
                             }
                         </div>
-                    <DrawerFooter>
-                    </DrawerFooter>
-                </DrawerContent>
-            </Drawer>
+                </SheetContent>
+            </Sheet>
+
 
             <Dialog open={isModalOpen} onOpenChange={(param) => {setIsModalOpen(param); setMonitorAction(null);}}>
                 <DialogContent>

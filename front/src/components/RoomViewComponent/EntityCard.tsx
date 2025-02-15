@@ -16,8 +16,10 @@ function EntityCard({ pawn, setModalAction = null, setSelectedPawn = null, setIs
     return (
         <Card className="w-full max-w-sm bg-white bg-opacity-50 shadow-md rounded-xl">
             <CardHeader>
-                <CardTitle className="text-lg font-semibold truncate">{pawn.name}</CardTitle>
-                {deletePawn && <Button className="bg-red-500" onClick={deletePawn}><Trash/></Button>}
+                <div className=" flex justify-between">
+                    <CardTitle className="text-lg font-semibold truncate">{pawn.name}</CardTitle>
+                    {deletePawn && <Button className="max-w-50" onClick={deletePawn}><Trash/></Button>}
+                </div>
             </CardHeader>
             <CardContent className="space-y-2">
                 <p className="text-sm text-gray-700">Mana: {pawn.mana?.current ?? "?"} / {pawn.mana?.max ?? "?"}</p>
