@@ -14,14 +14,6 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import SocketService from '@/services/SocketService';
-import {
-    Drawer,
-    DrawerContent,
-    DrawerDescription,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerTitle,
-  } from "@/components/ui/drawer"
 import NoteCard from '@/components/RoomViewComponent/NoteCard';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 
@@ -102,6 +94,23 @@ const RoomView: React.FC = () => {
         socket.on("delete_pawn", (data: number) => {
             console.log("Pawn to delete:", data);
             setPawnList((prev) => prev.filter((pawn) => {console.log("Pawn ID:", pawn.id, "Data ID:", data); return pawn.id !== data}));
+        });
+
+        socket.on("delete_note", (data: number) => {
+            console.log("Note to delete:", data);
+            setNoteList((prev) => prev.filter((note) => note.id !== data));
+        });
+
+        socket.on("note", (data: Note) => {
+            console.log("Note received:", data);
+            setNoteList((prev) => {
+                const existingNote = prev.find((note) => note.id === data.id);
+                if (existingNote) {
+                    return prev.map((note) => (note.id === data.id ? data : note));
+                } else {
+                    return [...prev, data];
+                }
+            })
         });
 
         setSocket(socket);
@@ -254,9 +263,12 @@ const RoomView: React.FC = () => {
                     </SheetHeader>
                     <SheetDescription>Current annotations</SheetDescription>
                         <div className='flex flex-row flex-wrap gap-4'>
-                            {noteList.map((note) => (
-                                <NoteCard key={note.id} note={note} isGm={isGm} />
-                            ))}
+                            {
+                                id &&
+                                noteList.map((note) => (
+                                    <NoteCard key={note.id} note={note} isGm={isGm} sessionId={id} />
+                                ))
+                            }
                             {
                                 noteList.length === 0 && (
                                     <p>Aucune note</p>

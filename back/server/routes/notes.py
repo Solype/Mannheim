@@ -16,11 +16,19 @@ async def get_notes(session_id: int, credentials: HTTPAuthorizationCredentials =
     if not gm:
         raise HTTPException(status_code=404, detail="Session not found")
 
-    notes = get_db("SELECT id, note FROM `session_notes` WHERE session_id = %s AND public = %s", (session_id, gm[0] != user_id))
+    query_for_gm = "SELECT id, note, public FROM `session_notes` WHERE session_id = %s"
+    tuple_for_gm = (session_id,)
+
+    query_for_player = "SELECT id, note, public FROM `session_notes` WHERE session_id = %s AND public = %s"
+    tuple_for_player = (session_id, True)
+
+    is_gm = gm[0] == user_id
+
+    notes = get_db(query_for_gm if is_gm else query_for_player, tuple_for_gm if is_gm else tuple_for_player)
     if notes == None:
         raise HTTPException(status_code=404, detail="Notes not found")
 
-    return [Note(id=n[0], content=n[1]) for n in notes] 
+    return [Note(id=n[0], content=n[1], is_public=n[2]) for n in notes] 
 
 
 @app.post("/api/my/session/{session_id}/notes", tags=["Notes"])
@@ -36,10 +44,11 @@ async def create_note(session_id: int, data: NoteContent, credentials: HTTPAutho
 
     public = gm[0] != user_id
 
-    modify_db("INSERT INTO `session_notes` (note, session_id, public) VALUES (%s, %s, %s)", (data.content, id, public))
-    note_id = getone_db("SELECT id FROM session_notes WHERE session_id = %s AND public = %s ORDER BY id DESC LIMIT 1;", (session_id, public, ))[0]
-    note = Note(id=note_id, content=data.content)
-    await emit_note(id, note, public)
+    note_id = modify_db("INSERT INTO `session_notes` (note, session_id, public) VALUES (%s, %s, %s)", (data.content, id, public))
+    if note_id == None:
+        raise HTTPException(status_code=500, detail="Failed to create note")
+    note = Note(id=note_id, content=data.content, is_public=public)
+    await emit_note(session_id, note)
 
 @app.delete("/api/my/session/{session_id}/notes/{note_id}", tags=["Notes"])
 async def delete_note(session_id: int, note_id: int, credentials: HTTPAuthorizationCredentials = Depends(security)) -> None:
@@ -79,7 +88,7 @@ async def modify_note(session_id: int, note_id: int, data: NoteContent, credenti
     success = modify_db("UPDATE `session_notes` SET note = %s WHERE id = %s AND session_id = %s", (data.content, note_id, session_id))
     if success == None:
         raise HTTPException(status_code=500, detail="Failed to modify note")
-    await emit_note(session_id, Note(id=note_id, content=data.content), note[0])
+    await emit_note(session_id, Note(id=note_id, content=data.content, is_public=note[0]))
 
 @app.put("/api/my/session/{session_id}/notes/{note_id}/public", tags=["Notes"])
 async def modify_note_public(session_id: int, note_id: int, credentials: HTTPAuthorizationCredentials = Depends(security)) -> None:
@@ -102,4 +111,5 @@ async def modify_note_public(session_id: int, note_id: int, credentials: HTTPAut
     if success == None:
         raise HTTPException(status_code=500, detail="Failed to modify note")
 
-    await emit_note(session_id, Note(id=note_id, content=note[1]), not note[0])
+    await emit_delete_note(session_id, note_id)
+    await emit_note(session_id, Note(id=note_id, content=note[1], is_public=not note[0]))

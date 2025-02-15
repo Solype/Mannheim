@@ -39,4 +39,5 @@ export type PawnSeed = {
 export type Note = {
     id:         number
     content:    string
+    is_public:  boolean
 }

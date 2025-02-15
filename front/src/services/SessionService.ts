@@ -91,6 +91,13 @@ class SessionService extends AService {
             body: JSON.stringify({ content : note }),
         });
     }
+
+    public async modifyNotePublic(sessionId: string, noteId: number): Promise<void> {
+        return await this.request<void>(`/api/my/session/${sessionId}/notes/${noteId}/public`, {
+            method: 'PUT',
+            headers: this.getHeaders(),
+        });
+    }
 }
 
 const sessionService = new SessionService();

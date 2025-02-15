@@ -222,10 +222,15 @@ async def emit_new_pawn(roomid : int, pawn : Pawn, hidden : Literal["totally", "
     gm_id = room_manager.getGm(roomid)
     await sio.emit("new_pawn", pawn.to_dict(), to=gm_id)
 
-async def emit_note(roomid : int, note : Note, public : bool) :
+async def emit_note(roomid : int, note : Note) :
     print("emit_note", roomid, flush=True)
-    if public :
+    if note.is_public :
         await sio.emit("note", note.__dict__, room=roomid)
+    else :
+        gm_id = room_manager.getGm(roomid)
+        if gm_id == None :
+            return
+        await sio.emit("note", note.__dict__, to=gm_id)
 
 async def emit_delete_pawn(roomid : int, id : int) :
     print("emit_delete_pawn", roomid, flush=True)

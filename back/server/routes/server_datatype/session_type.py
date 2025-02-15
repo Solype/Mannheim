@@ -64,6 +64,7 @@ class SessionLong(SessionShort):
 
 class Note(BaseModel):
     id:             int = 0
+    is_public:      bool = False
     content:        str
 
 class NoteContent(BaseModel):
