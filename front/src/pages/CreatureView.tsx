@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
 import ReligionForm from '@/components/Characterform/ReligionForm';
 import { Religion, Skill } from '@/types/character_types';
-import SkillForm, { extractSkills, listSkills } from '@/components/Characterform/SkillsForm';
+import { extractSkills, listSkills } from '@/components/Characterform/SkillsForm';
+import SkillsformMonter from '@/components/Characterform/SkillsFormMonster';
 import AttributesForm from '@/components/Characterform/AttributesForm';
-import { Attributes, getDefaultAttributes, Priority, CharacterOtherInfo, BasicCharaInfo } from '@/types/character_types';
-import BasicForm from '@/components/Characterform/BasicInfoForm';
-import PriorityForm from '@/components/Characterform/PriorityForm';
+import { Attributes, getDefaultAttributes, CharacterOtherInfo } from '@/types/character_types';
 import ListStringForm from '@/components/Characterform/ListStringForm';
 import CharacterModifiactionUtils from '@/services/CharacterModifiactionUtils';
 import { useParams } from 'react-router-dom';
@@ -79,11 +78,37 @@ const CreatureViewPage = () => {
     }
 
 
+    const handleRemoveSkill = (skillName: string) => {
+        const new_skills = skills.map((skill) => {
+            if (skill.name === skillName) {
+                return { ...skill, isRemoved: true };
+            }
+            return skill;
+        });
+        setSkills(new_skills);
+        console.log(new_skills);
+        localStorage.setItem('skills', JSON.stringify(new_skills));
+    };
+    
+    const handleRestoreSkill = (skillName: string) => {
+        const new_skills = skills.map((skill) => {
+            if (skill.name === skillName) {
+                return { ...skill, isRemoved: false };
+            }
+            return skill;
+        });
+        setSkills(new_skills);
+        localStorage.setItem('skills', JSON.stringify(new_skills));
+    };
+
+
     const handleSubmit = (e: React.FormEvent) => {
         if (!id) { return; }
         e.preventDefault();
+        const filteredSkills = skills.filter(skill => !skill.isRemoved);
+
         const data = {
-            skills,
+            skills: filteredSkills,
             religion,
             attributes,
             roles : { main: mainRoles, secondary: secondaryRoles },
@@ -155,7 +180,7 @@ const CreatureViewPage = () => {
 
                 <div className="col-span-3">
                     <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
-                        <SkillForm skillSetter={handleChangeSkill} skills={skills} disabled={isDisabled}/>
+                        <SkillsformMonter skillSetter={handleChangeSkill} skills={skills} disabled={isDisabled} removeSetter={handleRemoveSkill} restoreSetter={handleRestoreSkill}/>
                         {!isDisabled && (
                             <button type="submit" className="bg-or border border-white/70 text-light_foret font-bold text-2xl  p-4 hover:bg-light_or hover:shadow-[0_0_10px_4px_rgba(255,255,255,0.7)] transition-all duration-30 rounded-lg focus:outline-none">
                                 Sauvegarder

@@ -37,14 +37,7 @@ const CreaturesPage = () => {
                         key={index} 
                         className="bg-white bg-opacity-80 p-5 rounded-lg shadow-lg hover:bg-opacity-100 transition-all duration-300"
                     >
-                        {/* <div className="w-full h-40 bg-gray-300 rounded-lg mb-3 flex items-center justify-center">
-                            <span className="text-gray-500">Photo</span>
-                        </div> */}
-
                         <h1 className="font-bold text-2xl">{creature.infos.name}</h1>
-                        {/* <p className="mt-2 text-gray-700">Âge : {creature.infos.age}</p>
-                        <p className="text-gray-700">Espèce : {creature.infos.race}</p>
-                        <p className="text-gray-700">Genre : {creature.infos.gender}</p> */}
                     </Link>
                 ))}
             </div>
