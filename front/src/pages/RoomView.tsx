@@ -206,6 +206,9 @@ const RoomView: React.FC = () => {
             <div className="relative z-20 mt-14 text-white px-32 flex flex-col gap-20">
                 <div className="flex justify-between items-center">
                     {isGm ? (<SelectFriend room_id={room?.id as number} />) : (<SelectCharacter room_id={room?.id as number} />)}
+                    {isGm && (
+                        <AddCharacter room_id={room?.id as number} />
+                    )}
                     <h1 className="text-5xl font-bold text-or stroke-white text-center flex-1 mx-10">
                         Room: {room?.name}
                     </h1>
