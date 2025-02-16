@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import sessionService from '@/services/SessionService';
 import { useParams } from 'react-router-dom';
-import { SessionShort, Pawn } from '@/types/sesssion_types';
+import { SessionShort, Pawn, Note } from '@/types/sesssion_types';
 import LoginService from '@/services/LoginService';
 
 
@@ -14,7 +14,9 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import SocketService from '@/services/SocketService';
-
+import NoteCard from '@/components/RoomViewComponent/NoteCard';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { FilePlus } from 'lucide-react';
 
 interface MonitorAction {
     damage_phys: number;
@@ -37,6 +39,9 @@ const RoomView: React.FC = () => {
     const [ modalAction, setModalAction ] = useState<'heal' | 'attack' | null>(null);
     const [ monitorAction, setMonitorAction ] = useState<MonitorAction | null>(null);
 
+
+    const [ noteList, setNoteList ] = useState<Note[]>([]);
+    const [ notesOpen, setNotesOpen ] = useState<boolean>(false);
     const [ pawnList, setPawnList ] = useState<Pawn[]>([]);
     const [ socket, setSocket ] = useState<SocketService | null>(null);
 
@@ -87,6 +92,28 @@ const RoomView: React.FC = () => {
             })
         });
 
+        socket.on("delete_pawn", (data: number) => {
+            console.log("Pawn to delete:", data);
+            setPawnList((prev) => prev.filter((pawn) => {console.log("Pawn ID:", pawn.id, "Data ID:", data); return pawn.id !== data}));
+        });
+
+        socket.on("delete_note", (data: number) => {
+            console.log("Note to delete:", data);
+            setNoteList((prev) => prev.filter((note) => note.id !== data));
+        });
+
+        socket.on("note", (data: Note) => {
+            console.log("Note received:", data);
+            setNoteList((prev) => {
+                const existingNote = prev.find((note) => note.id === data.id);
+                if (existingNote) {
+                    return prev.map((note) => (note.id === data.id ? data : note));
+                } else {
+                    return [...prev, data];
+                }
+            })
+        });
+
         setSocket(socket);
         return () => {
             socket.disconnect();
@@ -108,6 +135,8 @@ const RoomView: React.FC = () => {
             if (!id) return;
             try {
                 const fetchedRoom = await sessionService.getRoom(id);
+                const fetchedNotes = await sessionService.getNotes(id);
+                setNoteList(fetchedNotes);
                 setPawnList(fetchedRoom.pawns);
                 setRoom(fetchedRoom);
                 console.log("Room loaded:", fetchedRoom);
@@ -118,9 +147,6 @@ const RoomView: React.FC = () => {
         
         loadRoom();
     }, [id]);
-
-
-
 
 
 
@@ -199,6 +225,16 @@ const RoomView: React.FC = () => {
         });
     }
 
+    const handleAddNote = (content : string) => {
+        if (!content || !id) return;
+        sessionService.createNote(id, content).catch((error) => console.log("Error creating note:", error));
+    }
+
+    const handleDeletePawn = (pawn: Pawn) => {
+        if (!pawn || !id) return;
+        sessionService.deletePawn(id, pawn.id).catch((error) => console.log("Error deleting pawn:", error));
+    }
+
     return (
         <div className="relative overflow-auto h-full" style={{ backgroundImage: 'url(/bg-rooms.jpg)', backgroundSize: 'cover', backgroundAttachment: 'fixed' }}>
             <div className="fixed inset-0 bg-black opacity-50 z-10" />
@@ -213,14 +249,48 @@ const RoomView: React.FC = () => {
                         Room: {room?.name}
                     </h1>
                     <p className="text-lg text-right mx-10">Game Master: {room?.gm_name}</p>
+                    <Button className="bg-green-500" onClick={() => setNotesOpen(true)}>Voir les notes</Button>
                 </div>
                 <p>{room?.description}</p>
                 <div className="grid grid-cols-5 gap-4">
                     {pawnList && pawnList.map((pawn) => (
-                        <EntityCard key={pawn.id} pawn={pawn} setModalAction={setModalAction} setSelectedPawn={setSelectedPawn} setIsModalOpen={setIsModalOpen}/>
+                        <EntityCard key={pawn.id}
+                            pawn={pawn}
+                            setModalAction={setModalAction}
+                            setSelectedPawn={setSelectedPawn}
+                            setIsModalOpen={setIsModalOpen}
+                            deletePawn={isGm ? () => handleDeletePawn(pawn) : null}
+                        />
                     ))}
                 </div>
             </div>
+
+            <Sheet open={notesOpen} onOpenChange={setNotesOpen}>
+                <SheetContent>
+                    <SheetHeader>
+                        <SheetTitle>
+                            <div className="flex flex-row items-center justify-between">
+                                <p>Notes</p>
+                                <Button variant={"ghost"} onClick={() => handleAddNote("New note")}><FilePlus/></Button>
+                            </div>
+                        </SheetTitle>
+                    </SheetHeader>
+                    <SheetDescription>Current annotations for this session</SheetDescription>
+                        <div className='flex flex-row flex-wrap gap-4'>
+                            {
+                                id &&
+                                noteList.map((note) => (
+                                    <NoteCard key={note.id} note={note} isGm={isGm} sessionId={id} />
+                                ))
+                            }
+                            {
+                                noteList.length === 0 && (
+                                    <p>Aucune note</p>
+                                )
+                            }
+                        </div>
+                </SheetContent>
+            </Sheet>
 
 
             <Dialog open={isModalOpen} onOpenChange={(param) => {setIsModalOpen(param); setMonitorAction(null);}}>

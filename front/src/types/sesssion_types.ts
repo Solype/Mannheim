@@ -31,8 +31,13 @@ export type Monitor = {
 }
 
 export type PawnSeed = {
-    linked_id:       number
+    linked_id:      number
     side:           number
     hidden:         string
 }
 
+export type Note = {
+    id:         number
+    content:    string
+    is_public:  boolean
+}

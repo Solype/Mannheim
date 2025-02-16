@@ -4,6 +4,7 @@ from server.access_manager import access_manager
 from server.routes.server_datatype.session_type import SessionShort, CreateSessionRequest, SessionLong, Player, Pawn, Monitor, PawnSeed
 from server.routes.server_datatype.chara_type import CharaAllData
 from server.routes.pawn_utils import get_pawns_of_session, insert_pawn_in_db, transform_chara_into_pawn
+from server.socket_message.ping import emit_delete_pawn
 import json
 
 
@@ -53,9 +54,6 @@ def get_my_owned_session(credentials: HTTPAuthorizationCredentials = Depends(sec
     lst = [compose_session_short(session_id[0]) for session_id in session_i_own]
     print(lst, flush=True)
     return lst
-    lst = [compose_session_short(session_id[0]) for session_id in session_i_own]
-    print(lst, flush=True)
-    return lst
 
 
 
@@ -75,7 +73,7 @@ async def create_session(session : CreateSessionRequest, credentials: HTTPAuthor
         "INSERT INTO `sessions` (gamemaster_id, name, description) VALUES (%s, %s, %s)", 
         (user_id, session.name, session.description)
     )
-    if not success:
+    if success == None:
         raise HTTPException(status_code=500, detail="Failed to create session")
 
     new_session_id = getone_db("SELECT id FROM `sessions` ORDER BY id DESC LIMIT 1", ())[0]
@@ -84,7 +82,7 @@ async def create_session(session : CreateSessionRequest, credentials: HTTPAuthor
         "INSERT INTO `session_participants` (user_id, session_id) VALUES (%s, %s)", 
         (user_id, new_session_id)
     )
-    if not success:
+    if success == None:
         raise HTTPException(status_code=500, detail="Failed to create link between user and session")
 
     return compose_session_short(new_session_id)
@@ -107,7 +105,7 @@ async def modify_session(id: int, session: SessionShort, credentials: HTTPAuthor
         raise HTTPException(status_code=403)
 
     success = modify_db("UPDATE `sessions` SET name = %s, description = %s WHERE id = %s AND gamemaster_id = %s", (session.name, session.description, id, user_id))
-    if not success:
+    if success == None:
         raise HTTPException(status_code=500, detail="Failed to modify session")
     return
 
@@ -128,7 +126,7 @@ async def delete_session(id: int, credentials: HTTPAuthorizationCredentials = De
         raise HTTPException(status_code=403)
 
     success = modify_db("DELETE FROM `sessions` WHERE id = %s AND gamemaster_id = %s", (id, user_id))
-    if not success:
+    if success == None:
         raise HTTPException(status_code=500, detail="Failed to delete session")
     return
 
@@ -213,3 +211,23 @@ async def create_pawn(session_id: int, pawn: PawnSeed, credentials: HTTPAuthoriz
     if not insert_pawn_in_db(to_insert, pawn.hidden, user_id, session_id) :
         raise HTTPException(status_code=500, detail="Failed to insert pawn")
     return
+
+@app.delete("/api/my/session/{session_id}/pawn/{pawn_id}", tags=["Pawn"])
+async def delete_pawn(session_id: int, pawn_id: int, credentials: HTTPAuthorizationCredentials = Depends(security)) -> None:
+    token = credentials.credentials
+    if not token or not access_manager.isTokenValid(token):
+        raise HTTPException(status_code=401, detail="Not Authentificated")
+    
+    user_id = access_manager.getTokenData(token).id
+    gm_id = getone_db("SELECT gamemaster_id FROM sessions WHERE id = %s", (session_id,))
+
+    if gm_id == None :
+        print("gm_id == None", flush=True)
+        raise HTTPException(status_code=404, detail="Session Not Found !")
+
+    if (gm_id[0] != user_id) :
+        raise HTTPException(status_code=403, detail="Not the GameMaster")
+
+    if modify_db("DELETE FROM `entities` WHERE id = %s AND session_id = %s", (pawn_id, session_id)) == None:
+        raise HTTPException(status_code=500, detail="Failed to delete pawn")
+    await emit_delete_pawn(session_id, pawn_id)

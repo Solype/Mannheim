@@ -45,7 +45,7 @@ async def request_friend(data: FriendName, credentials: HTTPAuthorizationCredent
         raise HTTPException(status_code=400, detail="Already friends")
 
     success = modify_db("INSERT INTO `friend_requests` (sender_id, receiver_id, status) VALUES (%s, %s, 'pending')", (user_id, friend_id[0]))
-    if not success:
+    if success == None:
         raise HTTPException(status_code=500, detail="Failed to send friend request")
     
     return
@@ -122,11 +122,11 @@ async def accept_friend_request(request_id: int, credentials: HTTPAuthorizationC
     sender_id = sender_id[0]
 
     success = modify_db("INSERT INTO `friends` (friend_id1, friend_id2) VALUES (%s, %s)", (user_id, sender_id,))
-    if not success:
+    if success == None:
         raise HTTPException(status_code=500, detail="Failed to create link between user and friend")
 
     success = modify_db("UPDATE `friend_requests` SET status = 'accepted' WHERE id = %s", (request_id,))
-    if not success:
+    if success == None:
         raise HTTPException(status_code=500, detail="Failed to accept friend request")
     return
 
@@ -138,7 +138,7 @@ async def decline_friend_request(request_id: int, credentials: HTTPAuthorization
     user_id = access_manager.getTokenData(token).id
 
     success = modify_db("UPDATE `friend_requests` SET status = 'refused' WHERE id = %s AND status = 'pending'", (request_id,))
-    if not success:
+    if success == None:
         raise HTTPException(status_code=500, detail="Failed to decline friend request")
     return
 
@@ -151,6 +151,6 @@ async def delete_friend_request(request_id: int, credentials: HTTPAuthorizationC
     user_id = access_manager.getTokenData(token).id
 
     success = modify_db("DELETE FROM `friend_requests` WHERE id = %s AND sender_id = %s", (request_id, user_id))
-    if not success:
+    if success == None:
         raise HTTPException(status_code=404, detail="Friend request not found or not sent by user")
     return
