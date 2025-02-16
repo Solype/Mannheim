@@ -73,8 +73,8 @@ def post_new_pawn(data: UserPawnRequestCreate, credentials: HTTPAuthorizationCre
         raise HTTPException(status_code=404, detail="Session not found")
     receiver_id = receiver_id[0]
 
-    if receiver_id == user_id:
-        raise HTTPException(status_code=500, detail="You cannot invite yourself")
+    # if receiver_id == user_id:
+    #     raise HTTPException(status_code=500, detail="You cannot invite yourself")
 
     already_sent = getone_db("SELECT id FROM `characters_requests` WHERE session_id = %s AND character_id = %s", (data.session_id, data.character_id,))
     if already_sent:
