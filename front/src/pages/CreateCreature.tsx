@@ -3,11 +3,12 @@ import ReligionForm from '@/components/Characterform/ReligionForm';
 import { Religion, Skill } from '@/types/character_types';
 import { extractSkills, listSkills } from '@/components/Characterform/SkillsForm';
 import SkillformMonter from '@/components/Characterform/SkillsFormMonster';
-import AttributesForm from '@/components/Characterform/AttributesForm';
+// import AttributesForm from '@/components/Characterform/AttributesForm';
 import { Attributes, getDefaultAttributes, CharacterOtherInfo } from '@/types/character_types';
 import ListStringForm from '@/components/Characterform/ListStringForm';
 import CharacterModifiactionUtils from '@/services/CharacterModifiactionUtils';
 import { useNavigate } from 'react-router-dom';
+import AttributesFormMonster from '@/components/Characterform/AttributeMonsters';
 
 const CreateCreaturePage = () => {
     const [ skills, setSkills ] = useState<Skill[]>(extractSkills(listSkills, null));
@@ -173,7 +174,7 @@ const CreateCreaturePage = () => {
                                 disabled={false}
                             />
                         </div>
-                            <AttributesForm attributes={attributes} setter={saveAttributes} disabled={false}/>
+                            <AttributesFormMonster attributes={attributes} setter={saveAttributes} disabled={false}/>
                     <ListStringForm title="Roles primaire" setter={saveMainRoles} listString={mainRoles} disabled={false}/>
                     <ListStringForm title="Roles secondaires" setter={saveSecondaryRoles} listString={secondaryRoles} disabled={false}/>
                     <ListStringForm title="Langues" setter={saveLanguages} listString={otherInfos.languages} disabled={false}/>

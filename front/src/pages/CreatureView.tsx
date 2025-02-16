@@ -3,11 +3,11 @@ import ReligionForm from '@/components/Characterform/ReligionForm';
 import { Religion, Skill } from '@/types/character_types';
 import { extractSkills, listSkills } from '@/components/Characterform/SkillsForm';
 import SkillsformMonter from '@/components/Characterform/SkillsFormMonster';
-import AttributesForm from '@/components/Characterform/AttributesForm';
 import { Attributes, getDefaultAttributes, CharacterOtherInfo } from '@/types/character_types';
 import ListStringForm from '@/components/Characterform/ListStringForm';
 import CharacterModifiactionUtils from '@/services/CharacterModifiactionUtils';
 import { useParams } from 'react-router-dom';
+import AttributesFormMonster from '@/components/Characterform/AttributeMonsters';
 
 const CreatureViewPage = () => {
     const { id } = useParams<{id: string}>();
@@ -43,20 +43,32 @@ const CreatureViewPage = () => {
 
     const loadCharacter = () => {
         if (!id) { return; }
-
+    
         CharacterModifiactionUtils.getCharacter(id).then(
             (character) => {
+                const characterAttributes = character.attributes;
+    
+                const filteredAttributes = Object.fromEntries(
+                    Object.entries(attributes).filter(([attribute]) =>
+                        attribute in characterAttributes
+                    )
+                );
+    
+                // Mettre à jour les attributs avec ceux présents dans `character.attributes`
+                setAttributes({ ...filteredAttributes, ...characterAttributes });
+                
+                // Mettre à jour les autres états du personnage
                 setSkills(extractSkills(listSkills, character.skills));
                 setReligion(character.religion);
-                setAttributes(character.attributes);
                 setMainRoles(character.roles.main);
                 setSecondaryRoles(character.roles.secondary);
                 setOtherInfos(character.other);
                 setName(character.infos.name);
             }
         );
-    }
-
+    };
+    
+    
     useEffect(() => {
         loadCharacter();
     }, []);
@@ -169,7 +181,7 @@ const CreatureViewPage = () => {
                             />
                         </div>
                         <div className='col-span-3'>
-                            <AttributesForm attributes={attributes} setter={saveAttributes} disabled={isDisabled}/>
+                            <AttributesFormMonster attributes={attributes} setter={saveAttributes} disabled={isDisabled}/>
                         </div>
                     <ListStringForm title="Roles primaire" setter={saveMainRoles} listString={mainRoles} disabled={isDisabled}/>
                     <ListStringForm title="Roles secondaires" setter={saveSecondaryRoles} listString={secondaryRoles} disabled={isDisabled}/>
