@@ -11,6 +11,7 @@ interface AttributesFormProps {
 export default function AttributesFormMonster({ attributes, setter, disabled }: AttributesFormProps) {
     const [removedAttributes, setRemovedAttributes] = useState<string[]>([]);
     const [selectedAttribute, setSelectedAttribute] = useState<string>("");
+    const attributesCompulsories = ["resistance", "strength", "vivacity", "dexterity"];
 
     useEffect(() => {
         const storedRemovedAttributes = localStorage.getItem('removedAttributes');
@@ -86,7 +87,7 @@ export default function AttributesFormMonster({ attributes, setter, disabled }: 
                                 disabled={disabled}
                             />
                         </div>
-                            {!disabled && (
+                            {!disabled && !attributesCompulsories.includes(attribute) && (
                                 <button
                                     type="button"
                                     onClick={() => onRemoveAttribute(attribute)}
