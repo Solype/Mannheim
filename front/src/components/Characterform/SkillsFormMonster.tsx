@@ -38,7 +38,7 @@ const SingleSkillForm = ({ skillName, pureValue, roleValue, skillValueSetter, di
                             disabled={disabled}
                         />
                     </div>
-                    <div className="flex flex-col items-center">
+                    {/* <div className="flex flex-col items-center">
                         <label className="text-sm text-gray-500">Role</label>
                         <input
                             type="number"
@@ -47,14 +47,14 @@ const SingleSkillForm = ({ skillName, pureValue, roleValue, skillValueSetter, di
                             className="w-16 px-2 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
                             disabled={disabled}
                         />
-                    </div>
+                    </div> */}
                 </div>
-                <p className="text-xl font-bold text-gray-900 self-center">= {pureValue + roleValue}</p>
+                {/* <p className="text-xl font-bold text-gray-900 self-center">= {pureValue + roleValue}</p>
                 {!disabled && (
                     <button onClick={() => removeSkill(skillName, dico[skillName] ?? skillName)} className="text-red-500">
                         X
                     </button>
-                    )}
+                    )} */}
             </div>
         </div>
     );

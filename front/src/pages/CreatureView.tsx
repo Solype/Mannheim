@@ -4,7 +4,7 @@ import { Religion, Skill } from '@/types/character_types';
 import { extractSkills, listSkills } from '@/components/Characterform/SkillsForm';
 import SkillsformMonter from '@/components/Characterform/SkillsFormMonster';
 import { Attributes, getDefaultAttributes, CharacterOtherInfo } from '@/types/character_types';
-import ListStringForm from '@/components/Characterform/ListStringForm';
+// import ListStringForm from '@/components/Characterform/ListStringForm';
 import CharacterModifiactionUtils from '@/services/CharacterModifiactionUtils';
 import { useParams } from 'react-router-dom';
 import AttributesFormMonster from '@/components/Characterform/AttributeMonsters';
@@ -29,35 +29,34 @@ const CreatureViewPage = () => {
         setAttributes(attributes);
     }
 
-    const saveMainRoles = (mainRoles: string[]) => {
-        setMainRoles(mainRoles);
-    }
+    // const saveMainRoles = (mainRoles: string[]) => {
+    //     setMainRoles(mainRoles);
+    // }
 
-    const saveSecondaryRoles = (secondaryRoles: string[]) => {
-        setSecondaryRoles(secondaryRoles);
-    }
+    // const saveSecondaryRoles = (secondaryRoles: string[]) => {
+    //     setSecondaryRoles(secondaryRoles);
+    // }
 
-    const saveLanguages = (languages: string[]) => {
-        setOtherInfos({ ...otherInfos, languages: languages });
-    }
+    // const saveLanguages = (languages: string[]) => {
+    //     setOtherInfos({ ...otherInfos, languages: languages });
+    // }
 
     const loadCharacter = () => {
         if (!id) { return; }
-    
+
         CharacterModifiactionUtils.getCharacter(id).then(
             (character) => {
                 const characterAttributes = character.attributes;
-    
+
                 const filteredAttributes = Object.fromEntries(
                     Object.entries(attributes).filter(([attribute]) =>
                         attribute in characterAttributes
                     )
                 );
-    
-                // Mettre à jour les attributs avec ceux présents dans `character.attributes`
+
+                console.log({ ...filteredAttributes, ...characterAttributes });
                 setAttributes({ ...filteredAttributes, ...characterAttributes });
-                
-                // Mettre à jour les autres états du personnage
+
                 setSkills(extractSkills(listSkills, character.skills));
                 setReligion(character.religion);
                 setMainRoles(character.roles.main);
@@ -183,9 +182,9 @@ const CreatureViewPage = () => {
                         <div className='col-span-3'>
                             <AttributesFormMonster attributes={attributes} setter={saveAttributes} disabled={isDisabled}/>
                         </div>
-                    <ListStringForm title="Roles primaire" setter={saveMainRoles} listString={mainRoles} disabled={isDisabled}/>
+                    {/* <ListStringForm title="Roles primaire" setter={saveMainRoles} listString={mainRoles} disabled={isDisabled}/>
                     <ListStringForm title="Roles secondaires" setter={saveSecondaryRoles} listString={secondaryRoles} disabled={isDisabled}/>
-                    <ListStringForm title="Langues" setter={saveLanguages} listString={otherInfos.languages} disabled={isDisabled}/>
+                    <ListStringForm title="Langues" setter={saveLanguages} listString={otherInfos.languages} disabled={isDisabled}/> */}
 
                     <ReligionForm setter={saveReligion} listReligions={religion} disabled={isDisabled}/>
                 </div>

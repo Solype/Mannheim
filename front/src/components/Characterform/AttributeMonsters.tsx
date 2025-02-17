@@ -55,6 +55,7 @@ export default function AttributesFormMonster({ attributes, setter, disabled }: 
                     <select
                         id="restoreAttribute"
                         value={selectedAttribute}
+                        disabled={disabled}
                         onChange={(e) => {
                             setSelectedAttribute(e.target.value);
                             onRestoreAttribute(e);
@@ -71,7 +72,7 @@ export default function AttributesFormMonster({ attributes, setter, disabled }: 
                 </div>
             )}
             {Object.entries(attributes).map(([attribute, value]) => (
-                attribute && (
+                attribute && value != null && (
                     <div className="grid grid-cols-6 gap-2" key={attribute}>
                         <div key={attribute} className="flex justify-between items-center col-span-5">
                             <label htmlFor={attribute} className="font-semibold text-gray-700 capitalize">

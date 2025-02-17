@@ -5,7 +5,7 @@ import { extractSkills, listSkills } from '@/components/Characterform/SkillsForm
 import SkillformMonter from '@/components/Characterform/SkillsFormMonster';
 // import AttributesForm from '@/components/Characterform/AttributesForm';
 import { Attributes, getDefaultAttributes, CharacterOtherInfo } from '@/types/character_types';
-import ListStringForm from '@/components/Characterform/ListStringForm';
+// import ListStringForm from '@/components/Characterform/ListStringForm';
 import CharacterModifiactionUtils from '@/services/CharacterModifiactionUtils';
 import { useNavigate } from 'react-router-dom';
 import AttributesFormMonster from '@/components/Characterform/AttributeMonsters';
@@ -31,20 +31,20 @@ const CreateCreaturePage = () => {
         setAttributes(attributes);
     }
 
-    const saveMainRoles = (mainRoles: string[]) => {
-        localStorage.setItem('mainRoles_monstre', JSON.stringify(mainRoles));
-        setMainRoles(mainRoles);
-    }
+    // const saveMainRoles = (mainRoles: string[]) => {
+    //     localStorage.setItem('mainRoles_monstre', JSON.stringify(mainRoles));
+    //     setMainRoles(mainRoles);
+    // }
 
-    const saveSecondaryRoles = (secondaryRoles: string[]) => {
-        localStorage.setItem('secondaryRole_monstre', JSON.stringify(secondaryRoles));
-        setSecondaryRoles(secondaryRoles);
-    }
+    // const saveSecondaryRoles = (secondaryRoles: string[]) => {
+    //     localStorage.setItem('secondaryRole_monstre', JSON.stringify(secondaryRoles));
+    //     setSecondaryRoles(secondaryRoles);
+    // }
 
-    const saveLanguages = (languages: string[]) => {
-        localStorage.setItem('languages_monstre', JSON.stringify(languages));
-        setOtherInfos({ ...otherInfos, languages: languages });
-    }
+    // const saveLanguages = (languages: string[]) => {
+    //     localStorage.setItem('languages_monstre', JSON.stringify(languages));
+    //     setOtherInfos({ ...otherInfos, languages: languages });
+    // }
 
 
     useEffect(() => {
@@ -175,9 +175,9 @@ const CreateCreaturePage = () => {
                             />
                         </div>
                             <AttributesFormMonster attributes={attributes} setter={saveAttributes} disabled={false}/>
-                    <ListStringForm title="Roles primaire" setter={saveMainRoles} listString={mainRoles} disabled={false}/>
+                    {/* <ListStringForm title="Roles primaire" setter={saveMainRoles} listString={mainRoles} disabled={false}/>
                     <ListStringForm title="Roles secondaires" setter={saveSecondaryRoles} listString={secondaryRoles} disabled={false}/>
-                    <ListStringForm title="Langues" setter={saveLanguages} listString={otherInfos.languages} disabled={false}/>
+                    <ListStringForm title="Langues" setter={saveLanguages} listString={otherInfos.languages} disabled={false}/> */}
 
                     <ReligionForm setter={saveReligion} listReligions={religion} disabled={false}/>
                 </div>
