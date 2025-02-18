@@ -28,42 +28,42 @@ services:
         networks:
             - mannheim
 
-    mobile:
-        build:
-            context: ./mobile
-            dockerfile: Dockerfile
-            args:
-                VITE_BACKEND_URL: ${VITE_BACKEND_URL}
-        ports:
-            - "8082:80"
-        networks:
-            - mannheim
-        environment:
-            - NODE_ENV=production
-        ulimits:
-            nofile:
-                soft: 5000
-                hard: 5000
-        volumes:
-            - 'apk:/shared'
+    # mobile:
+    #     build:
+    #         context: ./mobile
+    #         dockerfile: Dockerfile
+    #         args:
+    #             VITE_BACKEND_URL: ${VITE_BACKEND_URL}
+    #     ports:
+    #         - "8082:80"
+    #     networks:
+    #         - mannheim
+    #     environment:
+    #         - NODE_ENV=production
+    #     ulimits:
+    #         nofile:
+    #             soft: 5000
+    #             hard: 5000
+    #     volumes:
+    #         - 'apk:/shared'
 
-    frontend:
-        build:
-            context: ./front
-            dockerfile: Dockerfile
-            args:
-                VITE_BACKEND_URL: ${VITE_BACKEND_URL}
-        ports:
-            - "8081:80"
-        depends_on:
-            mobile:
-                condition: service_completed_successfully
-            server:
-                condition: service_started
-        networks:
-            - mannheim
-        volumes:
-            - 'apk:/shared'
+    # frontend:
+    #     build:
+    #         context: ./front
+    #         dockerfile: Dockerfile
+    #         args:
+    #             VITE_BACKEND_URL: ${VITE_BACKEND_URL}
+    #     ports:
+    #         - "8081:80"
+    #     depends_on:
+    #         # mobile:
+    #         #     condition: service_completed_successfully
+    #         server:
+    #             condition: service_started
+    #     networks:
+    #         - mannheim
+    #     volumes:
+    #         - 'apk:/shared'
 
 networks:
     mannheim:

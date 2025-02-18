@@ -12,16 +12,16 @@ interface SingleSkillFormProps {
     removeSkill: (skillName: string, category: string) => void;
 }
 
-const SingleSkillForm = ({ skillName, pureValue, roleValue, skillValueSetter, disabled, removeSkill }: SingleSkillFormProps) => {
+const SingleSkillForm = ({ skillName, pureValue, roleValue, skillValueSetter, disabled }: SingleSkillFormProps) => {
     const onPureValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newPureValue = Number(e.target.value);
         skillValueSetter(newPureValue, roleValue);
     };
 
-    const onRoleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const newRoleValue = Number(e.target.value);
-        skillValueSetter(pureValue, newRoleValue);
-    };
+    // const onRoleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     const newRoleValue = Number(e.target.value);
+    //     skillValueSetter(pureValue, newRoleValue);
+    // };
 
     return (
         <div className="flex items-center justify-between rounded-lg ">

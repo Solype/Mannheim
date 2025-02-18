@@ -14,15 +14,20 @@ export default function AttributesFormMonster({ attributes, setter, disabled }: 
     const attributesCompulsories = ["resistance", "strength", "vivacity", "dexterity"];
 
     useEffect(() => {
-        const storedRemovedAttributes = localStorage.getItem('removedAttributes');
-        if (storedRemovedAttributes) {
-            setRemovedAttributes(JSON.parse(storedRemovedAttributes));
-        }
-    }, []);
-
-    useEffect(() => {
-        localStorage.setItem('removedAttributes', JSON.stringify(removedAttributes));
-    }, [removedAttributes]);
+        console.log(attributes);
+        const attributes_removed : string[] = [];
+        const attributes_list = Object.entries(attributes);
+        attributes_list.forEach((attribute) => {
+            console.log(attribute, attribute[1], attribute[1] === null);
+            if (attribute[1] === null) {
+                console.log(attribute[0]);
+                attributes_removed.push(attribute[0]);
+                console.log(attributes_removed);
+            }
+        })
+        console.log(attributes_removed);
+        setRemovedAttributes(attributes_removed);
+    }, [attributes]);
 
     const onRoleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setter({ ...attributes, [e.target.name]: Number(e.target.value) });
