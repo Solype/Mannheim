@@ -12,6 +12,7 @@ export default function AttributesFormMonster({ attributes, setter, disabled }: 
     const [removedAttributes, setRemovedAttributes] = useState<string[]>([]);
     const [selectedAttribute, setSelectedAttribute] = useState<string>("");
     const attributesCompulsories = ["resistance", "strength", "vivacity", "dexterity"];
+    const allAttributes = [...attributesCompulsories, "agility", "intellect", "social", "magic"];
 
     useEffect(() => {
         console.log(attributes);
@@ -26,6 +27,14 @@ export default function AttributesFormMonster({ attributes, setter, disabled }: 
             }
         })
         console.log(attributes_removed);
+        allAttributes.map((attribute) => {
+            console.log(attribute);
+            const hasFound = attributes_list.find((attr) => {console.log(attr); return attr[0] === attribute})
+            if (hasFound === undefined) {
+                attributes_removed.push(attribute);
+            }
+            console.log(hasFound);
+        })
         setRemovedAttributes(attributes_removed);
     }, [attributes]);
 
