@@ -15,6 +15,8 @@ import CreateCharacterPage from './pages/CreateCharacter';
 import CharacterViewPage from './pages/CharacterView';
 import InvitationsPage from './pages/Invitations';
 import RoomView from './pages/RoomView';
+import CreateCreaturePage from './pages/CreateCreature';
+import CreatureView from './pages/CreatureView';
 
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
           <Route path="/" element={<DashboardPage />} />
           <Route path="/invitations" element={<InvitationsPage />} />
           <Route path="/creatures" element={<Creatures />} />
+          <Route path="/create-creature" element={<CreateCreaturePage />} />
+          <Route path="/creatures/:id" element={<CreatureView />} />
           <Route path="/lores" element={<Lores />} />
           <Route path="/rooms" element={<Rooms />} />
           <Route path="/room/:id" element={<RoomView />} />
