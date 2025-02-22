@@ -71,6 +71,27 @@ class CharacterModificationUtilsService {
             body: JSON.stringify(character_data)
         });
     }
+
+    async getCreatures(): Promise<CharacterBasicInfo[]> {
+        return await this.request('/api/my/monsters', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+        });
+    }
+
+    async createCreature(creature_data: any): Promise<void> {
+        await this.request('/api/my/monsters', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify(creature_data)
+        });
+    }
 }
 
 export default new CharacterModificationUtilsService();

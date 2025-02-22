@@ -199,6 +199,7 @@ export type Skill = {
     category: string;
     pureValue: number;
     roleValue: number;
+    isRemoved: boolean;
     [key: string]: any;
 };
 
