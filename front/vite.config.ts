@@ -1,6 +1,7 @@
 import path from "path"
 import react from "@vitejs/plugin-react"
 import { defineConfig } from "vite"
+import tailwindcss from '@tailwindcss/vite'
 
 import os from 'os';
 
@@ -33,7 +34,8 @@ export default defineConfig({
         __DOCKER_HOST_IP__: JSON.stringify(process.env.VITE_BACKEND_URL),
     },
     plugins: [
-        react()
+        react(),
+        tailwindcss(),
     ],
     resolve: {
         alias: {

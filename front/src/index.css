@@ -1,13 +1,22 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@font-face {
+/* @font-face {
   font-family: 'ringbearer';
   src: url('/fonts/ringbearer.TTF') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+  }
+}
+
 
 @layer base {
   body {
@@ -68,12 +77,4 @@
     --chart-5: 340 75% 55%
   }
 }
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}
+ */

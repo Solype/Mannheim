@@ -44,6 +44,7 @@ export default function LoginPage() {
     };
 
     return (
+
         <main className="relative flex min-h-screen w-full flex-col items-center justify-center">
             <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url(/bg-login.png)' }} />
             <div className="absolute inset-0 bg-black opacity-30" />
